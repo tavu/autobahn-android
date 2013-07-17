@@ -3,15 +3,25 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-        >
+              android:gravity="center_horizontal">
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/wellcome"
-            />
-    <ListView
+            android:text="@string/welcome"
+            android:gravity="center" android:textStyle="bold" android:textSize="15px"/>
+    <Button
             android:layout_width="fill_parent"
-            android:layout_height="81dp"
-            android:id="@+id/listView" android:choiceMode="singleChoice"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/request" android:text="@string/request"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/circuit"
+            android:id="@+id/circuit"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about"
+            android:id="@+id/about"/>
 </LinearLayout>
 

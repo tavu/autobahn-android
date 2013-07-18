@@ -21,14 +21,13 @@ public class about extends Activity {
     public final static Uri GEANT_URL = Uri.parse("http://www.geant.net");
     public final static Uri DANTE_URL = Uri.parse("http://www.dante.net");
     public final static Uri EC_URL = Uri.parse("http://ec.europa.eu");
-    public final static Uri BOD_URL = Uri.parse("bod.geant.net");
-    public final static Uri AUTOBAHN_URL = Uri.parse("autobahn.geant.net");
+    public final static Uri BOD_URL = Uri.parse("http://bod.geant.net");
+    public final static Uri AUTOBAHN_URL = Uri.parse("http://autobahn.geant.net");
     public final static Uri ISSUES_URL = Uri.parse("https://issues.geant.net/jira/browse/MDSD");
 
     Intent launchBrowser;
     TextView link;
     ImageButton button;
-
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

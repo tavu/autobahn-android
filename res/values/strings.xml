@@ -6,10 +6,14 @@
     <string name="request">Reservation request</string>
     <string name="circuit">Track circuit</string>
     <string name="aboutTitle">About BoD</string>
-    <string name="link_1"><a href="www.geant.net"> GEANT project</a>.</string>
-    <string name="info_1">AutoBAHN is developed by the</string>
-    <string name="info_2">If you want to learn more, please visit bod.geant.net and autobahn.geant.net.</string>
+    <string name="info_1">AutoBAHN is developed by the </string>
+    <string name="link_1"> <a href="www.geant.net">GEANT project</a>.</string>
+    <string name="link_5"><a href="ec.europa.eu">European Commission Information Society and Media</a></string>
+    <string name="info_2">If you want to learn more, please visit </string>
+    <string name="link_2"><a href="bod.geant.net">bod.geant.net</a></string>
+    <string name="and"> and </string>
+    <string name="link_3"><a href="autobahn.geant.net">autobahn.geant.net</a>.</string>
     <string name="info_3">If you have an issue contact your NREN or open a ticket to the Multi-Domain Service Desk
-        (MDSD): https://issues.geant.net/jira/browse/MDSD
-    </string>
+        (MDSD): </string>
+    <string name="link_4"><a href="https://issues.geant.net/jira/browse/MDSD">https://issues.geant.net/jira/browse/MDSD</a></string>
 </resources>

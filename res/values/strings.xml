@@ -5,4 +5,11 @@
     <string name="about">About</string>
     <string name="request">Reservation request</string>
     <string name="circuit">Track circuit</string>
+    <string name="aboutTitle">About BoD</string>
+    <string name="link_1"><a href="www.geant.net"> GEANT project</a>.</string>
+    <string name="info_1">AutoBAHN is developed by the</string>
+    <string name="info_2">If you want to learn more, please visit bod.geant.net and autobahn.geant.net.</string>
+    <string name="info_3">If you have an issue contact your NREN or open a ticket to the Multi-Domain Service Desk
+        (MDSD): https://issues.geant.net/jira/browse/MDSD
+    </string>
 </resources>

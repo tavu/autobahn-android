@@ -8,20 +8,20 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/welcome"
-            android:gravity="center" android:textStyle="bold" android:textSize="15px"/>
+            android:gravity="center" android:textStyle="bold" android:textSize="20dp" android:layout_margin="20px"/>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/request" android:text="@string/request"/>
+            android:id="@+id/request" android:text="@string/request" android:layout_margin="10px"/>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/circuit"
-            android:id="@+id/circuit"/>
+            android:id="@+id/circuit" android:layout_margin="10px"/>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/about"
-            android:id="@+id/about"/>
+            android:id="@+id/about" android:layout_margin="10px"/>
 </LinearLayout>
 

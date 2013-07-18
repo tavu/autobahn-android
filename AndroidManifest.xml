@@ -16,4 +16,5 @@
         <activity android:name="autobahn.android.request"/>
         <activity android:name="autobahn.android.about"/>
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest> 

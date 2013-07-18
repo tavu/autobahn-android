@@ -16,5 +16,7 @@ public class mainActivity extends Activity {
 
         Button b = (Button) findViewById(R.id.about);
 
+        LogIn l=new LogIn();
+        l.logInToServer();
     }
 }

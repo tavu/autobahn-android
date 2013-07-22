@@ -25,7 +25,7 @@ public class mainMenu extends Activity {
             @Override
             public void onClick(View view) {
                 Intent aboutActivity = new Intent();
-                aboutActivity.setClass(getApplicationContext(),about.class);
+                aboutActivity.setClass(getApplicationContext(),AboutActivity.class);
                 startActivity(aboutActivity);
             }
         });

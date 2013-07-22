@@ -16,7 +16,7 @@ import com.example.autobahn.R;
  * Time: 3:34 PM
  * To change this template use File | Settings | File Templates.
  */
-public class about extends Activity {
+public class AboutActivity extends Activity {
 
     public final static Uri GEANT_URL = Uri.parse("http://www.geant.net");
     public final static Uri DANTE_URL = Uri.parse("http://www.dante.net");

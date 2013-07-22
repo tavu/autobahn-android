@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import com.example.autobahn.R;
 
-public class mainActivity extends Activity {
+public class mainMenu extends Activity {
     /**
      * Called when the activity is first created.
      */

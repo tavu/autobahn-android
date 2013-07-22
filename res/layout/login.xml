@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="#ffffff">
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:layout_gravity="center">
+        <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="100px"
+                android:id="@+id/imageView" android:src="@drawable/header"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="20px">
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/username"
+                android:id="@+id/textView" android:textColor="#000000" android:layout_marginLeft="20px"
+                android:layout_marginBottom="10px"/>
+        <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/username" android:singleLine="true" android:layout_marginLeft="20px"
+                android:layout_marginBottom="20px" android:layout_marginRight="20px"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/password"
+                android:id="@+id/textView1" android:password="false" android:textColor="#000000"
+                android:layout_marginLeft="20px" android:layout_marginBottom="10px"/>
+        <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/password" android:password="true" android:layout_marginLeft="20px"
+                android:layout_marginBottom="20px" android:layout_marginRight="20px"/>
+        <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/log_in"
+                android:id="@+id/loginButton" android:gravity="center_vertical|center_horizontal"
+                android:layout_gravity="center" android:layout_marginLeft="20px" android:layout_marginRight="20px"
+                android:layout_marginTop="20px" android:enabled="true"/>
+    </LinearLayout>
+</LinearLayout>

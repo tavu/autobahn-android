@@ -1,5 +1,6 @@
 package autobahn.android;
 
+<<<<<<< HEAD
 import android.util.Log;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -20,20 +21,44 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+=======
+import android.app.Activity;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import com.example.autobahn.R;
+>>>>>>> f36230a8f435fe887fff6c346878a8b682c39b1a
 
 /**
  * Created with IntelliJ IDEA.
- * User: tavu
- * Date: 7/18/13
- * Time: 2:08 PM
+ * User: Nl0st
+ * Date: 22/7/2013
+ * Time: 11:41 πμ
  * To change this template use File | Settings | File Templates.
  */
-public class LogIn {
+public class login extends Activity {
 
-    public LogIn() {
+    //LoginHandler l = new LoginHandler();
+    //LologInToServer();
+    Button loginButton;
+    EditText usernameField;
+    EditText passwordField;
 
-    }
+    public final TextWatcher watcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
 
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+<<<<<<< HEAD
     public void logInToServer() {
         // Create a new HttpClient and Post Header
         HttpClient httpclient = new DefaultHttpClient();
@@ -114,8 +139,42 @@ public class LogIn {
 
             //String s = response.getFirstHeader("Location").toString();
             //boolean isError = s.contains("login_error");
+=======
+        @Override
+        public void afterTextChanged(Editable editable) {
+            checkFields();
+        }
+    };
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.login);
+
+        loginButton = (Button) findViewById(R.id.loginButton);
+        usernameField = (EditText) findViewById(R.id.username);
+        passwordField = (EditText) findViewById(R.id.password);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
 
 
+    }
+>>>>>>> f36230a8f435fe887fff6c346878a8b682c39b1a
+
+    public void checkFields(){
+
+
+    }
+
+
+
+
+
+<<<<<<< HEAD
 
 
 
@@ -154,4 +213,6 @@ public class LogIn {
 
 
     }
+=======
+>>>>>>> f36230a8f435fe887fff6c346878a8b682c39b1a
 }

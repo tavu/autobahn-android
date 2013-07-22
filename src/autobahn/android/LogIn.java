@@ -19,7 +19,6 @@ import com.example.autobahn.R;
  */
 public class Login extends Activity {
 
-    LoginHandler l = new LoginHandler();
     Button loginButton;
     EditText usernameField;
     EditText passwordField;
@@ -58,9 +57,6 @@ public class Login extends Activity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                l.logInToServer(username,password);
-
             }
         });
 

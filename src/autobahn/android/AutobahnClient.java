@@ -38,7 +38,7 @@ public class AutobahnClient {
 
         String query="j_username="+name+"&j_password="+pass;
 
-        URI url= new URI("http" , null , "62.217.125.174" ,8080, Resources.getSystem().getString(R.string.login) ,query,null);
+        URI url= new URI("http" , null , "62.217.125.174" ,8080, Resources.getSystem().getString(R.string.loginPage) ,query,null);
         HttpPost httppost = new HttpPost(url);
         HttpResponse response = httpclient.execute(httppost);
 

@@ -14,7 +14,7 @@
         <activity android:name="autobahn.android.trackCircuit"/>
         <activity android:name="autobahn.android.request"/>
         <activity android:name="autobahn.android.about"/>
-        <activity android:name="autobahn.android.login">
+        <activity android:name="autobahn.android.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

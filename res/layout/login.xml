@@ -46,6 +46,6 @@
                 android:text="@string/log_in"
                 android:id="@+id/loginButton" android:gravity="center_vertical|center_horizontal"
                 android:layout_gravity="center" android:layout_marginLeft="20px" android:layout_marginRight="20px"
-                android:layout_marginTop="20px" android:enabled="true"/>
+                android:layout_marginTop="20px" android:enabled="false"/>
     </LinearLayout>
 </LinearLayout>

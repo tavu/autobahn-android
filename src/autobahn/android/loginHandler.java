@@ -30,17 +30,15 @@ public class LoginHandler {
 
     }
 
-    public void logInToServer() {
-        // Create a new HttpClient and Post Header
+    public void logInToServer(String username, String password) {
         HttpClient httpclient = new DefaultHttpClient();
-
 
         try {
             // Add your data
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
             nameValuePairs.add(new BasicNameValuePair("j_username", "demoadmin"));
             nameValuePairs.add(new BasicNameValuePair("j_password", "demoadmin"));
-            URI url= new URI("http" , null , "62.217.125.174" ,8080, "/autobahn-gui/portal/login.htm",null,null);
+            URI url= new URI("http" , null , "62.217.125.174" ,8080, "/autobahn-gui/portal/Login.htm",null,null);
             Log.d("WARN", url.toString());
 
             HttpPost httppost = new HttpPost(url);

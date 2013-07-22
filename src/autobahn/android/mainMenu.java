@@ -30,7 +30,6 @@ public class mainMenu extends Activity {
             }
         });
 
-        login l=new login();
-        l.logInToServer();
+
     }
 }

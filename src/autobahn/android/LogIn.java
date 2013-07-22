@@ -1,6 +1,9 @@
 package autobahn.android;
 
+import android.app.Activity;
+import android.os.Bundle;
 import android.util.Log;
+import com.example.autobahn.R;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -16,19 +19,21 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Created with IntelliJ IDEA.
- * User: tavu
- * Date: 7/18/13
- * Time: 2:08 PM
+ * User: Nl0st
+ * Date: 22/7/2013
+ * Time: 11:41 πμ
  * To change this template use File | Settings | File Templates.
  */
-public class LogIn {
+public class login extends Activity {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    public LogIn() {
-
+        setContentView(R.layout.login);
     }
+
+
 
     public void logInToServer() {
         // Create a new HttpClient and Post Header
@@ -60,6 +65,5 @@ public class LogIn {
             Log.d("WARN", "3 "+e.getMessage());
         }
     }
-
 
 }

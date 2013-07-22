@@ -20,6 +20,8 @@ public class mainActivity extends Activity {
         setContentView(R.layout.main);
 
         aboutButton = (Button) findViewById(R.id.about);
+        LogIn l=new LogIn();
+        l.logInToServer();
 
         aboutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,7 +32,6 @@ public class mainActivity extends Activity {
             }
         });
 
-        LogIn l=new LogIn();
-        l.logInToServer();
+
     }
 }

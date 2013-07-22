@@ -16,4 +16,10 @@
     <string name="info_3">If you have an issue contact your NREN or open a ticket to the Multi-Domain Service Desk
         (MDSD): </string>
     <string name="link_4"><a href="https://issues.geant.net/jira/browse/MDSD">https://issues.geant.net/jira/browse/MDSD</a></string>
+
+
+   <!-- autobahn client URLS  -->
+   <string name="login">/autobahn-gui/j_spring_security_check</string>
+
+
 </resources>

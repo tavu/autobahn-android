@@ -13,6 +13,7 @@ public class mainMenu extends Activity {
      */
 
     Button aboutButton;
+    Button trackCircuitButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -20,13 +21,23 @@ public class mainMenu extends Activity {
         setContentView(R.layout.main);
 
         aboutButton = (Button) findViewById(R.id.about);
+        trackCircuitButton = (Button) findViewById(R.id.circuit);
 
         aboutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent aboutActivity = new Intent();
-                aboutActivity.setClass(getApplicationContext(),AboutActivity.class);
+                aboutActivity.setClass(getApplicationContext(), about.class);
                 startActivity(aboutActivity);
+            }
+        });
+
+        trackCircuitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent circuitActivity = new Intent();
+                circuitActivity.setClass(getApplicationContext(), trackCircuit.class);
+                startActivity(circuitActivity);
             }
         });
 

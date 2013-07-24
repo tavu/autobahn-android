@@ -11,6 +11,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -49,11 +51,45 @@ public class AutobahnClient {
     }
 
     public List<Circuit> getTrackCircuit(String idm) {
-        return null;
+
+        List<Circuit> list=new ArrayList<Circuit>();
+
+        Circuit c=new Circuit();
+        c.id=1;
+        c.capacity=10000;
+        c.mtu=-1;
+        c.state=Circuit.ReservationState.ACTIVE;
+        c.startTime= Calendar.getInstance();
+        c.endTime=Calendar.getInstance();
+        c.startVlan=0;
+        c.endVlan=0;
+        c.startPort=new Port("Port_1","GARR");
+        c.endPort=new Port("Port_2","GARR");
+        list.add(c);
+
+        c=new Circuit();
+        c.id=2;
+        c.capacity=1000;
+        c.mtu=500;
+        c.state=Circuit.ReservationState.FAILED;
+        c.startTime= Calendar.getInstance();
+        c.endTime=Calendar.getInstance();
+        c.startPort=new Port("GARR.Port_1","GARR","client_1");
+        c.endPort=new Port("GRNET.Port_2","GRNET");
+        c.startVlan=10;
+        c.endVlan=4000;
+        list.add(c);
+
+
+
+        return list;
     }
 
     public List<String> getIdms() {
-        return null;
+        List<String> list=new ArrayList<String>();
+        list.add("GARR");
+        list.add("GRNET");
+        return list;
     }
 
 

@@ -22,9 +22,6 @@
     <string name="info_3">If you have an issue contact your NREN or open a ticket to the Multi-Domain Service Desk(MDSD): </string>
     <string name="link_4"><a href="https://issues.geant.net/jira/browse/MDSD">https://issues.geant.net/jira/browse/MDSD</a></string>
 
-    <string name="link_4">
-        <a href="https://issues.geant.net/jira/browse/MDSD">https://issues.geant.net/jira/browse/MDSD</a>
-    </string>
     <string name="username">Username</string><string name="password">Password</string><string name="log_in">Log In</string>
 
     <!-- autobahn client URLS  -->

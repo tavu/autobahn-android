@@ -21,16 +21,12 @@
     </string>
     <string name="info_3">If you have an issue contact your NREN or open a ticket to the Multi-Domain Service Desk(MDSD): </string>
     <string name="link_4"><a href="https://issues.geant.net/jira/browse/MDSD">https://issues.geant.net/jira/browse/MDSD</a></string>
-
-    <string name="link_4">
-        <a href="https://issues.geant.net/jira/browse/MDSD">https://issues.geant.net/jira/browse/MDSD</a>
-    </string>
     <string name="remember">Remember Me</string>
     <string name="username">Username</string><string name="password">Password</string><string name="log_in">Log In</string>
 
     <!-- autobahn client URLS  -->
     <string name="loginPage">/autobahn-gui/j_spring_security_check</string>
     <string name="circuitPage">/android/circuit</string>
-    <string name="idmsPage">/android/idms</string><string name="idm_title">Please select one of the available domains below to view past reservations</string>
+    <string name="idmsPage">/android/idms</string><string name="idm_title">Please select one of the available domains below to view past reservations</string><string name="no_domains">No domains are registered!</string><string name="back_to_menu">Back to Main Menu</string>
 
 </resources>

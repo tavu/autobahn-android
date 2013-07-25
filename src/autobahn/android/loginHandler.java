@@ -37,7 +37,7 @@ public class LoginHandler {
 
         try {
             // Add your data
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+            List<NameValuePair> nameValuePairs = new ArrayList(2);
             nameValuePairs.add(new BasicNameValuePair("j_username", "demoadmin"));
             nameValuePairs.add(new BasicNameValuePair("j_password", "demoadmin"));
             URI url= new URI("http" , null , "62.217.125.174" ,8080, "/autobahn-gui/portal/Login.htm",null,null);

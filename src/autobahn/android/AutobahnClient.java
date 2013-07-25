@@ -1,15 +1,9 @@
 package autobahn.android;
 
-import com.example.autobahn.R;
-import android.content.res.Resources;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,7 +20,7 @@ public class AutobahnClient {
     private String userName;
     private String password;
     private List<String> idms;
-    private  List<Circuit> circuits;
+    private  List<Circuit> circuits = new ArrayList();
 
     static AutobahnClient instance = null;
 
@@ -66,6 +60,7 @@ public class AutobahnClient {
     public String getPassword() {
         return password;
     }
+
 
 
     public boolean hasAuthenticate() {
@@ -131,8 +126,9 @@ public class AutobahnClient {
     }
 
     public void fetchIdms() {
-        idms.add("GARR");
-        idms.add("GRNET");
+        idms.clear();
+        idms.add(new String("GARR"));
+        idms.add(new String("GRNET"));
     }
 
 }

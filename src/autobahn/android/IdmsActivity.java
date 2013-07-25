@@ -20,7 +20,7 @@ public class IdmsActivity extends Activity {
 
 
 
-        AsyncTask<Void, Void, Void> async=new AsyncTask<Void, Void, Void>() {
+        AsyncTask<Void, Void, Void> async = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... type) {
 

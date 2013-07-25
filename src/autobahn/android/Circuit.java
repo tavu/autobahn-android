@@ -1,6 +1,4 @@
 package autobahn.android;
-import autobahn.android.Port;
-
 import java.util.Calendar;
 
 public class Circuit {

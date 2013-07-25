@@ -99,7 +99,7 @@ public class AutobahnClient {
 
     public void fetchTrackCircuit(String idm) {
 
-        List<Circuit> list = new ArrayList<Circuit>();
+        circuits.clear();
 
         Circuit c = new Circuit();
         c.id = 1;
@@ -112,7 +112,7 @@ public class AutobahnClient {
         c.endVlan = 0;
         c.startPort = new Port("Port_1","GARR");
         c.endPort = new Port("Port_2","GARR");
-        list.add(c);
+        circuits.add(c);
 
         c=new Circuit();
         c.id=2;
@@ -125,7 +125,7 @@ public class AutobahnClient {
         c.endPort=new Port("GRNET.Port_2","GRNET");
         c.startVlan=10;
         c.endVlan=4000;
-        list.add(c);
+        circuits.add(c);
     }
 
     public List<String> getIdms() {

@@ -1,6 +1,7 @@
 package autobahn.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,10 +21,7 @@ public class IdmsActivity extends Activity {
     ListView domainList;
     ArrayAdapter<String> adapter;
 
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        autobahnClient.fetchIdms();
+    private void showData() {
         domains = autobahnClient.getIdms();
 
         if(domains.isEmpty()){
@@ -47,6 +45,11 @@ public class IdmsActivity extends Activity {
 
         }
 
+    }
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         AsyncTask<Void, Void, Void> async=new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... type) {
@@ -62,8 +65,9 @@ public class IdmsActivity extends Activity {
 
             @Override
             protected void onPostExecute(Void result) {
-                //TODO show data
+                showData();
             }
         };
+        async.execute();
     }
 }

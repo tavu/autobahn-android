@@ -66,8 +66,8 @@ public class AutobahnClient {
     }
 
 
-    private List<Idm> idms;
-    private  List<Circuit> circuits;
+    private ArrayList<Idm> idms;
+    private ArrayList<Circuit> circuits;
 
     public boolean hasAuthenticate() {
         return isLogIn;
@@ -132,8 +132,8 @@ public class AutobahnClient {
     }
 
     public void fetchIdms() {
+        idms=new ArrayList<Idm>();
         idms.add(new Idm("GARR") );
         idms.add(new Idm("GRNET") );
     }
-
 }

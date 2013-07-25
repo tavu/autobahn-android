@@ -118,6 +118,7 @@ public class Login extends Activity implements  View.OnClickListener {
                 startActivity(menuActivity);
             }
         };
+        async.execute();
 
     }
 }

@@ -20,7 +20,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="autobahn.android.Idms"/>
+        <activity android:name="autobahn.android.IdmsActivity"/>
+        <activity android:name="autobahn.android.PrefsActivity"
+                  android:label="@string/titlePrefs" />
+
+
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest> 

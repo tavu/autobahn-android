@@ -16,7 +16,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/list" android:layout_gravity="center" android:headerDividersEnabled="false"
             android:footerDividersEnabled="false" android:focusableInTouchMode="false" android:focusable="false"
-            android:fastScrollEnabled="false" android:fastScrollAlwaysVisible="false"
             android:drawSelectorOnTop="false" android:clickable="true"
             />
+            <!--android:fastScrollEnabled="false" android:fastScrollAlwaysVisible="false" -->
+
+
 </LinearLayout>

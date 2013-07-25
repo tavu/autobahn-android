@@ -15,7 +15,7 @@ public class TrackCircuitActivity extends Activity  {
     //TODO to be implemented
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.circuitsDisplay);
+        setContentView(R.layout.circuits_display);
 
         Bundle extras = getIntent().getExtras();
         final String idmName = extras.getString("currentIdm");

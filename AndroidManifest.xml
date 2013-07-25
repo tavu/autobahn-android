@@ -18,6 +18,10 @@
         <activity android:name="autobahn.android.Login">
         </activity>
         <activity android:name="autobahn.android.IdmsActivity"/>
+        <activity android:name="autobahn.android.PrefsActivity"
+                  android:label="@string/titlePrefs" />
+
+
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

@@ -20,13 +20,10 @@ public class IdmsActivity extends Activity {
     ListView domainList;
     ArrayAdapter<String> adapter;
 
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        autobahnClient.fetchIdms();
+    private void showData() {
         domains = autobahnClient.getIdms();
 
-        if(domains.isEmpty()){
+        if (domains.isEmpty()) {
             setContentView(R.layout.no_domains);
             Button menuButton = (Button) findViewById(R.id.menuButton);
             menuButton.setOnClickListener(new View.OnClickListener() {
@@ -38,12 +35,17 @@ public class IdmsActivity extends Activity {
                     finish();
                 }
             });
-        }
+        } else {
+            setContentView(R.layout.idm_selection_activity);
+            domainList = (ListView) findViewById(R.id.list);
+            adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, domains);
+            domainList.setAdapter(adapter);
 
-        setContentView(R.layout.idm_selection_activity);
-        domainList = (ListView) findViewById(R.id.list);
-        adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_1,domains);
-        domainList.setAdapter(adapter);
+        }
+    }
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         AsyncTask<Void, Void, Void> async = new AsyncTask<Void, Void, Void>() {
             @Override
@@ -60,8 +62,9 @@ public class IdmsActivity extends Activity {
 
             @Override
             protected void onPostExecute(Void result) {
-                //TODO show data
+                showData();
             }
         };
+        async.execute();
     }
 }

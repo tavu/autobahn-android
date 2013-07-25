@@ -19,10 +19,10 @@ public class AutobahnClient {
     boolean isLogIn;
     private String userName;
     private String password;
-    private List<String> idms;
+    private List<String> idms = new ArrayList();
     private  List<Circuit> circuits = new ArrayList();
 
-    static AutobahnClient instance = null;
+    static AutobahnClient instance=null;
 
     public static AutobahnClient getInstance() {
         if(instance == null)
@@ -54,12 +54,13 @@ public class AutobahnClient {
     }
 
     public void setPassword(String pass) {
-        password = pass;
+        password=pass;
     }
 
     public String getPassword() {
         return password;
     }
+
 
 
 
@@ -92,7 +93,7 @@ public class AutobahnClient {
 
     public void fetchTrackCircuit(String idm) {
 
-        List<Circuit> list = new ArrayList<Circuit>();
+        circuits.clear();
 
         Circuit c = new Circuit();
         c.id = 1;
@@ -105,20 +106,20 @@ public class AutobahnClient {
         c.endVlan = 0;
         c.startPort = new Port("Port_1","GARR");
         c.endPort = new Port("Port_2","GARR");
-        list.add(c);
+        circuits.add(c);
 
-        c = new Circuit();
-        c.id = 2;
-        c.capacity = 1000;
-        c.mtu = 500;
-        c.state = Circuit.ReservationState.FAILED;
-        c.startTime = Calendar.getInstance();
-        c.endTime = Calendar.getInstance();
-        c.startPort = new Port("GARR.Port_1","GARR","client_1");
-        c.endPort = new Port("GRNET.Port_2","GRNET");
-        c.startVlan = 10;
-        c.endVlan = 4000;
-        list.add(c);
+        c=new Circuit();
+        c.id=2;
+        c.capacity=1000;
+        c.mtu=500;
+        c.state=Circuit.ReservationState.FAILED;
+        c.startTime= Calendar.getInstance();
+        c.endTime=Calendar.getInstance();
+        c.startPort=new Port("GARR.Port_1","GARR","client_1");
+        c.endPort=new Port("GRNET.Port_2","GRNET");
+        c.startVlan=10;
+        c.endVlan=4000;
+        circuits.add(c);
     }
 
     public List<String> getIdms() {

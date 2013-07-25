@@ -4,12 +4,21 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
+import com.example.autobahn.R;
+
+import java.util.List;
 
 
 public class IdmsActivity extends Activity {
 
+    AutobahnClient autobahnClient = AutobahnClient.getInstance();
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.idmSelectionActivity);
+
+
+
 
         AsyncTask<Void, Void, Void> async=new AsyncTask<Void, Void, Void>() {
             @Override

@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import com.example.autobahn.R;
 
-public class mainMenu extends Activity {
+public class MainMenu extends Activity {
     /**
      * Called when the activity is first created.
      */
@@ -21,13 +21,13 @@ public class mainMenu extends Activity {
         setContentView(R.layout.main);
 
         aboutButton = (Button) findViewById(R.id.about);
-        trackCircuitButton = (Button) findViewById(R.id.circuit);
+        trackCircuitButton = (Button) findViewById(R.id.idms);
 
         aboutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent aboutActivity = new Intent();
-                aboutActivity.setClass(getApplicationContext(), about.class);
+                aboutActivity.setClass(getApplicationContext(), AboutActivity.class);
                 startActivity(aboutActivity);
 
             }
@@ -50,7 +50,7 @@ public class mainMenu extends Activity {
             @Override
             public void onClick(View view) {
                 Intent circuitActivity = new Intent();
-                circuitActivity.setClass(getApplicationContext(), trackCircuit.class);
+                circuitActivity.setClass(getApplicationContext(), TrackCircuitActivity.class);
                 startActivity(circuitActivity);
             }
         });

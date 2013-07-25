@@ -10,7 +10,7 @@ import android.os.Bundle;
  * Time: 3:34 PM
  * To change this template use File | Settings | File Templates.
  */
-public class request extends Activity {
+public class RequestActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }

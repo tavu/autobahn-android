@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 
-public class trackCircuit extends Activity  {
+public class TrackCircuitActivity extends Activity  {
 
     //TODO to be implemented
     public void onCreate(Bundle savedInstanceState) {

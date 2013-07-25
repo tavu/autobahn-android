@@ -47,7 +47,7 @@ public class LoginHandler {
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 
-            // Execute HTTP Post Request
+            // Execute HTTP Post RequestActivity
             HttpResponse response = httpclient.execute(httppost);
             Log.d("WARN", response.toString());
         } catch (ClientProtocolException e) {

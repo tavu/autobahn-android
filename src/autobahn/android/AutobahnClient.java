@@ -25,8 +25,6 @@ public class AutobahnClient {
     boolean isLogIn;
     private String userName;
     private String password;
-    private List<Idm> idms;
-    private  List<Circuit> circuits;
 
     static AutobahnClient instance = null;
 
@@ -67,6 +65,9 @@ public class AutobahnClient {
         return password;
     }
 
+
+    private List<Idm> idms;
+    private  List<Circuit> circuits;
 
     public boolean hasAuthenticate() {
         return isLogIn;

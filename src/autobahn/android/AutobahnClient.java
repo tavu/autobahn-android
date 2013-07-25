@@ -23,21 +23,59 @@ public class AutobahnClient {
     private String host;
     private int port;
     boolean isLogIn;
+    private String userName;
+    private String password;
 
-    public AutobahnClient(String host,int port){
+    static AutobahnClient instance=null;
+
+    public static AutobahnClient getInstance() {
+        if(instance==null)
+            instance=new AutobahnClient();
+
+        return instance;
+    }
+
+    public AutobahnClient(){
         httpclient= new DefaultHttpClient();
         scheme="http";
-        this.host=host;
-        this.port=port;
         isLogIn=false;
     }
+
+    public void setHost(String s) {
+        host=s;
+    }
+
+    public void setPort(int p) {
+        port = p;
+    }
+
+    public void setUserName(String s) {
+        userName=s;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setPassword(String pass) {
+        password=pass;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+
+    private List<Idm> idms;
+    private  List<Circuit> circuits;
 
     public boolean hasAuthenticate() {
         return isLogIn;
     }
 
-    public void logIn(String name,String pass) throws URISyntaxException, IOException {
+    public void logIn() throws URISyntaxException, IOException {
 
+        /*
         String query="j_username="+name+"&j_password="+pass;
 
         URI url= new URI("http" , null , "62.217.125.174" ,8080, Resources.getSystem().getString(R.string.loginPage) ,query,null);
@@ -48,9 +86,17 @@ public class AutobahnClient {
 
         isLogIn=true;
         return ;
+        */
     }
 
-    public List<Circuit> getTrackCircuit(String idm) {
+    /*
+        returns the track circuit than have been fetched previously from fetchTrackCircuit
+     */
+    public List<Circuit> getTrackCircuit() {
+        return circuits;
+    }
+
+    public void fetchTrackCircuit(Idm idm) {
 
         List<Circuit> list=new ArrayList<Circuit>();
 
@@ -79,18 +125,15 @@ public class AutobahnClient {
         c.startVlan=10;
         c.endVlan=4000;
         list.add(c);
-
-
-
-        return list;
     }
 
-    public List<String> getIdms() {
-        List<String> list=new ArrayList<String>();
-        list.add("GARR");
-        list.add("GRNET");
-        return list;
+    public List<Idm> getIdms() {
+        return idms;
     }
 
+    public void fetchIdms() {
+        idms.add(new Idm("GARR") );
+        idms.add(new Idm("GRNET") );
+    }
 
 }

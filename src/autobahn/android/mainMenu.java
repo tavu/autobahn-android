@@ -27,6 +27,20 @@ public class mainMenu extends Activity {
                 Intent aboutActivity = new Intent();
                 aboutActivity.setClass(getApplicationContext(),AboutActivity.class);
                 startActivity(aboutActivity);
+
+            }
+        });
+
+
+        aboutButton = (Button) findViewById(R.id.idms);
+
+        aboutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent idmsActivity = new Intent();
+                idmsActivity.setClass(getApplicationContext(),IdmsActivity.class);
+                startActivity(idmsActivity);
+
             }
         });
 

@@ -25,15 +25,15 @@ public class Port {
         this.name=null;
     }
 
-    String getId() {
+    public String getId() {
         return id;
     }
 
-    String getDomain() {
+    public String getDomain() {
         return domain;
     }
 
-    String name() {
+    public String name() {
         if(name==null){
             return id;
         }

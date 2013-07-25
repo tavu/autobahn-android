@@ -17,7 +17,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/circuit"
-            android:id="@+id/circuit" android:layout_margin="10px"/>
+            android:id="@+id/idms" android:layout_margin="10px"/>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

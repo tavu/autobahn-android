@@ -25,6 +25,8 @@ public class AutobahnClient {
     boolean isLogIn;
     private String userName;
     private String password;
+    private List<String> idms = new ArrayList<String>();
+    private  List<Circuit> circuits = new ArrayList<Circuit>();
 
     static AutobahnClient instance = null;
 
@@ -66,8 +68,6 @@ public class AutobahnClient {
     }
 
 
-    private List<Idm> idms;
-    private  List<Circuit> circuits;
 
     public boolean hasAuthenticate() {
         return isLogIn;
@@ -96,11 +96,11 @@ public class AutobahnClient {
         return circuits;
     }
 
-    public void fetchTrackCircuit(Idm idm) {
+    public void fetchTrackCircuit(String idm) {
 
-        List<Circuit> list=new ArrayList<Circuit>();
+        List<Circuit> list = new ArrayList<Circuit>();
 
-        Circuit c=new Circuit();
+        Circuit c = new Circuit();
         c.id = 1;
         c.capacity = 10000;
         c.mtu = -1;
@@ -127,13 +127,14 @@ public class AutobahnClient {
         list.add(c);
     }
 
-    public List<Idm> getIdms() {
+    public List<String> getIdms() {
         return idms;
     }
 
     public void fetchIdms() {
-        idms.add(new Idm("GARR") );
-        idms.add(new Idm("GRNET") );
+        idms.clear();
+        idms.add(new String("GARR"));
+        idms.add(new String("GRNET"));
     }
 
 }

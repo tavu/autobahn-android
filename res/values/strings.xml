@@ -21,8 +21,10 @@
     </string>
     <string name="info_3">If you have an issue contact your NREN or open a ticket to the Multi-Domain Service Desk(MDSD): </string>
     <string name="link_4"><a href="https://issues.geant.net/jira/browse/MDSD">https://issues.geant.net/jira/browse/MDSD</a></string>
+    <string name="remember">Remember Me</string>
+    <string name="username">Username</string><string name="password">Password</string><string name="log_in">Log In</string>
 
-    <string name="url">Autobahn url</string>
+ <string name="url">Autobahn url</string>
     <string name="username">Username</string><string name="password">Password</string>
     <string name="log_in">Log In</string>
 
@@ -30,9 +32,6 @@
     <string name="summaryUrl">"Please enter the url of the Autobahn Portal"</string>
     <string name="summaryUsername">"Please enter your username"</string>
     <string name="summaryPassword">"Please enter your password"</string>
-
-
-
 
 
     <!-- autobahn client URLS  -->

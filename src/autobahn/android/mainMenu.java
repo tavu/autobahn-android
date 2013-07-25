@@ -15,16 +15,16 @@ public class mainMenu extends Activity {
      * Called when the activity is first created.
      */
 
-    Button aboutButton;
+    Button button;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        aboutButton = (Button) findViewById(R.id.about);
+        button = (Button) findViewById(R.id.about);
 
-        aboutButton.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent aboutActivity = new Intent();
@@ -35,9 +35,9 @@ public class mainMenu extends Activity {
         });
 
 
-        aboutButton = (Button) findViewById(R.id.idms);
+        button = (Button) findViewById(R.id.idms);
 
-        aboutButton.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent idmsActivity = new Intent();

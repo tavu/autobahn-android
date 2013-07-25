@@ -25,24 +25,26 @@ public class AutobahnClient {
     boolean isLogIn;
     private String userName;
     private String password;
+    private List<String> idms = new ArrayList<String>();
+    private  List<Circuit> circuits = new ArrayList<Circuit>();
 
     static AutobahnClient instance=null;
 
     public static AutobahnClient getInstance() {
-        if(instance==null)
-            instance=new AutobahnClient();
+        if(instance == null)
+            instance = new AutobahnClient();
 
         return instance;
     }
 
     public AutobahnClient(){
-        httpclient= new DefaultHttpClient();
-        scheme="http";
-        isLogIn=false;
+        httpclient = new DefaultHttpClient();
+        scheme = "http";
+        isLogIn = false;
     }
 
     public void setHost(String s) {
-        host=s;
+        host = s;
     }
 
     public void setPort(int p) {
@@ -50,7 +52,7 @@ public class AutobahnClient {
     }
 
     public void setUserName(String s) {
-        userName=s;
+        userName = s;
     }
 
     public String getUserName() {
@@ -66,8 +68,7 @@ public class AutobahnClient {
     }
 
 
-    private ArrayList<Idm> idms;
-    private ArrayList<Circuit> circuits;
+
 
     public boolean hasAuthenticate() {
         return isLogIn;
@@ -96,21 +97,21 @@ public class AutobahnClient {
         return circuits;
     }
 
-    public void fetchTrackCircuit(Idm idm) {
+    public void fetchTrackCircuit(String idm) {
 
-        List<Circuit> list=new ArrayList<Circuit>();
+        List<Circuit> list = new ArrayList<Circuit>();
 
-        Circuit c=new Circuit();
-        c.id=1;
-        c.capacity=10000;
-        c.mtu=-1;
-        c.state=Circuit.ReservationState.ACTIVE;
-        c.startTime= Calendar.getInstance();
-        c.endTime=Calendar.getInstance();
-        c.startVlan=0;
-        c.endVlan=0;
-        c.startPort=new Port("Port_1","GARR");
-        c.endPort=new Port("Port_2","GARR");
+        Circuit c = new Circuit();
+        c.id = 1;
+        c.capacity = 10000;
+        c.mtu = -1;
+        c.state = Circuit.ReservationState.ACTIVE;
+        c.startTime = Calendar.getInstance();
+        c.endTime = Calendar.getInstance();
+        c.startVlan = 0;
+        c.endVlan = 0;
+        c.startPort = new Port("Port_1","GARR");
+        c.endPort = new Port("Port_2","GARR");
         list.add(c);
 
         c=new Circuit();
@@ -127,13 +128,14 @@ public class AutobahnClient {
         list.add(c);
     }
 
-    public List<Idm> getIdms() {
+    public List<String> getIdms() {
         return idms;
     }
 
     public void fetchIdms() {
-        idms=new ArrayList<Idm>();
-        idms.add(new Idm("GARR") );
-        idms.add(new Idm("GRNET") );
+        idms.clear();
+        idms.add(new String("GARR"));
+        idms.add(new String("GRNET"));
     }
+
 }

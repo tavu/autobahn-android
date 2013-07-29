@@ -8,7 +8,7 @@ import com.example.autobahn.R;
 import java.util.List;
 
 
-public class TrackCircuitActivity extends Activity  {
+public class TrackCircuitActivity extends Activity {
 
     private List<Circuit> circuitList;
 
@@ -36,6 +36,7 @@ public class TrackCircuitActivity extends Activity  {
             @Override
             protected void onPostExecute(Void result) {
                 circuitList = AutobahnClient.getInstance().getTrackCircuits();
+                //TODO: populate with circuits
             }
         };
     }

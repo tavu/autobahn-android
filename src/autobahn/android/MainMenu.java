@@ -47,14 +47,14 @@ public class MainMenu extends Activity {
             }
         });
 
-        button.setOnClickListener(new View.OnClickListener() {
+        /*button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent circuitActivity = new Intent();
                 circuitActivity.setClass(getApplicationContext(), TrackCircuitActivity.class);
                 startActivity(circuitActivity);
             }
-        });
+        });*/
 
 
     }

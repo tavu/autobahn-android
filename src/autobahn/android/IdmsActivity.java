@@ -4,10 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
+import android.widget.*;
 import com.example.autobahn.R;
 
 import java.util.List;
@@ -40,6 +39,18 @@ public class IdmsActivity extends Activity {
             domainList = (ListView) findViewById(R.id.list);
             adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, domains);
             domainList.setAdapter(adapter);
+            domainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    TextView item = (TextView)view;
+                    String domain  = item.getText().toString();
+                    Log.d("Debug",domain);
+                    Intent domainActivity = new Intent();
+                    domainActivity.setClass(getApplicationContext(),DomainCircuitsList.class);
+                    domainActivity.putExtra("DOMAIN_NAME",domain);
+                    startActivity(domainActivity);
+                }
+            });
 
         }
     }
@@ -51,7 +62,7 @@ public class IdmsActivity extends Activity {
             @Override
             protected Void doInBackground(Void... type) {
 
-                AutobahnClient.getInstance().fetchIdms();
+                autobahnClient.fetchIdms();
                 return null;
             }
 
@@ -66,5 +77,7 @@ public class IdmsActivity extends Activity {
             }
         };
         async.execute();
+
+
     }
 }

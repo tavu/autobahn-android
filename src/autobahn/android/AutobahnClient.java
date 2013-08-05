@@ -126,7 +126,7 @@ public class AutobahnClient {
         }
         if(!isLogIn)
         {
-            String error=context.getString(R.string.login_faild);
+            String error=context.getString(R.string.login_failed);
             AutobahnClientException ex=new AutobahnClientException(error);
             throw ex;
         }

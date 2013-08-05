@@ -30,10 +30,7 @@
     <string name="no_domains">No domains are registered!</string>
     <string name="back_to_menu">Back to Main Menu</string>
 
-    <string name="titlePrefs">preferences</string>
-    <string name="summaryUrl">"Please enter the url of the Autobahn Portal"</string>
-    <string name="summaryUsername">"Please enter your username"</string>
-    <string name="summaryPassword">"Please enter your password"</string>
+    <string name="titlePrefs">Preferences</string>
 
     <string name="service">Service</string>
     <string name="user">User</string>
@@ -48,5 +45,5 @@
 
     <!-- ERRORS -->
     <string name="login_failed">"Log in failed. Please check username and password"</string>
-    <string name="net_error">"Network error."</string>
+    <string name="net_error">"Network error."</string><string name="end_time">End Time</string><string name="start_port">Start Port</string><string name="start_vlan">Start VLAN</string><string name="end_port">End Port</string><string name="end_vlan">End VLAN</string>
 </resources>

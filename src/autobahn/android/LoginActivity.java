@@ -1,29 +1,22 @@
 package autobahn.android;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import com.example.autobahn.R;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 
-/**
- * Created with IntelliJ IDEA.
- * User: Nl0st
- * Date: 22/7/2013
- * Time: 11:41 πμ
- * To change this template use File | Settings | File Templates.
- */
-public class Login extends Activity implements  View.OnClickListener {
+public class LoginActivity extends Activity implements  View.OnClickListener {
 
     Button loginButton;
     EditText usernameField;
@@ -53,7 +46,8 @@ public class Login extends Activity implements  View.OnClickListener {
      */
     private void initClient() {
         client=AutobahnClient.getInstance();
-        //TODO
+        client.setContext(this);
+
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -87,37 +81,29 @@ public class Login extends Activity implements  View.OnClickListener {
 
 
     public void onClick(View view) {
+        loginButton.setEnabled(false);
+
         String username = usernameField.getText().toString();
         String password = passwordField.getText().toString();
 
         client.setUserName(username);
         client.setPassword(password);
-        AsyncTask<Void, Void, Void> async=new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... type) {
 
-                try {
-                    AutobahnClient.getInstance().logIn();
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-                return null;
-            }
+        try {
+            client.logIn();
+        } catch (AutobahnClientException e) {
+            Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
+            loginButton.setEnabled(true);
+            toast.show();
+            return ;
+        }
 
-            @Override
-            protected void onProgressUpdate(Void... progress) {
-                super.onProgressUpdate(progress);
-            }
 
-            @Override
-            protected void onPostExecute(Void result) {
-                Intent menuActivity = new Intent();
-                menuActivity.setClass(getApplicationContext(),MainMenu.class);
-                startActivity(menuActivity);
-            }
-        };
+        loginButton.setEnabled(true);
+
+        Intent menuActivity = new Intent();
+        menuActivity.setClass(getApplicationContext(),MainMenu.class);
+        startActivity(menuActivity);
 
     }
 }

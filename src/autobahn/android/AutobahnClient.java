@@ -1,16 +1,30 @@
 package autobahn.android;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
+import android.content.Context;
+import android.util.Log;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
+import com.example.autobahn.R;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 
 public class AutobahnClient {
+
+    private static String LOGIN_URL="/autobahn-gui/j_spring_security_check";
 
     private HttpClient httpclient;
     private String scheme;
@@ -19,8 +33,11 @@ public class AutobahnClient {
     boolean isLogIn;
     private String userName;
     private String password;
+    private HttpContext localContext;
     private List<String> idms = new ArrayList();
     private  List<Circuit> circuits = new ArrayList();
+
+    private String TAG="WARN";
 
     static AutobahnClient instance=null;
 
@@ -35,6 +52,18 @@ public class AutobahnClient {
         httpclient = new DefaultHttpClient();
         scheme = "http";
         isLogIn = false;
+        CookieStore cookieStore = new BasicCookieStore();
+        localContext = new BasicHttpContext();
+        localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+        //TODO get the host from a property
+        host="62.217.125.174";
+    }
+
+    private Context context = null;
+
+    public void setContext(Context context)
+    {
+        this.context = context;
     }
 
     public void setHost(String s) {
@@ -61,27 +90,46 @@ public class AutobahnClient {
         return password;
     }
 
-
-
-
     public boolean hasAuthenticate() {
         return isLogIn;
     }
 
-    public void logIn() throws URISyntaxException, IOException {
+    public void logIn() throws AutobahnClientException {
+        String query="j_username="+userName+"&j_password="+password+"&_spring_security_remember_me=true";
+        URI url= null;
+        HttpPost httppost=null;
+        try {
+            url = new URI(scheme, null , host ,8080, LOGIN_URL ,query,null);
+            httppost = new HttpPost(url);
+            HttpResponse response = httpclient.execute(httppost,localContext);
 
-        /*
-        String query="j_username="+name+"&j_password="+pass;
+        } catch (URISyntaxException e) {
+            String error=context.getString(R.string.net_error);
+            AutobahnClientException ex=new AutobahnClientException(error);
+            throw ex;
+        } catch (ClientProtocolException e) {
+            String error=context.getString(R.string.net_error);
+            AutobahnClientException ex=new AutobahnClientException(error);
+            throw ex;
+        } catch (IOException e) {
+            String error=context.getString(R.string.net_error);
+            AutobahnClientException ex=new AutobahnClientException(error);
+            throw ex;
+        }
 
-        URI url= new URI("http" , null , "62.217.125.174" ,8080, Resources.getSystem().getString(R.string.loginPage) ,query,null);
-        HttpPost httppost = new HttpPost(url);
-        HttpResponse response = httpclient.execute(httppost);
-
-        //TODO check if login is correct
-
-        isLogIn=true;
-        return ;
-        */
+        CookieStore cookieStore=(CookieStore)localContext.getAttribute(ClientContext.COOKIE_STORE);
+        for(Cookie c:cookieStore.getCookies() )
+        {
+            if(c.getName().equals("SPRING_SECURITY_REMEMBER_ME_COOKIE"))
+                isLogIn=true;
+            Log.d(TAG,c.toString());
+        }
+        if(!isLogIn)
+        {
+            String error=context.getString(R.string.login_faild);
+            AutobahnClientException ex=new AutobahnClientException(error);
+            throw ex;
+        }
     }
 
     /*
@@ -93,6 +141,16 @@ public class AutobahnClient {
 
     public void fetchTrackCircuit(String idm) {
 
+          //TODO
+    }
+
+    public void fetchIdms() {
+        //TODO
+    }
+
+
+    /*
+    public void fetchTrackCircuit(String idm) {
         circuits.clear();
 
         Circuit c = new Circuit();
@@ -121,15 +179,76 @@ public class AutobahnClient {
         c.endVlan=4000;
         circuits.add(c);
     }
+     */
 
     public List<String> getIdms() {
         return idms;
     }
 
+    /*
     public void fetchIdms() {
         idms.clear();
         idms.add(new String("GARR"));
         idms.add(new String("GRNET"));
     }
+      */
+    /*
 
+    public void fetchIdms() {
+
+        Log.d(TAG,"idms");
+        HttpClient httpClient = new DefaultHttpClient();
+        //HttpContext localContext = new BasicHttpContext();
+                   ///autobahn-gui/j_spring_security_check
+        String text = "";
+        try {
+            URI url= new URI("http" , null , "62.217.125.174" ,8080, "/autobahn-gui/portal/secure/rest/idms" ,null,null);
+            HttpGet httpGet = new HttpGet(url);
+            Header uname=new BasicHeader("username","demoadmin");
+           Header pass=new BasicHeader("password","demoadmin");
+           httpGet.addHeader(uname);
+          httpGet.addHeader(pass);
+            HttpResponse response = httpClient.execute(httpGet);
+            org.apache.http.HttpEntity entity = response.getEntity();
+
+            text = getASCIIContentFromEntity(entity);
+
+
+        } catch (Exception e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+            return ;
+        }
+        Log.d(TAG,text);
+        JSONArray json = null;
+        try {
+            json = new JSONArray(text);
+            for(int i = 0; i < json.length(); i++){
+                String s  = (String) json.get(i);
+                Log.d(TAG,"S "+s);
+                idms.add(s);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+
+
+
+    }
+    */
+
+
+    /*
+    private String getASCIIContentFromEntity(HttpEntity entity) throws IllegalStateException, IOException {
+        InputStream in = entity.getContent();
+        StringBuffer out = new StringBuffer();
+        int n = 1;
+        while (n>0) {
+            byte[] b = new byte[4096];
+            n =  in.read(b);
+            if (n>0) out.append(new String(b, 0, n));
+        }
+        return out.toString();
+    }
+      */
 }

@@ -3,6 +3,7 @@ package autobahn.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,19 +35,19 @@ public class MainMenu extends Activity {
             }
         });
 
-
         button = (Button) findViewById(R.id.idms);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("WARN", "go to idms");
                 Intent idmsActivity = new Intent();
                 idmsActivity.setClass(getApplicationContext(),IdmsActivity.class);
                 startActivity(idmsActivity);
 
             }
         });
-
+/*
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,7 +56,7 @@ public class MainMenu extends Activity {
                 startActivity(circuitActivity);
             }
         });
-
+  */
 
     }
 
@@ -64,7 +65,7 @@ public class MainMenu extends Activity {
         MenuInflater inflater = getMenuInflater();
         //
         inflater.inflate(R.menu.menu, menu);
-        //
+
         return true; //
     }
 

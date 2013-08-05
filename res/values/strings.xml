@@ -36,8 +36,9 @@
     <string name="summaryPassword">"Please enter your password"</string>
 
 
+    <!-- autobahn client URLS  -->
+    <string name="loginPage">/autobahn-gui/j_spring_security_check</string>
+    <string name="circuitPage">/android/circuit</string>
+    <string name="idmsPage">/android/idms</string><string name="service">Service</string><string name="user">User</string><string name="state">State</string><string name="justification">Justification</string><string name="start_time">Start Time</string>
 
-    <!-- ERRORS -->
-    <string name="login_faild">log in faild. Please check username and password</string>
-    <string name="net_error">Can not connect to the network </string>
 </resources>

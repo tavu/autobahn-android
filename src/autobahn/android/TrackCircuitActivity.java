@@ -12,13 +12,14 @@ import android.widget.ListView;
 import com.example.autobahn.R;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class TrackCircuitActivity extends Activity {
 
     private List<Circuit> circuitList;
-    private List<String>  reservationID;
+    List<String>  reservationID = new ArrayList<String>();
     ListView reservationList;
     ArrayAdapter<String> adapter;
 
@@ -27,7 +28,6 @@ public class TrackCircuitActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.domain_reservation_activity);
-
         Bundle extras = getIntent().getExtras();
         idmName = extras.getString("DOMAIN_NAME");
         async.execute();
@@ -60,7 +60,7 @@ public class TrackCircuitActivity extends Activity {
 
         setContentView(R.layout.domain_reservation_activity);
         for( Circuit c : circuitList){
-            String route = c.getStartDomain()+"-"+c.getEndDomain();
+            String route = c.getStartDomain()+" "+c.getStartPort().name()+"-"+c.getEndDomain()+ " " + c.getEndPort().name();
             reservationID.add(route);
         }
 
@@ -71,28 +71,11 @@ public class TrackCircuitActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String JSONObject = (new Gson()).toJson(circuitList.get(i));
-                Log.d("Debug",JSONObject);
                 Intent singleCircuitActivity = new Intent();
                 singleCircuitActivity.setClass(getApplicationContext(),SingleCircuitActivity.class);
                 singleCircuitActivity.putExtra("JSON_OBJECT",JSONObject);
-                //startActivity(singleCircuitActivity);
+                startActivity(singleCircuitActivity);
             }
         });
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
-
-
-
 }

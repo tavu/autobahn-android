@@ -40,23 +40,12 @@ public class MainMenu extends Activity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("WARN", "go to idms");
                 Intent idmsActivity = new Intent();
                 idmsActivity.setClass(getApplicationContext(),IdmsActivity.class);
                 startActivity(idmsActivity);
 
             }
         });
-/*
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent circuitActivity = new Intent();
-                circuitActivity.setClass(getApplicationContext(), TrackCircuitActivity.class);
-                startActivity(circuitActivity);
-            }
-        });
-  */
 
     }
 

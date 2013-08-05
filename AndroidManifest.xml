@@ -20,6 +20,7 @@
         <activity android:name="autobahn.android.IdmsActivity"/>
         <activity android:name="autobahn.android.PrefsActivity"
                   android:label="@string/titlePrefs" />
+        <activity android:name="autobahn.android.SingleCircuitActivity"/>
 
 
     </application>

@@ -6,9 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
+import android.widget.*;
 import com.example.autobahn.R;
 
 import java.util.List;
@@ -16,13 +14,12 @@ import java.util.List;
 
 public class IdmsActivity extends Activity {
 
-    AutobahnClient autobahnClient = AutobahnClient.getInstance();
     List<String> domains;
     ListView domainList;
     ArrayAdapter<String> adapter;
 
     private void showData() {
-        domains = autobahnClient.getIdms();
+        domains = AutobahnClient.getInstance().getIdms();
 
         Log.d("WARN","showData");
 
@@ -40,9 +37,20 @@ public class IdmsActivity extends Activity {
             });
         } else {
             setContentView(R.layout.idm_selection_activity);
-            domainList = (ListView) findViewById(R.id.list);
+            domainList = (ListView) findViewById(R.id.listView);
             adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, domains);
             domainList.setAdapter(adapter);
+            domainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    TextView item = (TextView)view;
+                    String domain  = item.getText().toString();
+                    Intent domainActivity = new Intent();
+                    domainActivity.setClass(getApplicationContext(),TrackCircuitActivity.class);
+                    domainActivity.putExtra("DOMAIN_NAME",domain);
+                    startActivity(domainActivity);
+                }
+            });
 
         }
     }
@@ -71,5 +79,7 @@ public class IdmsActivity extends Activity {
             }
         };
         async.execute();
+
+
     }
 }

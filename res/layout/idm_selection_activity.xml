@@ -11,14 +11,9 @@
             android:text="@string/idm_title"
             android:id="@+id/idm_title" android:layout_gravity="center" android:gravity="center"
             android:layout_marginLeft="20px" android:layout_marginRight="20px" android:layout_marginTop="20px"/>
-    <ListView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/list" android:layout_gravity="center" android:headerDividersEnabled="false"
-            android:footerDividersEnabled="false" android:focusableInTouchMode="false" android:focusable="false"
-            android:drawSelectorOnTop="false" android:clickable="true"
-            />
-            <!--android:fastScrollEnabled="false" android:fastScrollAlwaysVisible="false" -->
+    <ListView android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/listView"
+              android:layout_gravity="center"/>
+    <!--android:fastScrollEnabled="false" android:fastScrollAlwaysVisible="false" -->
 
 
 </LinearLayout>

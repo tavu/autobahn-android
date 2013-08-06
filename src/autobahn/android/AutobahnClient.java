@@ -41,7 +41,7 @@ public class AutobahnClient {
 
     static AutobahnClient instance=null;
 
-    public static AutobahnClient getInstance() {
+    public static AutobahnClient getInstance()  {
         if(instance == null)
             instance = new AutobahnClient();
 

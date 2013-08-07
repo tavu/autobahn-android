@@ -17,6 +17,7 @@ public class IdmsActivity extends Activity {
     List<String> domains;
     ListView domainList;
     ArrayAdapter<String> adapter;
+    AutobahnClientException exception=null;
 
     private void showData() {
         domains = AutobahnClient.getInstance().getIdms();

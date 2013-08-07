@@ -286,7 +286,7 @@ public class AutobahnClient {
     */
 
 
-    /*
+
     private String getASCIIContentFromEntity(HttpEntity entity) throws IllegalStateException, IOException {
         InputStream in = entity.getContent();
         StringBuffer out = new StringBuffer();
@@ -298,5 +298,5 @@ public class AutobahnClient {
         }
         return out.toString();
     }
-      */
+
 }

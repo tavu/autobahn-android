@@ -62,7 +62,7 @@ public class IdmsActivity extends Activity {
             @Override
             protected Void doInBackground(Void... type) {
 
-                Log.d("WARN","fetch idms");
+                Log.d("WARN","Fetching Domains....");
                 AutobahnClient.getInstance().fetchIdms();
                 return null;
             }
@@ -74,7 +74,7 @@ public class IdmsActivity extends Activity {
 
             @Override
             protected void onPostExecute(Void result) {
-                Log.d("WARN","done");
+                Log.d("WARN","Done Fetching Domains!");
                 showData();
             }
         };

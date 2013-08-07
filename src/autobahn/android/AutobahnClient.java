@@ -1,15 +1,9 @@
 package autobahn.android;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 import com.example.autobahn.R;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
@@ -22,9 +16,15 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class AutobahnClient {
 
-    private static String LOGIN_URL="/autobahn-gui/j_spring_security_check";
+    private static String LOGIN_URL = "/autobahn-gui/j_spring_security_check";
 
     private HttpClient httpclient;
     private String scheme;
@@ -34,21 +34,23 @@ public class AutobahnClient {
     private String userName;
     private String password;
     private HttpContext localContext;
+    private Context context = null;
+    private SharedPreferences prefs;
     private List<String> idms = new ArrayList();
-    private  List<Circuit> circuits = new ArrayList();
+    private List<Circuit> circuits = new ArrayList();
 
-    private String TAG="WARN";
+    private String TAG = "WARN";
 
-    static AutobahnClient instance=null;
+    static AutobahnClient instance = null;
 
-    public static AutobahnClient getInstance()  {
-        if(instance == null)
+    public static AutobahnClient getInstance() {
+        if (instance == null)
             instance = new AutobahnClient();
 
         return instance;
     }
 
-    public AutobahnClient(){
+    public AutobahnClient() {
         httpclient = new DefaultHttpClient();
         scheme = "http";
         isLogIn = false;
@@ -56,13 +58,10 @@ public class AutobahnClient {
         localContext = new BasicHttpContext();
         localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
         //TODO get the host from a property
-        host="62.217.125.174";
+        host = "62.217.125.174";
     }
 
-    private Context context = null;
-
-    public void setContext(Context context)
-    {
+    public void setContext(Context context) {
         this.context = context;
     }
 
@@ -83,7 +82,7 @@ public class AutobahnClient {
     }
 
     public void setPassword(String pass) {
-        password=pass;
+        password = pass;
     }
 
     public String getPassword() {
@@ -95,39 +94,38 @@ public class AutobahnClient {
     }
 
     public void logIn() throws AutobahnClientException {
-        String query="j_username="+userName+"&j_password="+password+"&_spring_security_remember_me=true";
-        URI url= null;
-        HttpPost httppost=null;
+        String query = "j_username=" + userName + "&j_password=" + password + "&_spring_security_remember_me=true";
+        URI url = null;
+        HttpPost httppost = null;
         try {
-            url = new URI(scheme, null , host ,8080, LOGIN_URL ,query,null);
+            url = new URI(scheme, null, host, 8080, LOGIN_URL, query, null);
             httppost = new HttpPost(url);
-            HttpResponse response = httpclient.execute(httppost,localContext);
+            HttpResponse response = httpclient.execute(httppost, localContext);
 
         } catch (URISyntaxException e) {
-            String error=context.getString(R.string.net_error);
-            AutobahnClientException ex=new AutobahnClientException(error);
+            String error = context.getString(R.string.net_error);
+            AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         } catch (ClientProtocolException e) {
-            String error=context.getString(R.string.net_error);
-            AutobahnClientException ex=new AutobahnClientException(error);
+            String error = context.getString(R.string.net_error);
+            AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         } catch (IOException e) {
-            String error=context.getString(R.string.net_error);
-            AutobahnClientException ex=new AutobahnClientException(error);
+            String error = context.getString(R.string.net_error);
+            AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         }
 
-        CookieStore cookieStore=(CookieStore)localContext.getAttribute(ClientContext.COOKIE_STORE);
-        for(Cookie c:cookieStore.getCookies() )
-        {
-            if(c.getName().equals("SPRING_SECURITY_REMEMBER_ME_COOKIE"))
-                isLogIn=true;
-            Log.d(TAG,c.toString());
+        CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
+        for (Cookie c : cookieStore.getCookies()) {
+            if (c.getName().equals("SPRING_SECURITY_REMEMBER_ME_COOKIE"))
+                isLogIn = true;
+            Log.d(TAG, c.toString());
+            Log.d(TAG,"Connected to " + host);
         }
-        if(!isLogIn)
-        {
-            String error=context.getString(R.string.login_failed);
-            AutobahnClientException ex=new AutobahnClientException(error);
+        if (!isLogIn) {
+            String error = context.getString(R.string.login_failed);
+            AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         }
     }
@@ -141,7 +139,7 @@ public class AutobahnClient {
 
     public void fetchTrackCircuit(String idm) {
 
-          //TODO
+        //TODO
     }
 
     public void fetchIdms() {

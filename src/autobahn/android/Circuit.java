@@ -15,18 +15,61 @@ public class Circuit {
         FAILED
     }
 
-    public ReservationState state;
-    public Calendar startTime;
-    public Calendar endTime;
-    public long id;
-    public int capacity;
-    public int mtu;
-    public int startVlan;
-    public int endVlan;
+    private ReservationState state;
+    private Calendar startTime;
+    private Calendar endTime;
+    private long id;
+    private int capacity;
+    private int mtu;
+    private int startVlan;
+    private int endVlan;
+    private Port startPort;
+    private Port endPort;
+    private String justf;
 
-    public Port startPort;
-    public Port endPort;
-    public String justf;
+    public void setState(ReservationState state) {
+        this.state = state;
+    }
+
+    public void setStartTime(Calendar startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(Calendar endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public void setMtu(int mtu) {
+        this.mtu = mtu;
+    }
+
+    public void setStartVlan(int startVlan) {
+        this.startVlan = startVlan;
+    }
+
+    public void setEndVlan(int endVlan) {
+        this.endVlan = endVlan;
+    }
+
+    public void setStartPort(Port startPort) {
+        this.startPort = startPort;
+    }
+
+    public void setEndPort(Port endPort) {
+        this.endPort = endPort;
+    }
+
+    public void setJustf(String justf) {
+        this.justf = justf;
+    }
 
     public ReservationState getState() {
         return state;
@@ -68,7 +111,7 @@ public class Circuit {
         return endPort;
     }
 
-    public String justification() {
+    public String getJustification() {
         return justf;
     }
 

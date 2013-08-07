@@ -3,7 +3,9 @@ package autobahn.android;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -62,6 +64,12 @@ public class LoginActivity extends Activity implements  View.OnClickListener {
 
         usernameField.addTextChangedListener(watcher);
         passwordField.addTextChangedListener(watcher);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        usernameField.getText().append(prefs.getString("username","") );
+        passwordField.getText().append(prefs.getString("password","") );
+
 
         loginButton.setOnClickListener(this);
 

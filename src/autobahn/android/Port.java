@@ -7,22 +7,24 @@ public class Port {
     private String domain;
     private String name;
 
-    public Port(String id,String domain,String name) {
-        this.id=id;
-        this.domain=domain;
-        name=name.trim();
-        if(name.length()==0 ) {
-            this.name=null;
-        }
-        else {
-            this.name=name;
-        }
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public Port(String id,String domain) {
-        this.id=id;
-        this.domain=domain;
-        this.name=null;
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+
+    public Port() {
+        name=null;
+        id=null;
+        name=null;
     }
 
     public String getId() {

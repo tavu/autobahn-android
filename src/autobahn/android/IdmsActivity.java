@@ -17,12 +17,16 @@ public class IdmsActivity extends Activity {
     List<String> domains;
     ListView domainList;
     ArrayAdapter<String> adapter;
+    AutobahnClientException exception=null;
 
     private void showData() {
         domains = AutobahnClient.getInstance().getIdms();
 
-        Log.d("WARN","showData");
-
+        if(exception!=null) {
+            Log.d("WARN","idms error");
+            Toast toast  = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
+            toast.show();
+        }
         if (domains.isEmpty()) {
             setContentView(R.layout.no_domains);
             Button menuButton = (Button) findViewById(R.id.menuButton);
@@ -57,13 +61,15 @@ public class IdmsActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("WARN","create");
         AsyncTask<Void, Void, Void> async = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... type) {
 
-                Log.d("WARN","fetch idms");
-                AutobahnClient.getInstance().fetchIdms();
+                try {
+                    AutobahnClient.getInstance().fetchIdms();
+                } catch (AutobahnClientException e) {
+                    exception=e;
+                }
                 return null;
             }
 
@@ -74,12 +80,10 @@ public class IdmsActivity extends Activity {
 
             @Override
             protected void onPostExecute(Void result) {
-                Log.d("WARN","done");
                 showData();
             }
         };
         async.execute();
-
 
     }
 }

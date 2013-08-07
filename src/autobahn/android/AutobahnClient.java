@@ -1,19 +1,26 @@
 package autobahn.android;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.autobahn.R;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.cookie.Cookie;
@@ -25,6 +32,7 @@ import org.apache.http.protocol.HttpContext;
 public class AutobahnClient {
 
     private static String LOGIN_URL="/autobahn-gui/j_spring_security_check";
+    private static String IDMS_URL="/autobahn-gui/portal/secure/android/idms";
 
     private HttpClient httpclient;
     private String scheme;
@@ -57,6 +65,7 @@ public class AutobahnClient {
         localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
         //TODO get the host from a property
         host="62.217.125.174";
+        port=8080;
     }
 
     private Context context = null;
@@ -64,6 +73,8 @@ public class AutobahnClient {
     public void setContext(Context context)
     {
         this.context = context;
+
+
     }
 
     public void setHost(String s) {
@@ -99,19 +110,22 @@ public class AutobahnClient {
         URI url= null;
         HttpPost httppost=null;
         try {
-            url = new URI(scheme, null , host ,8080, LOGIN_URL ,query,null);
+            url = new URI(scheme, null , host ,port, LOGIN_URL ,query,null);
             httppost = new HttpPost(url);
             HttpResponse response = httpclient.execute(httppost,localContext);
 
         } catch (URISyntaxException e) {
+            Log.d(TAG,e.getReason());
             String error=context.getString(R.string.net_error);
             AutobahnClientException ex=new AutobahnClientException(error);
             throw ex;
         } catch (ClientProtocolException e) {
+            Log.d(TAG,e.getMessage());
             String error=context.getString(R.string.net_error);
             AutobahnClientException ex=new AutobahnClientException(error);
             throw ex;
         } catch (IOException e) {
+            Log.d(TAG,e.getMessage());
             String error=context.getString(R.string.net_error);
             AutobahnClientException ex=new AutobahnClientException(error);
             throw ex;
@@ -144,8 +158,54 @@ public class AutobahnClient {
           //TODO
     }
 
-    public void fetchIdms() {
-        //TODO
+    public void fetchIdms() throws AutobahnClientException {
+
+        idms.clear();
+        URI url= null;
+        HttpGet httpget=null;
+        HttpResponse response=null;
+
+        try {
+            String s="DF"+IDMS_URL;
+            url = new URI(scheme, null , host ,port,IDMS_URL, null,null);
+            httpget = new HttpGet(url);
+            response = httpclient.execute(httpget,localContext);
+
+        } catch (URISyntaxException e) {
+            String error=context.getString(R.string.net_error);
+            AutobahnClientException ex=new AutobahnClientException(error);
+            throw ex;
+        } catch (ClientProtocolException e) {
+            String error=context.getString(R.string.net_error);
+            AutobahnClientException ex=new AutobahnClientException(error);
+            throw ex;
+        } catch (IOException e) {
+            String error=context.getString(R.string.net_error);
+            AutobahnClientException ex=new AutobahnClientException(error);
+            throw ex;
+        }
+
+        String json=null;
+        try {
+            json =getASCIIContentFromEntity(response.getEntity());
+        } catch (IOException e) {
+            String error=context.getString(R.string.net_error);
+            AutobahnClientException ex=new AutobahnClientException(error);
+            throw ex;
+        }
+
+        Gson gson = new Gson();
+        ArrayList<String> l = new ArrayList<String>();
+
+        try {
+            l=gson.fromJson(json,l.getClass());
+        }catch (JsonParseException e) {
+            String error=context.getString(R.string.net_error);
+            AutobahnClientException ex=new AutobahnClientException(error);
+            throw ex;
+        }
+
+        idms=l;
     }
 
 
@@ -251,4 +311,16 @@ public class AutobahnClient {
         return out.toString();
     }
       */
+
+    private String getASCIIContentFromEntity(HttpEntity entity) throws IllegalStateException, IOException {
+        InputStream in = entity.getContent();
+        StringBuffer out = new StringBuffer();
+        int n = 1;
+        while (n>0) {
+            byte[] b = new byte[4096];
+            n =  in.read(b);
+            if (n>0) out.append(new String(b, 0, n));
+        }
+        return out.toString();
+    }
 }

@@ -45,5 +45,5 @@
 
     <!-- ERRORS -->
     <string name="login_failed">"Log in failed. Please check username and password"</string>
-    <string name="net_error">"Network error."</string><string name="end_time">End Time</string><string name="start_port">Start Port</string><string name="start_vlan">Start VLAN</string><string name="end_port">End Port</string><string name="end_vlan">End VLAN</string>
+    <string name="net_error">"Network error."</string><string name="end_time">End Time</string><string name="start_port">Start Port</string><string name="start_vlan">Start VLAN</string><string name="end_port">End Port</string><string name="end_vlan">End VLAN</string><string name="capacity">Capacity[Mbits/s]</string><string name="mtu_size">MTU size[bytes]</string><string name="failure_reason">Failure Reason</string>
 </resources>

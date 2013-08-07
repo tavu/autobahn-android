@@ -17,12 +17,11 @@ public class IdmsActivity extends Activity {
     List<String> domains;
     ListView domainList;
     ArrayAdapter<String> adapter;
-    AutobahnClientException exception=null;
 
     private void showData() {
         domains = AutobahnClient.getInstance().getIdms();
 
-        if(exception!=null) {
+        if(exception != null) {
             Log.d("WARN","idms error");
             Toast toast  = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
             toast.show();
@@ -61,6 +60,7 @@ public class IdmsActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("WARN","create");
         AsyncTask<Void, Void, Void> async = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... type) {
@@ -80,10 +80,12 @@ public class IdmsActivity extends Activity {
 
             @Override
             protected void onPostExecute(Void result) {
+                Log.d("WARN","Done Fetching Domains!");
                 showData();
             }
         };
         async.execute();
+
 
     }
 }

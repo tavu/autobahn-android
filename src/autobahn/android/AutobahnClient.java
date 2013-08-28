@@ -23,15 +23,19 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.cookie.Cookie;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class AutobahnClient {
 
     private static String LOGIN_URL = "/autobahn-gui/j_spring_security_check";
     private static String IDMS_URL = "/autobahn-gui/portal/secure/android/idms";
+    private static String CIRCUITS_URL = "/autobahn-gui/portal/secure/android/services";
 
     private HttpClient httpclient;
     private String scheme;
@@ -43,7 +47,7 @@ public class AutobahnClient {
     private HttpContext localContext;
     private Context context = null;
     private List<String> idms = new ArrayList();
-    private List<Circuit> circuits = new ArrayList();
+    private List<String> circuits = new ArrayList();
 
     private String TAG = "WARN";
 
@@ -65,6 +69,7 @@ public class AutobahnClient {
         localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
         //TODO get the host from a property
         host = "62.217.125.174";
+        port=8080;
     }
 
     public void setContext(Context context) {
@@ -106,27 +111,33 @@ public class AutobahnClient {
         try {
             url = new URI(scheme, null , host ,port, LOGIN_URL ,query,null);
             httppost = new HttpPost(url);
+            Log.d(TAG,"edo1");
             HttpResponse response = httpclient.execute(httppost, localContext);
+            Log.d(TAG,"edo2");
 
         } catch (URISyntaxException e) {
+            Log.d(TAG,"edo3");
             String error = context.getString(R.string.net_error);
             AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         } catch (ClientProtocolException e) {
+            Log.d(TAG,"edo4");
             String error = context.getString(R.string.net_error);
             AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         } catch (IOException e) {
+            Log.d(TAG,"edo5");
             String error = context.getString(R.string.net_error);
             AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         }
-
+        Log.d(TAG,"edo");
         CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
         for (Cookie c : cookieStore.getCookies()) {
             if (c.getName().equals("SPRING_SECURITY_REMEMBER_ME_COOKIE"))
                 isLogIn = true;
         }
+
         if (!isLogIn) {
             String error = context.getString(R.string.login_failed);
             AutobahnClientException ex = new AutobahnClientException(error);
@@ -137,13 +148,57 @@ public class AutobahnClient {
     /*
         returns the track circuit than have been fetched previously from fetchTrackCircuit
      */
-    public List<Circuit> getTrackCircuits() {
+    public List<String> getTrackCircuits() {
         return circuits;
     }
 
-    public void fetchTrackCircuit(String idm) {
+    public void fetchTrackCircuit(String idm) throws AutobahnClientException {
 
-          //TODO
+        circuits.clear();
+        URI url= null;
+        HttpGet httpget=null;
+        HttpResponse response=null;
+        String query = "idm=" + idm;
+        try {
+            url = new URI(scheme, null , host ,port,IDMS_URL, query,null);
+            httpget = new HttpGet(url);
+            response = httpclient.execute(httpget,localContext);
+
+        } catch (URISyntaxException e) {
+            String error=context.getString(R.string.net_error);
+            AutobahnClientException ex=new AutobahnClientException(error);
+            throw ex;
+        } catch (ClientProtocolException e) {
+            String error=context.getString(R.string.net_error);
+            AutobahnClientException ex=new AutobahnClientException(error);
+            throw ex;
+        } catch (IOException e) {
+            String error=context.getString(R.string.net_error);
+            AutobahnClientException ex=new AutobahnClientException(error);
+            throw ex;
+        }
+
+        String json=null;
+        try {
+            json =getASCIIContentFromEntity(response.getEntity());
+        } catch (IOException e) {
+            String error=context.getString(R.string.net_error);
+            AutobahnClientException ex=new AutobahnClientException(error);
+            throw ex;
+        }
+
+        Gson gson = new Gson();
+        ArrayList<String> l = new ArrayList<String>();
+
+        try {
+            l=gson.fromJson(json,l.getClass());
+        }catch (JsonParseException e) {
+            String error=context.getString(R.string.net_error);
+            AutobahnClientException ex=new AutobahnClientException(error);
+            throw ex;
+        }
+
+        circuits=l;
     }
 
     public void fetchIdms() throws AutobahnClientException {
@@ -154,7 +209,6 @@ public class AutobahnClient {
         HttpResponse response=null;
 
         try {
-            String s="DF"+IDMS_URL;
             url = new URI(scheme, null , host ,port,IDMS_URL, null,null);
             httpget = new HttpGet(url);
             response = httpclient.execute(httpget,localContext);

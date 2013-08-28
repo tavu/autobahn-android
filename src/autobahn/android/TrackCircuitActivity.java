@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.example.autobahn.R;
 import com.google.gson.Gson;
 
@@ -18,10 +19,11 @@ import java.util.List;
 
 public class TrackCircuitActivity extends Activity {
 
-    private List<Circuit> circuitList;
+    private List<String> circuitList;
     List<String>  reservationID = new ArrayList<String>();
     ListView reservationList;
     ArrayAdapter<String> adapter;
+    AutobahnClientException exception=null;
 
     private String idmName;
 
@@ -37,7 +39,11 @@ public class TrackCircuitActivity extends Activity {
         @Override
         protected Void doInBackground(Void... type) {
 
-            AutobahnClient.getInstance().fetchTrackCircuit(idmName);
+            try {
+                AutobahnClient.getInstance().fetchTrackCircuit(idmName);
+            } catch (AutobahnClientException e) {
+                exception=e;
+            }
             return null;
         }
 
@@ -56,14 +62,21 @@ public class TrackCircuitActivity extends Activity {
 
     public void showReservations()
     {
-        circuitList = AutobahnClient.getInstance().getTrackCircuits();
+        if(exception != null) {
+            Log.d("WARN","circuit error");
+            Toast toast  = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
+            toast.show();
+            return ;
+        }
 
+        reservationID=AutobahnClient.getInstance().getTrackCircuits();
         setContentView(R.layout.domain_reservation_activity);
-        for( Circuit c : circuitList){
+/*
+        for( Circuit c : reservationID){
             String route = c.getStartDomain()+" "+c.getStartPort().name()+"-"+c.getEndDomain()+ " " + c.getEndPort().name();
             reservationID.add(route);
         }
-
+*/
         reservationList = (ListView) findViewById(R.id.listView);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, reservationID);
         reservationList.setAdapter(adapter);

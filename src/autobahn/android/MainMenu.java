@@ -3,7 +3,6 @@ package autobahn.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -41,8 +40,20 @@ public class MainMenu extends Activity {
             @Override
             public void onClick(View view) {
                 Intent idmsActivity = new Intent();
-                idmsActivity.setClass(getApplicationContext(),IdmsActivity.class);
+                idmsActivity.setClass(getApplicationContext(), IdmsActivity.class);
                 startActivity(idmsActivity);
+
+            }
+        });
+
+        button = (Button) findViewById(R.id.request);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent requestActivity = new Intent();
+                requestActivity.setClass(getApplicationContext(), RequestActivity.class);
+                startActivity(requestActivity);
 
             }
         });

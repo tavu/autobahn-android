@@ -19,31 +19,14 @@ import java.util.List;
 
 public class TrackCircuitActivity extends Activity {
 
-    private List<String> circuitList;
-    List<String>  reservationID = new ArrayList<String>();
+    List<String> reservationID = new ArrayList<String>();
     ListView reservationList;
     ArrayAdapter<String> adapter;
-    AutobahnClientException exception=null;
-
-    private String idmName;
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.domain_reservation_activity);
-        Bundle extras = getIntent().getExtras();
-        idmName = extras.getString("DOMAIN_NAME");
-        async.execute();
-    }
-
+    AutobahnClientException exception = null;
     AsyncTask<Void, Void, Void> async = new AsyncTask<Void, Void, Void>() {
         @Override
         protected Void doInBackground(Void... type) {
-
-            try {
-                AutobahnClient.getInstance().fetchTrackCircuit(idmName);
-            } catch (AutobahnClientException e) {
-                exception=e;
-            }
+            AutobahnClient.getInstance().fetchTrackCircuit(idmName);
             return null;
         }
 
@@ -58,18 +41,26 @@ public class TrackCircuitActivity extends Activity {
             showReservations();
         }
     };
+    private List<String> circuitList;
+    private String idmName;
 
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.domain_reservation_activity);
+        Bundle extras = getIntent().getExtras();
+        idmName = extras.getString("DOMAIN_NAME");
+        async.execute();
+    }
 
-    public void showReservations()
-    {
-        if(exception != null) {
-            Log.d("WARN","circuit error");
-            Toast toast  = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
+    public void showReservations() {
+        if (exception != null) {
+            Log.d("WARN", "circuit error");
+            Toast toast = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
             toast.show();
-            return ;
+            return;
         }
 
-        reservationID=AutobahnClient.getInstance().getTrackCircuits();
+        reservationID = AutobahnClient.getInstance().getTrackCircuits();
         setContentView(R.layout.domain_reservation_activity);
 /*
         for( Circuit c : reservationID){
@@ -85,8 +76,8 @@ public class TrackCircuitActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String JSONObject = (new Gson()).toJson(circuitList.get(i));
                 Intent singleCircuitActivity = new Intent();
-                singleCircuitActivity.setClass(getApplicationContext(),SingleCircuitActivity.class);
-                singleCircuitActivity.putExtra("JSON_OBJECT",JSONObject);
+                singleCircuitActivity.setClass(getApplicationContext(), SingleCircuitActivity.class);
+                singleCircuitActivity.putExtra("JSON_OBJECT", JSONObject);
                 startActivity(singleCircuitActivity);
             }
         });

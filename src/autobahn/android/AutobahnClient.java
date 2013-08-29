@@ -43,7 +43,7 @@ public class AutobahnClient {
     private HttpContext localContext;
     private Context context = null;
     private List<String> idms = new ArrayList();
-    private List<Circuit> circuits = new ArrayList();
+    private List<String> circuits = new ArrayList();
 
     private String TAG = "WARN";
 
@@ -65,6 +65,7 @@ public class AutobahnClient {
         localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
         //TODO get the host from a property
         host = "62.217.125.174";
+        port = 8080;
     }
 
     public void setContext(Context context) {
@@ -109,15 +110,15 @@ public class AutobahnClient {
             HttpResponse response = httpclient.execute(httppost, localContext);
 
         } catch (URISyntaxException e) {
-            String error = context.getString(R.string.net_error);
+            String error = e.getMessage();
             AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         } catch (ClientProtocolException e) {
-            String error = context.getString(R.string.net_error);
+            String error = e.getMessage();
             AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         } catch (IOException e) {
-            String error = context.getString(R.string.net_error);
+            String error = e.getMessage();
             AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         }

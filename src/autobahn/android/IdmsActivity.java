@@ -23,7 +23,6 @@ public class IdmsActivity extends Activity {
         domains = AutobahnClient.getInstance().getIdms();
 
         if(exception != null) {
-            Log.d("WARN","idms error");
             Toast toast  = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
             toast.show();
         }

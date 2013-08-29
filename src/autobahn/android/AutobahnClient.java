@@ -138,7 +138,7 @@ public class AutobahnClient {
     /*
         returns the track circuit than have been fetched previously from fetchTrackCircuit
      */
-    public List<Circuit> getTrackCircuits() {
+    public List<String> getTrackCircuits() {
         return circuits;
     }
 

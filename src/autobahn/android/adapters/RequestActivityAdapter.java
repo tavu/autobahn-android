@@ -76,7 +76,7 @@ public class RequestActivityAdapter extends BaseExpandableListAdapter {
         TextView item = (TextView) convertView.findViewById(R.id.parameter);
         item.setTypeface(null, Typeface.BOLD);
         item.setText(parameterName);
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return convertView;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

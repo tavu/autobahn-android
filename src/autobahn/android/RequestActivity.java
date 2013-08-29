@@ -21,22 +21,20 @@ import java.util.LinkedHashMap;
  */
 public class RequestActivity extends Activity {
 
-    private ArrayList<String> groupList = new ArrayList(Arrays.asList(getResources().getString(R.string.basicParameters),
-            getResources().getString(R.string.optionalParameters),
-            getResources().getString(R.string.pathConstraints)));
-    private ArrayList<String> childList;
-    private LinkedHashMap<String, ArrayList<String>> headerInfoCollection = new LinkedHashMap();
-
+    private ArrayList<String> groupList;
+    private LinkedHashMap<String, ArrayList<String>> headerInfoCollection;
     private ExpandableListView expandableListView;
-
-    public RequestActivity() {
-    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.request_reservation_activity);
 
+        headerInfoCollection = new LinkedHashMap();
+
+        groupList = new ArrayList(Arrays.asList(getResources().getString(R.string.basicParameters),
+                getResources().getString(R.string.optionalParameters),
+                getResources().getString(R.string.pathConstraints)));
         prepareParameters();
 
         expandableListView = (ExpandableListView) findViewById(R.id.requestExpandableList);

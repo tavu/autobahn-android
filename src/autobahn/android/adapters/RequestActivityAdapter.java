@@ -73,7 +73,7 @@ public class RequestActivityAdapter extends BaseExpandableListAdapter {
             LayoutInflater infalInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.group_heading, null);
         }
-        TextView item = (TextView) convertView.findViewById(R.id.parameter);
+        TextView item = (TextView) convertView.findViewById(R.id.heading);
         item.setTypeface(null, Typeface.BOLD);
         item.setText(parameterName);
         return convertView;  //To change body of implemented methods use File | Settings | File Templates.

@@ -25,7 +25,7 @@ public class RequestActivity extends Activity {
     private LinkedHashMap<String, ArrayList<String>> headerInfoCollection;
     private ExpandableListView expandableListView;
 
-    public void onCreate(Bundle savedInstanceState) {
+    public void onsCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.request_reservation_activity);

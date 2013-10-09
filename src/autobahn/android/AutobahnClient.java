@@ -236,13 +236,6 @@ public class AutobahnClient {
     }
 
     /*
-    public void fetchIdms() {
-        idms.clear();
-        idms.add(new String("GARR"));
-        idms.add(new String("GRNET"));
-    }
-      */
-    /*
 
     public void fetchIdms() {
 

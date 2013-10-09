@@ -1,6 +1,7 @@
 package autobahn.android;
 
 import android.content.Context;
+import android.util.Log;
 import com.example.autobahn.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
@@ -17,6 +18,7 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,7 +63,7 @@ public class AutobahnClient {
         localContext = new BasicHttpContext();
         localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
         //TODO get the host from a property
-        host = "62.217.125.174";
+        host = "62.217.124.241";
         port = 8080;
     }
 
@@ -108,14 +110,17 @@ public class AutobahnClient {
 
         } catch (URISyntaxException e) {
             String error = e.getMessage();
+            Log.d(TAG,error);
             AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         } catch (ClientProtocolException e) {
             String error = e.getMessage();
+            Log.d(TAG,error);
             AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         } catch (IOException e) {
             String error = e.getMessage();
+            Log.d(TAG,error);
             AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         }
@@ -152,7 +157,6 @@ public class AutobahnClient {
         HttpResponse response = null;
 
         try {
-            String s = "DF" + IDMS_URL;
             url = new URI(scheme, null, host, port, IDMS_URL, null, null);
             httpget = new HttpGet(url);
             response = httpclient.execute(httpget, localContext);
@@ -173,7 +177,7 @@ public class AutobahnClient {
 
         String json = null;
         try {
-            json = getASCIIContentFromEntity(response.getEntity());
+            json = EntityUtils.toString(response.getEntity());
         } catch (IOException e) {
             String error = context.getString(R.string.net_error);
             AutobahnClientException ex = new AutobahnClientException(error);

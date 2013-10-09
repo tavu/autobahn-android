@@ -107,7 +107,7 @@ public class LoginActivity extends Activity implements  View.OnClickListener {
         }
 
 
-        loginButton.setEnabled(true);
+        //loginButton.setEnabled(true);
 
         Intent menuActivity = new Intent();
         menuActivity.setClass(getApplicationContext(),MainMenu.class);

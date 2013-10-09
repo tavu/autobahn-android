@@ -52,7 +52,7 @@ public class MainMenu extends Activity {
             @Override
             public void onClick(View view) {
                 Intent requestActivity = new Intent();
-                requestActivity.setClass(getApplicationContext(), RequestActivity.class);
+                requestActivity.setClass(getApplicationContext(), RequestActivity2.class);
                 startActivity(requestActivity);
 
             }

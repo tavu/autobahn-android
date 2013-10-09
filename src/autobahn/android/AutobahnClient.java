@@ -235,49 +235,5 @@ public class AutobahnClient {
         return idms;
     }
 
-    /*
-
-    public void fetchIdms() {
-
-        Log.d(TAG,"idms");
-        HttpClient httpClient = new DefaultHttpClient();
-        //HttpContext localContext = new BasicHttpContext();
-                   ///autobahn-gui/j_spring_security_check
-        String text = "";
-        try {
-            URI url= new URI("http" , null , "62.217.125.174" ,8080, "/autobahn-gui/portal/secure/rest/idms" ,null,null);
-            HttpGet httpGet = new HttpGet(url);
-            Header uname=new BasicHeader("username","demoadmin");
-           Header pass=new BasicHeader("password","demoadmin");
-           httpGet.addHeader(uname);
-          httpGet.addHeader(pass);
-            HttpResponse response = httpClient.execute(httpGet);
-            org.apache.http.HttpEntity entity = response.getEntity();
-
-            text = getASCIIContentFromEntity(entity);
-
-
-        } catch (Exception e) {
-            Log.e(TAG, e.getLocalizedMessage(), e);
-            return ;
-        }
-        Log.d(TAG,text);
-        JSONArray json = null;
-        try {
-            json = new JSONArray(text);
-            for(int i = 0; i < json.length(); i++){
-                String s  = (String) json.get(i);
-                Log.d(TAG,"S "+s);
-                idms.add(s);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-
-
-
-    }
-    */
 
 }

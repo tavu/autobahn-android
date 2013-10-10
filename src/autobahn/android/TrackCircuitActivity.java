@@ -74,6 +74,7 @@ public class TrackCircuitActivity extends Activity {
                 Intent singleCircuitActivity = new Intent();
                 singleCircuitActivity.setClass(getApplicationContext(), SingleCircuitActivity.class);
                 singleCircuitActivity.putExtra("SERVICE_ID",serviceID);
+                singleCircuitActivity.putExtra("DOMAIN_NAME",idmName);
                 startActivity(singleCircuitActivity);
             }
         });

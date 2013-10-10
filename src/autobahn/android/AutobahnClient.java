@@ -34,13 +34,15 @@ import java.util.List;
 public class AutobahnClient {
 
     private static String LOGIN_URL = "/autobahn-gui/j_spring_security_check";
-    private static String IDMS_URL = "/autobahn-gui/portal/secure/android/idms";
+    private static String DOMAIN_URL = "/autobahn-gui/portal/secure/android/idms";
     private static String SERVICES_URL = "/autobahn-gui/portal/secure/android/services";
+    private static String SERVICE_URL = "/autobahn-gui/portal/secure/android/service";
 
     private HttpClient httpclient;
     private HttpGet httpget;
     private HttpResponse response;
     private URI url;
+    private Gson gson;
     private String json;
     private String scheme;
     private String host;
@@ -52,6 +54,7 @@ public class AutobahnClient {
     private Context context = null;
     private List<String> idms = new ArrayList();
     private List<String> circuits = new ArrayList();
+    private Circuit reservationInfo;
 
     private String TAG = "WARN";
 
@@ -189,8 +192,7 @@ public class AutobahnClient {
             throw ex;
         }
 
-        Gson gson = new Gson();
-
+        gson = new Gson();
         try {
             circuits = gson.fromJson(json, circuits.getClass());
         } catch (JsonParseException e) {
@@ -204,7 +206,7 @@ public class AutobahnClient {
 
         idms.clear();
         try {
-            url = new URI(scheme, null, host, port, IDMS_URL, null, null);
+            url = new URI(scheme, null, host, port, DOMAIN_URL, null, null);
             httpget = new HttpGet(url);
             response = httpclient.execute(httpget, localContext);
 
@@ -243,6 +245,59 @@ public class AutobahnClient {
         }
 
         idms = l;
+    }
+
+    public void fetchReservationInfo(String domain, String serviceID) throws AutobahnClientException{
+
+        reservationInfo = new Circuit();
+
+        try {
+
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("currentIdm",domain));
+            params.add(new BasicNameValuePair("serviceID",serviceID));
+
+            String query = URLEncodedUtils.format(params, "utf-8");
+            url = new URI(scheme, null, host, port, SERVICE_URL, query, null);
+            httpget = new HttpGet(url);
+            response = httpclient.execute(httpget, localContext);
+
+        }catch (URISyntaxException e) {
+            String error = context.getString(R.string.net_error);
+            AutobahnClientException ex = new AutobahnClientException(error);
+            throw ex;
+        } catch (ClientProtocolException e) {
+            String error = context.getString(R.string.net_error);
+            AutobahnClientException ex = new AutobahnClientException(error);
+            throw ex;
+        } catch (IOException e) {
+            String error = context.getString(R.string.net_error);
+            AutobahnClientException ex = new AutobahnClientException(error);
+            throw ex;
+        }
+
+        try {
+            json = EntityUtils.toString(response.getEntity());
+        } catch (IOException e) {
+            String error = context.getString(R.string.net_error);
+            AutobahnClientException ex = new AutobahnClientException(error);
+            throw ex;
+        }
+
+        gson = new Gson();
+        try{
+            reservationInfo = gson.fromJson(json,reservationInfo.getClass());
+        } catch (JsonParseException e) {
+            String error = context.getString(R.string.net_error);
+            AutobahnClientException ex = new AutobahnClientException(error);
+            throw ex;
+        }
+
+    }
+
+    public Circuit getReservationInfo()
+    {
+        return reservationInfo;
     }
 
     public List<String> getIdms() {

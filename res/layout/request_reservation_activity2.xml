@@ -2,153 +2,167 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:background="#ffffff">>
+          android:layout_height="wrap_content">
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="1500dp"
-              android:layout_width="match_parent">
+              android:layout_width="match_parent" android:clickable="false" android:focusable="false"
+              android:focusableInTouchMode="false">
+
+
 
   <TextView
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:text="@string/start_domain"
-          android:id="@+id/startPort"
+          android:id="@+id/startDomainText"
           android:layout_alignParentTop="true" android:layout_alignLeft="@+id/req_start_port" android:enabled="true"/>
-
-  <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/start_stp"
-          android:id="@+id/startStp"
-          android:phoneNumber="false" android:password="false"
-          android:layout_alignLeft="@+id/startPort" android:layout_below="@+id/spinner1"/>
-  <Spinner
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:id="@+id/spinner"
-          android:layout_below="@+id/startStp" android:layout_alignRight="@+id/spinner1"
-          android:layout_alignLeft="@+id/startPort"/>
-  <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/start_vlan"
-          android:id="@+id/startVlan" android:layout_alignLeft="@+id/startPort" android:layout_below="@+id/spinner"/>
-  <CheckBox
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/vlan_auto"
-          android:id="@+id/checkBox" android:layout_toRightOf="@+id/start_vlan_picker"
-          android:layout_below="@+id/startVlan"/>
-  <Spinner
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:id="@+id/spinner1" android:layout_alignLeft="@+id/startPort" android:layout_below="@+id/startPort"
-          android:layout_alignParentRight="true"/>
-  <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/end_domain"
-          android:id="@+id/textView"
-          android:layout_alignParentLeft="true" android:layout_below="@+id/checkBox"/>
-  <Spinner
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:id="@+id/spinner2" android:layout_alignLeft="@+id/startPort" android:layout_below="@+id/textView"
-          android:layout_alignRight="@+id/spinner"/>
-  <TextView
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="@string/end_port"
-          android:id="@+id/textView1" android:layout_alignLeft="@+id/startPort" android:layout_below="@+id/spinner2"/>
-  <Spinner
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:id="@+id/spinner3" android:layout_alignParentLeft="true" android:layout_below="@+id/textView1"
-          />
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/startDomainText"
+        android:id="@+id/startDomain" />
     <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/end_vlan"
-            android:id="@+id/textView2" android:layout_alignLeft="@+id/startPort" android:layout_below="@+id/spinner3"/>
+            android:text="@string/start_port"
+            android:layout_below="@+id/startDomain"
+            android:id="@+id/startPortText" />
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/startPortText"
+            android:id="@+id/startPort" />
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/end_domain"
+            android:layout_below="@+id/startPort"
+            android:id="@+id/endDomainText" />
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/endDomainText"
+            android:id="@+id/endDomain" />
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/end_port"
+            android:layout_below="@+id/endDomain"
+            android:id="@+id/endPortText" />
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/endPortText"
+            android:id="@+id/endPort" />
+    <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_below="@+id/endPort"
+            android:id="@+id/seperator1"  />
+
+
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/start_vlan"
+            android:layout_below="@+id/seperator1"
+            android:id="@+id/startVlanText" />
+    <EditText
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/startVlan"
+            android:onClick="showNumberPicker"
+            android:layout_below="@+id/startVlanText"/>
     <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/vlan_auto"
-            android:id="@+id/checkBox1"
-        android:layout_below="@+id/textView2"
-        android:layout_toRightOf="@+id/editText" />
+            android:id="@+id/startVlanAuto"
+            android:layout_toRightOf="@+id/startVlan"
+            android:layout_below="@+id/startVlanText"/>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/end_vlan"
+            android:layout_below="@+id/startVlan"
+            android:id="@+id/endVlanText" />
+    <EditText
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/endVlan"
+            android:layout_below="@+id/endVlanText"/>
+    <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vlan_auto"
+            android:id="@+id/endVlanAuto"
+            android:layout_toRightOf="@+id/endVlan"
+            android:layout_below="@+id/endVlanText"/>
+    <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_below="@+id/endVlan"
+            android:id="@+id/seperator2"  />
+
+
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/startDate"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/checkBox1"
-        android:layout_alignParentLeft="true" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/start_date"
+            android:layout_below="@+id/seperator2"
+            android:id="@+id/startDateText" />
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/startDateText"
+            android:id="@+id/startDate"/>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/start_time"
+            android:layout_below="@+id/startDate"
+            android:id="@+id/startTimeText" />
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/startTimeText"
+            android:id="@+id/startTime"/>
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/end_date"
+            android:layout_below="@+id/startTime"
+            android:id="@+id/endDateText" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/editText"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/textView3" />
-
-    <DatePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/datePicker"
-        android:layout_alignWithParentIfMissing="false"
-        android:layout_below="@+id/textView3"
-        android:layout_alignLeft="@+id/timePicker" />
-
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/endDateText"
+            android:id="@+id/endDate"/>
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/endTime"
-        android:id="@+id/textView4"
-        android:layout_below="@+id/timePicker"
-        android:layout_alignParentLeft="true" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/end_time"
+            android:layout_below="@+id/endDate"
+            android:id="@+id/endTimeText" />
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/endTimeText"
+            android:id="@+id/endTime" />
+    <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_below="@+id/endTime"
+            android:id="@+id/seperator3"  />
 
-    <DatePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/datePicker2"
-        android:layout_below="@+id/textView4"
-        android:layout_alignParentLeft="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/startTime"
-        android:id="@+id/textView5"
-        android:layout_below="@+id/datePicker"
-        android:layout_alignParentLeft="true" />
-
-    <TimePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/timePicker"
-        android:layout_below="@+id/textView5"
-        android:layout_alignLeft="@+id/textView6" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView6"
-        android:layout_below="@+id/datePicker2"
-        android:layout_alignRight="@+id/textView2" />
-
-    <TimePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/timePicker2"
-        android:layout_below="@+id/textView6"
-        android:layout_alignLeft="@+id/textView6" />
 
 
 </RelativeLayout>

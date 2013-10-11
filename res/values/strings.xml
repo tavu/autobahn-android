@@ -41,7 +41,6 @@
     <string name="user">User</string>
     <string name="state">State</string>
     <string name="justification">Justification</string>
-    <string name="start_time">Start Time</string>
 
     <string name="homedomain">Home Domain</string>
     <string name="destinationdomain">Destination Domain</string>
@@ -71,11 +70,12 @@
 
 
     <string name="end_time">End Time</string>
+    <string name="end_date">End Date</string>
+    <string name="start_time">Start Time</string>
+    <string name="start_date">Start Date</string>
     <string name="start_port">Start Port</string>
-    <string name="start_stp">Start stp</string>
     <string name="start_vlan">Start VLAN</string>
     <string name="end_port">End Port</string>
-    <string name="end_stp">End stp</string>
     <string name="end_vlan">End VLAN</string>
     <string name="capacity">Capacity[Mbits/s]</string>
     <string name="mtu_size">MTU size[bytes]</string>

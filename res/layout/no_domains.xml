@@ -5,16 +5,25 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/no_domains"
-            android:id="@+id/noDomains" android:layout_gravity="center" android:layout_marginRight="20px"
-            android:layout_marginTop="20px" android:layout_marginLeft="20px" android:gravity="center"/>
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/back_to_menu"
-            android:id="@+id/menuButton" android:layout_gravity="center" android:layout_marginTop="20px"
-            android:layout_marginRight="20px" android:layout_marginLeft="20px" android:clickable="true"/>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/no_domains"
+		android:id="@+id/noDomains"
+		android:layout_gravity="center"
+		android:layout_marginRight="20px"
+		android:layout_marginTop="20px"
+		android:layout_marginLeft="20px"
+		android:gravity="center"/>
+
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/back_to_menu"
+		android:id="@+id/menuButton"
+		android:layout_gravity="center"
+		android:layout_marginTop="20px"
+		android:layout_marginRight="20px"
+		android:layout_marginLeft="20px"
+		android:clickable="true"/>
 </LinearLayout>

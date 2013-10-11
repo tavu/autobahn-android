@@ -5,88 +5,132 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/header" android:layout_gravity="center" android:text="@string/aboutTitle"
-            android:textSize="20dp" android:textStyle="bold" />
-    <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent" android:layout_gravity="center">
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_gravity="center">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/info_1"
-                    android:id="@+id/info_1" android:layout_gravity="center" android:layout_marginTop="15px"
-                    android:layout_marginBottom="15px" android:layout_marginLeft="5px"
-                    android:gravity="center"/>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/link_1"
-                    android:id="@+id/link_1"
-                    android:layout_gravity="center"
-                    android:autoLink="web"/>
-        </LinearLayout>
-        <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/geantLogo" android:layout_gravity="center" android:src="@drawable/geant"
-                android:cropToPadding="true" android:baselineAlignBottom="false" android:adjustViewBounds="false"
-                android:background="@android:color/transparent" android:layout_margin="15px"/>
-        <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/danteLogo" android:layout_gravity="center" android:src="@drawable/dante"
-                android:cropToPadding="true" android:layout_margin="15px"
-                android:background="@android:color/transparent"/>
-        <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/euLogo" android:layout_gravity="center" android:src="@drawable/eu"
-                android:cropToPadding="false" android:background="@android:color/transparent"
-                android:layout_margin="15px"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/link_5"
-                android:id="@+id/ecLink" android:layout_gravity="center" android:gravity="center"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/info_2"
-                android:id="@+id/info_2" android:layout_gravity="center_horizontal" android:layout_margin="15dp"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/link_2"
-                android:id="@+id/link_2" android:layout_gravity="center_horizontal"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/and"
-                android:id="@+id/and" android:layout_gravity="center" android:layout_marginTop="15px"
-                android:layout_marginBottom="15px"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/link_3"
-                android:id="@+id/link_3" android:layout_gravity="center"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/info_3"
-                android:id="@+id/info_3" android:layout_gravity="center" android:gravity="center"
-                android:layout_marginTop="15px"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/link_4"
-                android:id="@+id/link_4" android:layout_gravity="center"/>
-    </LinearLayout>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/header"
+		android:layout_gravity="center"
+		android:text="@string/aboutTitle"
+		android:textSize="20dp"
+		android:textStyle="bold"/>
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="wrap_content"
+		android:layout_height="fill_parent"
+		android:layout_gravity="center">
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/info_1"
+				android:id="@+id/info_1"
+				android:layout_gravity="center"
+				android:layout_marginTop="15px"
+				android:layout_marginBottom="15px"
+				android:layout_marginLeft="5px"
+				android:gravity="center"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/link_1"
+				android:id="@+id/link_1"
+				android:layout_gravity="center"
+				android:autoLink="web"/>
+		</LinearLayout>
+
+		<ImageButton
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/geantLogo"
+			android:layout_gravity="center"
+			android:src="@drawable/geant"
+			android:cropToPadding="true"
+			android:baselineAlignBottom="false"
+			android:adjustViewBounds="false"
+			android:background="@android:color/transparent"
+			android:layout_margin="15px"/>
+
+		<ImageButton
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/danteLogo"
+			android:layout_gravity="center"
+			android:src="@drawable/dante"
+			android:cropToPadding="true"
+			android:layout_margin="15px"
+			android:background="@android:color/transparent"/>
+
+		<ImageButton
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/euLogo"
+			android:layout_gravity="center"
+			android:src="@drawable/eu"
+			android:cropToPadding="false"
+			android:background="@android:color/transparent"
+			android:layout_margin="15px"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/link_5"
+			android:id="@+id/ecLink"
+			android:layout_gravity="center"
+			android:gravity="center"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/info_2"
+			android:id="@+id/info_2"
+			android:layout_gravity="center_horizontal"
+			android:layout_margin="15dp"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/link_2"
+			android:id="@+id/link_2"
+			android:layout_gravity="center_horizontal"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/and"
+			android:id="@+id/and"
+			android:layout_gravity="center"
+			android:layout_marginTop="15px"
+			android:layout_marginBottom="15px"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/link_3"
+			android:id="@+id/link_3"
+			android:layout_gravity="center"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/info_3"
+			android:id="@+id/info_3"
+			android:layout_gravity="center"
+			android:gravity="center"
+			android:layout_marginTop="15px"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/link_4"
+			android:id="@+id/link_4"
+			android:layout_gravity="center"/>
+	</LinearLayout>
 </LinearLayout>

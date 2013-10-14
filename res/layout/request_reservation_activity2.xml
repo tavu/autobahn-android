@@ -113,7 +113,7 @@
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/start_date"
+            android:text="@string/startDate"
             android:layout_below="@+id/seperator2"
             android:id="@+id/startDateText" />
     <EditText
@@ -136,7 +136,7 @@
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/end_date"
+            android:text="@string/endDate"
             android:layout_below="@+id/startTime"
             android:id="@+id/endDateText" />
 

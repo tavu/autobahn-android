@@ -109,7 +109,10 @@ public class AutobahnClient {
     }
 
     public void clearData() {
-
+        idms.clear();
+        circuits.clear();
+        reservationInfo=null;
+        domainsPorts.clear();
     }
 
     public void logIn() throws AutobahnClientException {

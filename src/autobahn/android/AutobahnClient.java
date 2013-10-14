@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.autobahn.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
+import net.geant.autobahn.android.ReservationInfo;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -251,7 +252,7 @@ public class AutobahnClient {
             throw ex;
         }
 
-        String json=handleGetRequest(url);
+        String json = handleGetRequest(url);
 
         Gson gson = new Gson();
         ArrayList<String> l = new ArrayList<String>();
@@ -267,14 +268,13 @@ public class AutobahnClient {
         idms = l;
     }
 
-    public void fetchReservationInfo(String domain, String serviceID) throws AutobahnClientException{
+    public void fetchReservationInfo(String serviceID) throws AutobahnClientException{
 
 
         reservationInfo = new ReservationInfo();
         List<NameValuePair> params = new ArrayList<NameValuePair>();
-
-        params.add(new BasicNameValuePair("currentIdm",domain));
         params.add(new BasicNameValuePair("serviceID",serviceID));
+
         String query = URLEncodedUtils.format(params, "utf-8");
 
         URI url=null;
@@ -286,13 +286,14 @@ public class AutobahnClient {
             throw ex;
         }
 
-        String json=handleGetRequest(url);
+        String json = handleGetRequest(url);
 
         Gson gson = new Gson();
         try{
             reservationInfo = gson.fromJson(json,reservationInfo.getClass());
         } catch (JsonParseException e) {
             String error = context.getString(R.string.net_error);
+            Log.d(TAG,e.getMessage());
             AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         }

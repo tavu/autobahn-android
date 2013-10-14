@@ -28,12 +28,21 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/description"
+                android:text="@string/user"
+                android:id="@+id/textView1"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/user"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/justification"
                 android:id="@+id/textView3"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/description"/>
+                android:id="@+id/justification"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

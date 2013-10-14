@@ -4,24 +4,35 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:gravity="center_horizontal">
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/welcome"
-            android:gravity="center" android:textStyle="bold" android:textSize="20dp" android:layout_margin="20px"/>
-    <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/request" android:text="@string/request" android:layout_margin="10px"/>
-    <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/circuit"
-            android:id="@+id/idms" android:layout_margin="10px"/>
-    <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/about"
-            android:id="@+id/about" android:layout_margin="10px"/>
+
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/welcome"
+		android:gravity="center"
+		android:textStyle="bold"
+		android:textSize="20dp"
+		android:layout_margin="20px"/>
+
+	<Button
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/request"
+		android:text="@string/request"
+		android:layout_margin="10px"/>
+
+	<Button
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/circuit"
+		android:id="@+id/idms"
+		android:layout_margin="10px"/>
+
+	<Button
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/about"
+		android:id="@+id/about"
+		android:layout_margin="10px"/>
 </LinearLayout>
 

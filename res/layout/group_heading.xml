@@ -5,13 +5,17 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/heading"
-        android:layout_gravity="left|center_vertical" android:textIsSelectable="false" android:textSize="20dp"
-        android:paddingTop="10dp" android:password="false" android:paddingBottom="10dp"
-        android:layout_marginLeft="35dp"/>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="New Text"
+		android:id="@+id/heading"
+		android:layout_gravity="left|center_vertical"
+		android:textIsSelectable="false"
+		android:textSize="20dp"
+		android:paddingTop="10dp"
+		android:password="false"
+		android:paddingBottom="10dp"
+		android:layout_marginLeft="35dp"/>
 
 </LinearLayout>

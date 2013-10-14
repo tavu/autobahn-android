@@ -4,13 +4,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/parameter"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true" android:paddingTop="10dp" android:paddingBottom="10dp"
-        android:layout_marginLeft="35dp" android:textSize="20dp"/>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="New Text"
+		android:id="@+id/parameter"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentRight="true"
+		android:paddingTop="10dp"
+		android:paddingBottom="10dp"
+		android:layout_marginLeft="35dp"
+		android:textSize="20dp"/>
 </RelativeLayout>

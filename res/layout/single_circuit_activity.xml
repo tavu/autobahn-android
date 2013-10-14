@@ -37,21 +37,32 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/justification"
+                android:text="@string/description"
                 android:id="@+id/textView3"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/justification"/>
+                android:id="@+id/description"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/state"
-                android:id="@+id/textView2"/>
+                android:text="@string/reservationState"
+                android:id="@+id/textView2" android:singleLine="true"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/status"/>
+                android:id="@+id/reservationState"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/provisionState"
+                android:id="@+id/textView1"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:id="@+id/provisionState"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/lifecycleState"
+                  android:id="@+id/textView13"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:id="@+id/lifecycleState"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

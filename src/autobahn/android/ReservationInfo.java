@@ -7,47 +7,43 @@ public class ReservationInfo {
     }
 
 
-    public enum ReservationState {
-        UNKNOWN,
-        SCHEDULED,
-        ACTIVE,
-        FINISHED,
-        CANCELLED,
-        FAILED;
-
-        public static ReservationState fromInteger(int x) {
-            switch(x) {
-                case 0:
-                    return UNKNOWN;
-                case 1:
-                    return SCHEDULED;
-                case 2:
-                    return ACTIVE;
-                case 3:
-                    return FINISHED;
-                case 4:
-                    return CANCELLED;
-                case 5:
-                    return FAILED;
-            }
-            return null;
-        }
-    }
-
-    private ReservationState state = ReservationState.UNKNOWN;
+    private String reservationState;
+    private String provisionState;
+    private String lifecycleState;
     private Calendar startTime = null;
     private Calendar endTime = null;
-    private long id;
+    private String id;
     private long capacity;
     private int mtu;
     private int startVlan;
     private int endVlan;
-    private Port startPort = null;
-    private Port endPort = null;
+    private String startPort;
+    private String endPort;
     private String description = null;
 
-    public void setState(ReservationState state) {
-        this.state = state;
+
+    public String getReservationState() {
+        return reservationState;
+    }
+
+    public String getProvisionState() {
+        return provisionState;
+    }
+
+    public String getLifecycleState() {
+        return lifecycleState;
+    }
+
+    public void setProvisionState(String provisionState) {
+        this.provisionState = provisionState;
+    }
+
+    public void setLifecycleState(String lifecycleState) {
+        this.lifecycleState = lifecycleState;
+    }
+
+    public void setReservationState(String reservationState) {
+        this.reservationState = reservationState;
     }
 
     public void setStartTime(Calendar startTime) {
@@ -58,7 +54,7 @@ public class ReservationInfo {
         this.endTime = endTime;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -78,20 +74,16 @@ public class ReservationInfo {
         this.endVlan = endVlan;
     }
 
-    public void setStartPort(Port startPort) {
+    public void setStartPort(String startPort) {
         this.startPort = startPort;
     }
 
-    public void setEndPort(Port endPort) {
+    public void setEndPort(String endPort) {
         this.endPort = endPort;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public ReservationState getState() {
-        return state;
     }
 
     public Calendar getStartTime() {
@@ -102,7 +94,7 @@ public class ReservationInfo {
         return endTime;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
@@ -122,11 +114,11 @@ public class ReservationInfo {
         return endVlan;
     }
 
-    public Port getStartPort() {
+    public String getStartPort() {
         return startPort;
     }
 
-    public Port getEndPort() {
+    public String getEndPort() {
         return endPort;
     }
 
@@ -134,11 +126,4 @@ public class ReservationInfo {
         return description;
     }
 
-    public String getStartDomain() {
-        return startPort.getDomain();
-    };
-
-    public String getEndDomain() {
-        return endPort.getDomain();
-    }
 }

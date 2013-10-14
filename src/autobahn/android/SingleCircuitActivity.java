@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.autobahn.R;
+import net.geant.autobahn.android.ReservationInfo;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,8 +18,7 @@ import com.example.autobahn.R;
  */
 public class SingleCircuitActivity extends Activity {
 
-    private Circuit circuit;
-    private String currentIdm;
+    private ReservationInfo reservationInfo;
     private String serviceID;
     private AutobahnClientException exception;
 
@@ -25,7 +26,7 @@ public class SingleCircuitActivity extends Activity {
         @Override
         protected Void doInBackground(Void... type) {
             try{
-                AutobahnClient.getInstance().fetchReservationInfo(currentIdm,serviceID);
+                AutobahnClient.getInstance().fetchReservationInfo(serviceID);
             } catch (AutobahnClientException e) {
                 exception=e;
             }
@@ -46,20 +47,48 @@ public class SingleCircuitActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_circuit_activity);
+        Bundle bundle = getIntent().getExtras();
+        serviceID = bundle.getString("SERVICE_ID");
         async.execute();
 
     }
 
     public void showReservationInfo(){
 
+        TextView textView;
+
         if (exception != null) {
-            Log.d("WARN", "circuit error");
+            Log.d("WARN", "error");
             Toast toast = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
             toast.show();
             return;
         }
 
-        circuit = AutobahnClient.getInstance().getReservationInfo();
+        reservationInfo = AutobahnClient.getInstance().getReservationInfo();
+        textView = (TextView)findViewById(R.id.service);
+        textView.setText(reservationInfo.getId());
+        textView = (TextView)findViewById(R.id.description);
+        textView.setText(reservationInfo.getDescription());
+        textView = (TextView)findViewById(R.id.reservationState);
+        textView.setText(reservationInfo.getReservationState());
+        textView = (TextView)findViewById(R.id.provisionState);
+        textView.setText(reservationInfo.getProvisionState());
+        textView = (TextView)findViewById(R.id.lifecycleState);
+        textView.setText(reservationInfo.getLifecycleState());
+        textView = (TextView)findViewById(R.id.startTime);
+        textView.setText(reservationInfo.getStartTime());
+        textView = (TextView)findViewById(R.id.endTime);
+        textView.setText(reservationInfo.getEndTime());
+        textView = (TextView)findViewById(R.id.startVlan);
+        textView.setText(String.valueOf(reservationInfo.getStartVlan()));
+        textView = (TextView)findViewById(R.id.endVlan);
+        textView.setText(String.valueOf(reservationInfo.getEndVlan()));
+        textView = (TextView)findViewById(R.id.capacity);
+        textView.setText(String.valueOf(reservationInfo.getCapacity()));
+        textView = (TextView)findViewById(R.id.mtuSize);
+        textView.setText(String.valueOf(reservationInfo.getMtu()));
+        /*textView = (TextView)findViewById(R.id.endVlan);
+        textView.setText(reservationInfo.getEndVlan()); */
 
 
 

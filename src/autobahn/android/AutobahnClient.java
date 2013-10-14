@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.autobahn.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-import org.apache.http.HttpEntity;
+import net.geant.autobahn.android.ReservationInfo;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -24,12 +24,12 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AutobahnClient {
 
@@ -40,10 +40,6 @@ public class AutobahnClient {
 
     private HttpClient httpclient;
     private HttpGet httpget;
-    private HttpResponse response;
-    private URI url;
-    private Gson gson;
-    private String json;
     private String scheme;
     private String host;
     private int port;
@@ -52,9 +48,14 @@ public class AutobahnClient {
     private String password;
     private HttpContext localContext;
     private Context context = null;
+
     private List<String> idms = new ArrayList();
     private List<String> circuits = new ArrayList();
-    private Circuit reservationInfo;
+
+    private Map<String, List<String>> domainsPorts =new HashMap<String, List<String>>();
+
+    private ReservationInfo reservationInfo;
+
 
     private String TAG = "WARN";
 
@@ -111,14 +112,22 @@ public class AutobahnClient {
         return isLogIn;
     }
 
+    public void clearData() {
+        idms.clear();
+        circuits.clear();
+        reservationInfo=null;
+        domainsPorts.clear();
+    }
+
     public void logIn() throws AutobahnClientException {
         String query = "j_username=" + userName + "&j_password=" + password + "&_spring_security_remember_me=true";
         URI url = null;
         HttpPost httppost = null;
+        HttpResponse response=null;
         try {
             url = new URI(scheme, null, host, port, LOGIN_URL, query, null);
             httppost = new HttpPost(url);
-            HttpResponse response = httpclient.execute(httppost, localContext);
+            response = httpclient.execute(httppost, localContext);
 
         } catch (URISyntaxException e) {
             String error = e.getMessage();
@@ -134,6 +143,13 @@ public class AutobahnClient {
             String error = e.getMessage();
             Log.d(TAG,error);
             AutobahnClientException ex = new AutobahnClientException(error);
+            throw ex;
+        }
+
+        int status=response.getStatusLine().getStatusCode();
+        if(status != 200 ) {
+            String error = context.getString(R.string.login_failed);
+            AutobahnClientException ex = new AutobahnClientException(status,error);
             throw ex;
         }
 
@@ -149,31 +165,13 @@ public class AutobahnClient {
         }
     }
 
-    /*
-        returns the track circuit than have been fetched previously from fetchTrackCircuit
-     */
-    public List<String> getTrackCircuits() {
-        return circuits;
-    }
 
-    public void fetchTrackCircuit(String domain) throws AutobahnClientException{
+    private String handleGetRequest(URI url) throws AutobahnClientException{
 
-        circuits.clear();
+        httpget = new HttpGet(url);
+        HttpResponse response=null;
         try{
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("currentIdm",domain));
-
-            String query = URLEncodedUtils.format(params, "utf-8");
-
-            url = new URI(scheme, null, host, port, SERVICES_URL, query, null);
-            httpget = new HttpGet(url);
-
             response = httpclient.execute(httpget,localContext);
-        }
-        catch (URISyntaxException e) {
-            String error = context.getString(R.string.net_error);
-            AutobahnClientException ex = new AutobahnClientException(error);
-            throw ex;
         } catch (ClientProtocolException e) {
             String error = context.getString(R.string.net_error);
             AutobahnClientException ex = new AutobahnClientException(error);
@@ -184,15 +182,55 @@ public class AutobahnClient {
             throw ex;
         }
 
+        String json=null;
+        int status=response.getStatusLine().getStatusCode();
         try {
             json = EntityUtils.toString(response.getEntity());
         } catch (IOException e) {
+            //handle later;
+        }
+
+        Log.d(TAG,json);
+
+        if(json==null) {
+            String errorStr = context.getString(R.string.net_error);
+            AutobahnClientException ex = new AutobahnClientException(status,errorStr);
+            throw ex;
+        }
+
+        if(status!=200) {
+            AutobahnClientException ex = new AutobahnClientException(status,json);
+            throw ex;
+        }
+
+        return json;
+    }
+
+    public List<String> getTrackCircuits() {
+        return circuits;
+    }
+
+    public void fetchTrackCircuit(String domain) throws AutobahnClientException{
+
+        circuits.clear();
+        URI url=null;
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("currentIdm",domain));
+        String query = URLEncodedUtils.format(params, "utf-8");
+
+        try{
+
+            url = new URI(scheme, null, host, port, SERVICES_URL, query, null);
+        }
+        catch (URISyntaxException e) {
             String error = context.getString(R.string.net_error);
             AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         }
 
-        gson = new Gson();
+        String json=handleGetRequest(url);
+
+        Gson gson = new Gson();
         try {
             circuits = gson.fromJson(json, circuits.getClass());
         } catch (JsonParseException e) {
@@ -205,33 +243,16 @@ public class AutobahnClient {
     public void fetchIdms() throws AutobahnClientException {
 
         idms.clear();
+        URI url=null;
         try {
             url = new URI(scheme, null, host, port, DOMAIN_URL, null, null);
-            httpget = new HttpGet(url);
-            response = httpclient.execute(httpget, localContext);
-
         } catch (URISyntaxException e) {
             String error = context.getString(R.string.net_error);
             AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
-        } catch (ClientProtocolException e) {
-            String error = context.getString(R.string.net_error);
-            AutobahnClientException ex = new AutobahnClientException(error);
-            throw ex;
-        } catch (IOException e) {
-            String error = context.getString(R.string.net_error);
-            AutobahnClientException ex = new AutobahnClientException(error);
-            throw ex;
         }
 
-
-        try {
-            json = EntityUtils.toString(response.getEntity());
-        } catch (IOException e) {
-            String error = context.getString(R.string.net_error);
-            AutobahnClientException ex = new AutobahnClientException(error);
-            throw ex;
-        }
+        String json = handleGetRequest(url);
 
         Gson gson = new Gson();
         ArrayList<String> l = new ArrayList<String>();
@@ -247,55 +268,39 @@ public class AutobahnClient {
         idms = l;
     }
 
-    public void fetchReservationInfo(String domain, String serviceID) throws AutobahnClientException{
+    public void fetchReservationInfo(String serviceID) throws AutobahnClientException{
 
-        reservationInfo = new Circuit();
 
+        reservationInfo = new ReservationInfo();
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("serviceID",serviceID));
+
+        String query = URLEncodedUtils.format(params, "utf-8");
+
+        URI url=null;
         try {
-
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("currentIdm",domain));
-            params.add(new BasicNameValuePair("serviceID",serviceID));
-
-            String query = URLEncodedUtils.format(params, "utf-8");
             url = new URI(scheme, null, host, port, SERVICE_URL, query, null);
-            httpget = new HttpGet(url);
-            response = httpclient.execute(httpget, localContext);
-
         }catch (URISyntaxException e) {
             String error = context.getString(R.string.net_error);
             AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
-        } catch (ClientProtocolException e) {
-            String error = context.getString(R.string.net_error);
-            AutobahnClientException ex = new AutobahnClientException(error);
-            throw ex;
-        } catch (IOException e) {
-            String error = context.getString(R.string.net_error);
-            AutobahnClientException ex = new AutobahnClientException(error);
-            throw ex;
         }
 
-        try {
-            json = EntityUtils.toString(response.getEntity());
-        } catch (IOException e) {
-            String error = context.getString(R.string.net_error);
-            AutobahnClientException ex = new AutobahnClientException(error);
-            throw ex;
-        }
+        String json = handleGetRequest(url);
 
-        gson = new Gson();
+        Gson gson = new Gson();
         try{
             reservationInfo = gson.fromJson(json,reservationInfo.getClass());
         } catch (JsonParseException e) {
             String error = context.getString(R.string.net_error);
+            Log.d(TAG,e.getMessage());
             AutobahnClientException ex = new AutobahnClientException(error);
             throw ex;
         }
 
     }
 
-    public Circuit getReservationInfo()
+    public ReservationInfo getReservationInfo()
     {
         return reservationInfo;
     }

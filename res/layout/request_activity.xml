@@ -5,49 +5,49 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/homedomain"
-        android:id="@+id/textView"
-        android:layout_gravity="left|center_vertical"/>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/homedomain"
+		android:id="@+id/textView"
+		android:layout_gravity="left|center_vertical"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/homeDomain"
-        android:layout_gravity="center"/>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/homeDomain"
+		android:layout_gravity="center"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/destinationdomain"
-        android:id="@+id/textView"
-        android:layout_gravity="left|center_vertical"/>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/destinationdomain"
+		android:id="@+id/textView"
+		android:layout_gravity="left|center_vertical"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/destDomain"
-        android:layout_gravity="left|center_vertical"/>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/destDomain"
+		android:layout_gravity="left|center_vertical"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/description"
-        android:id="@+id/textView"
-        android:layout_gravity="left|center_vertical"/>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/justification"
+		android:id="@+id/textView"
+		android:layout_gravity="left|center_vertical"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/justification"
-        android:layout_gravity="left|center_vertical"/>
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/justification"
+		android:layout_gravity="left|center_vertical"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/newreservation"
-        android:id="@+id/newReservation"
-        android:layout_gravity="center"/>
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/newreservation"
+		android:id="@+id/newReservation"
+		android:layout_gravity="center"/>
 </LinearLayout>

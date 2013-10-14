@@ -117,9 +117,10 @@
             android:layout_below="@+id/seperator2"
             android:id="@+id/startDateText" />
     <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/startDateText"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:onClick="showDatePicker"
+	    android:layout_below="@+id/startDateText"
             android:id="@+id/startDate"/>
     <TextView
             android:layout_width="match_parent"

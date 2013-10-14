@@ -1,10 +1,11 @@
 package autobahn.android;
 import java.util.Calendar;
 
-public class Circuit {
-    public Circuit(){
+public class ReservationInfo {
+    public ReservationInfo(){
 
     }
+
 
     public enum ReservationState {
         UNKNOWN,
@@ -12,20 +13,38 @@ public class Circuit {
         ACTIVE,
         FINISHED,
         CANCELLED,
-        FAILED
+        FAILED;
+
+        public static ReservationState fromInteger(int x) {
+            switch(x) {
+                case 0:
+                    return UNKNOWN;
+                case 1:
+                    return SCHEDULED;
+                case 2:
+                    return ACTIVE;
+                case 3:
+                    return FINISHED;
+                case 4:
+                    return CANCELLED;
+                case 5:
+                    return FAILED;
+            }
+            return null;
+        }
     }
 
-    private ReservationState state;
-    private Calendar startTime;
-    private Calendar endTime;
+    private ReservationState state = ReservationState.UNKNOWN;
+    private Calendar startTime = null;
+    private Calendar endTime = null;
     private long id;
-    private int capacity;
+    private long capacity;
     private int mtu;
     private int startVlan;
     private int endVlan;
-    private Port startPort;
-    private Port endPort;
-    private String justf;
+    private Port startPort = null;
+    private Port endPort = null;
+    private String description = null;
 
     public void setState(ReservationState state) {
         this.state = state;
@@ -43,7 +62,7 @@ public class Circuit {
         this.id = id;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(long capacity) {
         this.capacity = capacity;
     }
 
@@ -67,8 +86,8 @@ public class Circuit {
         this.endPort = endPort;
     }
 
-    public void setJustf(String justf) {
-        this.justf = justf;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public ReservationState getState() {
@@ -87,7 +106,7 @@ public class Circuit {
         return id;
     }
 
-    public int getCapacity() {
+    public long getCapacity() {
         return capacity;
     }
 
@@ -111,8 +130,8 @@ public class Circuit {
         return endPort;
     }
 
-    public String getJustification() {
-        return justf;
+    public String getDescription() {
+        return description;
     }
 
     public String getStartDomain() {

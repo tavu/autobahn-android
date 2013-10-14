@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.autobahn.R;
 
@@ -16,7 +17,7 @@ import com.example.autobahn.R;
  */
 public class SingleCircuitActivity extends Activity {
 
-    private Circuit circuit;
+    private ReservationInfo circuit;
     private String currentIdm;
     private String serviceID;
     private AutobahnClientException exception;
@@ -46,11 +47,16 @@ public class SingleCircuitActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_circuit_activity);
+        Bundle bundle = getIntent().getExtras();
+        serviceID = bundle.getString("SERVICE_ID");
+        currentIdm = bundle.getString("DOMAIN_NAME");
         async.execute();
 
     }
 
     public void showReservationInfo(){
+
+        TextView textView;
 
         if (exception != null) {
             Log.d("WARN", "circuit error");
@@ -60,8 +66,19 @@ public class SingleCircuitActivity extends Activity {
         }
 
         circuit = AutobahnClient.getInstance().getReservationInfo();
-
-
+        textView = (TextView)findViewById(R.id.service);
+        textView.setText(serviceID);
+        textView = (TextView)findViewById(R.id.description);
+        textView.setText(circuit.getDescription());
+        /*textView = (TextView)findViewById(R.id.service);
+        textView.setText(serviceID);
+        textView = (TextView)findViewById(R.id.service);
+        textView.setText(serviceID);
+        textView = (TextView)findViewById(R.id.service);
+        textView.setText(serviceID);
+        textView = (TextView)findViewById(R.id.service);
+        textView.setText(serviceID);
+        */
 
     }
 }

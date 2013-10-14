@@ -54,7 +54,7 @@ public class AutobahnClient {
     private Context context = null;
     private List<String> idms = new ArrayList();
     private List<String> circuits = new ArrayList();
-    private Circuit reservationInfo;
+    private ReservationInfo reservationInfo;
 
     private String TAG = "WARN";
 
@@ -249,7 +249,7 @@ public class AutobahnClient {
 
     public void fetchReservationInfo(String domain, String serviceID) throws AutobahnClientException{
 
-        reservationInfo = new Circuit();
+        reservationInfo = new ReservationInfo();
 
         try {
 
@@ -295,7 +295,7 @@ public class AutobahnClient {
 
     }
 
-    public Circuit getReservationInfo()
+    public ReservationInfo getReservationInfo()
     {
         return reservationInfo;
     }

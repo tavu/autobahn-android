@@ -40,7 +40,7 @@
     <string name="service">Service</string>
     <string name="user">User</string>
     <string name="state">State</string>
-    <string name="justification">Justification</string>
+    <string name="description">Description</string>
     <string name="start_time">Start Time</string>
 
     <string name="homedomain">Home Domain</string>
@@ -56,7 +56,6 @@
     <string name="startDate">Start Date</string>
     <string name="endTime">End Time</string>
     <string name="endDate">End Date</string>
-    <string name="description">Description</string>
     <string name="delay">Delay [ms]</string>
 
     <!--summary -->

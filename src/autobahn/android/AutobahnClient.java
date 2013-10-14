@@ -50,12 +50,11 @@ public class AutobahnClient {
 
     private List<String> idms = new ArrayList();
     private List<String> circuits = new ArrayList();
-<<<<<<< HEAD
-    private Circuit reservationInfo;
+
     private Map<String, List<String>> domainsPorts =new HashMap<String, List<String>>();
-=======
+
     private ReservationInfo reservationInfo;
->>>>>>> b9ef2db964a10a7014ee841401350a6855a60111
+
 
     private String TAG = "WARN";
 
@@ -270,12 +269,9 @@ public class AutobahnClient {
 
     public void fetchReservationInfo(String domain, String serviceID) throws AutobahnClientException{
 
-<<<<<<< HEAD
-        reservationInfo = new Circuit();
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-=======
+
         reservationInfo = new ReservationInfo();
->>>>>>> b9ef2db964a10a7014ee841401350a6855a60111
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
 
         params.add(new BasicNameValuePair("currentIdm",domain));
         params.add(new BasicNameValuePair("serviceID",serviceID));

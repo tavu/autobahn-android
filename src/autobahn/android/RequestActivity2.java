@@ -2,13 +2,14 @@ package autobahn.android;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
+import android.app.TimePickerDialog;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.NumberPicker;
+import android.widget.TimePicker;
 
 import com.example.autobahn.R;
 
@@ -25,7 +26,8 @@ import java.util.Date;
  * Time: 2:26 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RequestActivity2 extends Activity implements DatePickerDialog.OnDateSetListener {
+public class RequestActivity2 extends Activity implements View.OnFocusChangeListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+	private View lastClickedView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -33,37 +35,65 @@ public class RequestActivity2 extends Activity implements DatePickerDialog.OnDat
 
 		setContentView(R.layout.request_reservation_activity2);
 
-		EditText editText = (EditText) findViewById(R.id.startDate);
-		editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-				if (hasFocus) {
-					showDatePicker();
-				}
+		((EditText) findViewById(R.id.startVlan)).setRawInputType(Configuration.KEYBOARD_12KEY);
+		((EditText) findViewById(R.id.endVlan)).setRawInputType(Configuration.KEYBOARD_12KEY);
+
+		findViewById(R.id.startDate).setOnFocusChangeListener(this);
+		findViewById(R.id.endDate).setOnFocusChangeListener(this);
+		findViewById(R.id.startTime).setOnFocusChangeListener(this);
+		findViewById(R.id.endTime).setOnFocusChangeListener(this);
+	}
+
+	@Override
+	public void onFocusChange(View view, boolean hasFocus) {
+		if (view.hasFocus()) {
+			switch (view.getId()) {
+				case R.id.startDate:
+					showDatePicker(view);
+					break;
+				case R.id.startTime:
+					showTimePicker(view);
+					break;
+				case R.id.endDate:
+					showDatePicker(view);
+					break;
+				case R.id.endTime:
+					showTimePicker(view);
+					break;
 			}
-		});
+		}
 	}
 
-	public void showNumberPicker(View v) {
-		// TODO: change min API level to 11
-		NumberPicker numb = new NumberPicker(this);
-
-		Dialog dialog = new Dialog(this);
-		ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-		dialog.addContentView(numb, lp);
-		dialog.show();
-
+	public void disableVlan(View view) {
+		boolean checked = ((CheckBox) view).isChecked();
+		switch (view.getId()) {
+			case R.id.startVlanAuto:
+				if (checked) {
+					findViewById(R.id.startVlan).setFocusable(false);
+				} else {
+					findViewById(R.id.startVlan).setFocusableInTouchMode(true);
+				}
+				break;
+			case R.id.endVlanAuto:
+				if (checked) {
+					findViewById(R.id.endVlan).setFocusable(false);
+				} else {
+					findViewById(R.id.endVlan).setFocusableInTouchMode(true);
+				}
+				break;
+		}
 	}
 
-	public void showDatePicker() {
+	public void showDatePicker(View view) {
 		// TODO: change min API level to 11
 		DatePickerDialog dialog = new DatePickerDialog(this, this, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+		lastClickedView = view;
 		dialog.show();
 	}
 
 	public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-		EditText dateDisplay = (EditText) findViewById(R.id.startDate);
+		EditText dateDisplay = (EditText) lastClickedView;
+
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date date = null;
 		try {
@@ -72,5 +102,24 @@ public class RequestActivity2 extends Activity implements DatePickerDialog.OnDat
 		}
 		DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this);
 		dateDisplay.setText(dateFormat.format(date));
+	}
+
+	public void showTimePicker(View view) {
+		TimePickerDialog dialog = new TimePickerDialog(this, this, Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), true);
+		lastClickedView = view;
+		dialog.show();
+	}
+
+	public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+		EditText timeDisplay = (EditText) lastClickedView;
+
+		SimpleDateFormat sdf = new SimpleDateFormat("kk:mm");
+		Date time = null;
+		try {
+			time = sdf.parse(hourOfDay + ":" + minute);
+		} catch (ParseException e) {
+		}
+		DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
+		timeDisplay.setText(timeFormat.format(time));
 	}
 }

@@ -12,9 +12,7 @@
 			android:label="@string/app_name">
 		</activity>
 		<activity android:name="autobahn.android.TrackCircuitActivity"/>
-		<activity
-			android:name="autobahn.android.RequestActivity"/>
-		<activity android:name="autobahn.android.AboutActivity"/>
+        <activity android:name="autobahn.android.AboutActivity"/>
 		<activity android:name="autobahn.android.LoginActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>

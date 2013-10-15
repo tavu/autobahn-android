@@ -3,7 +3,7 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:gravity="center_horizontal">
+              android:gravity="center_horizontal" android:background="#ffffff">
 
 	<TextView
 		android:layout_width="fill_parent"
@@ -12,14 +12,14 @@
 		android:gravity="center"
 		android:textStyle="bold"
 		android:textSize="20dp"
-		android:layout_margin="20px"/>
+		android:layout_margin="20px" android:textColor="@color/custom_text_color_autobahn_android"/>
 
 	<Button
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:id="@+id/request"
 		android:text="@string/request"
-		android:layout_margin="10px"/>
+		android:layout_margin="10px" android:shadowColor="@color/custom_text_color_autobahn_android"/>
 
 	<Button
 		android:layout_width="fill_parent"

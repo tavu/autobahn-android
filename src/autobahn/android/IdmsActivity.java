@@ -2,6 +2,7 @@ package autobahn.android;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,11 +43,14 @@ public class IdmsActivity extends Activity {
             setContentView(R.layout.idm_selection_activity);
             domainList = (ListView) findViewById(R.id.listView);
             adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, domains);
+
             domainList.setAdapter(adapter);
             domainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     TextView item = (TextView)view;
+                    item.setTextColor(R.color.custom_text_color_autobahn_android);
+                    item.setBackgroundColor(Color.WHITE);
                     String domain  = item.getText().toString();
                     Intent domainActivity = new Intent();
                     domainActivity.setClass(getApplicationContext(),TrackCircuitActivity.class);

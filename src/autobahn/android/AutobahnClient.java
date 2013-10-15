@@ -7,6 +7,7 @@ import com.example.autobahn.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
+import net.geant.autobahn.android.ReservationInfo;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -53,7 +54,7 @@ public class AutobahnClient {
 	private Context context = null;
 	private List<String> idms = new ArrayList();
 	private List<String> circuits = new ArrayList();
-	private Circuit reservationInfo;
+	private ReservationInfo reservationInfo;
 
 	private String TAG = "WARN";
 
@@ -245,14 +246,13 @@ public class AutobahnClient {
 		idms = l;
 	}
 
-	public void fetchReservationInfo(String domain, String serviceID) throws AutobahnClientException {
+	public void fetchReservationInfo(String serviceID) throws AutobahnClientException {
 
-		reservationInfo = new Circuit();
+		reservationInfo = new ReservationInfo();
 
 		try {
 
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair("currentIdm", domain));
 			params.add(new BasicNameValuePair("serviceID", serviceID));
 
 			String query = URLEncodedUtils.format(params, "utf-8");
@@ -293,7 +293,7 @@ public class AutobahnClient {
 
 	}
 
-	public Circuit getReservationInfo() {
+	public ReservationInfo getReservationInfo() {
 		return reservationInfo;
 	}
 

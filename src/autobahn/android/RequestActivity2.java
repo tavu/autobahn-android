@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import com.example.autobahn.R;
@@ -12,10 +14,7 @@ import com.example.autobahn.R;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,6 +25,47 @@ import java.util.List;
  */
 public class RequestActivity2 extends Activity implements View.OnFocusChangeListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 	private View lastClickedView;
+    private AutobahnClientException exception=null;
+
+    private class DomainAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... type) {
+            try{
+                AutobahnClient.getInstance().fetchIdms();
+            } catch (AutobahnClientException e) {
+                exception=e;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... progress) {
+            super.onProgressUpdate(progress);
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            setDomains();
+        }
+    };
+
+    protected void setDomains() {
+        if(exception==null) {
+            Log.d("malakia", AutobahnClient.getInstance().getIdms().toString())      ;
+            ArrayList<String> a1=new ArrayList<String>( AutobahnClient.getInstance().getIdms())    ;
+            ArrayAdapter<String> startDomAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, a1 );
+            Spinner sp1= (Spinner) findViewById(R.id.startDomain);
+            startDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sp1.setAdapter(startDomAdapter);
+
+            ArrayList<String> a2=new ArrayList<String>( AutobahnClient.getInstance().getIdms())    ;
+            ArrayAdapter<String> endDomAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, a2 );
+            Spinner sp2= (Spinner) findViewById(R.id.endDomain);
+            endDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sp2.setAdapter(endDomAdapter);
+        }
+    }
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -39,9 +79,11 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
         Spinner timezone=((Spinner) findViewById(R.id.timezone));
 
         List<String> list = new ArrayList<String>();
-        list.add("list 1");
-        list.add("list 2");
-        list.add("list 3");
+        TimeZone timeZone=TimeZone.getDefault();
+        list.add(timeZone.getDisplayName());
+        list.add(TimeZone.getTimeZone("GMT").getDisplayName());
+
+
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         timezone.setAdapter(dataAdapter);
@@ -50,6 +92,10 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 		findViewById(R.id.endDate).setOnFocusChangeListener(this);
 		findViewById(R.id.startTime).setOnFocusChangeListener(this);
 		findViewById(R.id.endTime).setOnFocusChangeListener(this);
+
+
+        DomainAsyncTask dat=new DomainAsyncTask();
+        dat.execute();
 	}
 
 	@Override
@@ -102,12 +148,10 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 	public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 		EditText dateDisplay = (EditText) lastClickedView;
 
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		Date date = null;
-		try {
-			date = sdf.parse(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-		} catch (ParseException e) {
-		}
+		//SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat sdf=DateFormat.getDateInstance();
+		Date date = new Date(year,monthOfYear,dayOfMonth);
+
 		DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this);
 		dateDisplay.setText(dateFormat.format(date));
 	}

@@ -75,7 +75,7 @@ public class AutobahnClient {
 		localContext = new BasicHttpContext();
 		localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
 		//TODO get the host from a property
-		host = "62.217.124.241";
+		host = "62.217.125.174";
 		port = 8080;
 	}
 
@@ -248,6 +248,7 @@ public class AutobahnClient {
 
 	public void fetchReservationInfo(String serviceID) throws AutobahnClientException {
 
+        /*
 		reservationInfo = new ReservationInfo();
 
 		try {
@@ -290,7 +291,7 @@ public class AutobahnClient {
 			AutobahnClientException ex = new AutobahnClientException(error);
 			throw ex;
 		}
-
+           */
 	}
 
 	public ReservationInfo getReservationInfo() {
@@ -300,5 +301,6 @@ public class AutobahnClient {
 	public List<String> getIdms() {
 		return idms;
 	}
+
 
 }

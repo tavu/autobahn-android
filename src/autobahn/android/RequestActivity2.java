@@ -6,18 +6,16 @@ import android.app.TimePickerDialog;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TimePicker;
-
+import android.widget.*;
 import com.example.autobahn.R;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,6 +35,16 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 
 		((EditText) findViewById(R.id.startVlan)).setRawInputType(Configuration.KEYBOARD_12KEY);
 		((EditText) findViewById(R.id.endVlan)).setRawInputType(Configuration.KEYBOARD_12KEY);
+
+        Spinner timezone=((Spinner) findViewById(R.id.timezone));
+
+        List<String> list = new ArrayList<String>();
+        list.add("list 1");
+        list.add("list 2");
+        list.add("list 3");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        timezone.setAdapter(dataAdapter);
 
 		findViewById(R.id.startDate).setOnFocusChangeListener(this);
 		findViewById(R.id.endDate).setOnFocusChangeListener(this);
@@ -121,5 +129,6 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 		}
 		DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
 		timeDisplay.setText(timeFormat.format(time));
+
 	}
 }

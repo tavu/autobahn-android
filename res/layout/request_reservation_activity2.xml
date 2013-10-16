@@ -125,12 +125,24 @@
 			android:layout_below="@+id/endVlan"
 			android:background="@android:color/darker_gray"/>
 
+        <TextView
+                android:id="@+id/timezoneText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/seperator2"
+                android:text="@string/start_date"/>
+
+        <Spinner
+                android:id="@+id/timezone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/timezoneText"/>
 
 		<TextView
 			android:id="@+id/startDateText"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_below="@+id/seperator2"
+			android:layout_below="@+id/timezone"
 			android:text="@string/start_date"/>
 
 		<EditText

@@ -96,7 +96,7 @@
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/startVlanText"
 			android:layout_toRightOf="@+id/startVlan"
-			android:onClick="disableVlan"
+			android:onClick="disableCheckboxForms"
 			android:text="@string/vlan_auto"/>
 
 		<TextView
@@ -118,7 +118,7 @@
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/endVlanText"
 			android:layout_toRightOf="@+id/endVlan"
-			android:onClick="disableVlan"
+			android:onClick="disableCheckboxForms"
 			android:text="@string/vlan_auto"/>
 
 		<View
@@ -138,10 +138,19 @@
 
 		<EditText
 			android:id="@+id/startDate"
-			android:layout_width="match_parent"
+			android:layout_width="120dp"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/startDateText"
 			android:onClick="showDatePicker"/>
+
+		<CheckBox
+			android:id="@+id/startNow"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/startDateText"
+			android:layout_toRightOf="@+id/startDate"
+			android:text="@string/startNow"
+			android:onClick="disableCheckboxForms"/>
 
 		<TextView
 			android:id="@+id/startTimeText"
@@ -152,7 +161,7 @@
 
 		<EditText
 			android:id="@+id/startTime"
-			android:layout_width="match_parent"
+			android:layout_width="120dp"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/startTimeText"
 			android:onClick="showTimePicker"/>
@@ -166,7 +175,7 @@
 
 		<EditText
 			android:id="@+id/endDate"
-			android:layout_width="match_parent"
+			android:layout_width="120dp"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/endDateText"
 			android:onClick="showDatePicker"/>
@@ -181,7 +190,7 @@
 
 		<EditText
 			android:id="@+id/endTime"
-			android:layout_width="match_parent"
+			android:layout_width="120dp"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/endTimeText"
 			android:onClick="showTimePicker"/>

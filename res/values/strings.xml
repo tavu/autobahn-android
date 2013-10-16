@@ -82,6 +82,7 @@
 	<string name="vlan_auto">Automatically set vlan</string>
 	<string name="start_domain">Start domain</string>
 	<string name="end_domain">End domain</string>
+	<string name="startNow">Start now</string>
 
 
 </resources>

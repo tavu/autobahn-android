@@ -28,6 +28,7 @@ import java.util.Date;
  */
 public class RequestActivity2 extends Activity implements View.OnFocusChangeListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 	private View lastClickedView;
+	private boolean enableStartTime = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,10 +50,14 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 		if (view.hasFocus()) {
 			switch (view.getId()) {
 				case R.id.startDate:
-					showDatePicker(view);
+					if (enableStartTime) {
+						showDatePicker(view);
+					}
 					break;
 				case R.id.startTime:
-					showTimePicker(view);
+					if (enableStartTime) {
+						showTimePicker(view);
+					}
 					break;
 				case R.id.endDate:
 					showDatePicker(view);
@@ -64,7 +69,7 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 		}
 	}
 
-	public void disableVlan(View view) {
+	public void disableCheckboxForms(View view) {
 		boolean checked = ((CheckBox) view).isChecked();
 		switch (view.getId()) {
 			case R.id.startVlanAuto:
@@ -81,6 +86,16 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 					findViewById(R.id.endVlan).setFocusableInTouchMode(true);
 				}
 				break;
+			case R.id.startNow:
+				if (checked) {
+					enableStartTime = false;
+					findViewById(R.id.startDate).setFocusable(false);
+					findViewById(R.id.startTime).setFocusable(false);
+				} else {
+					enableStartTime = true;
+					findViewById(R.id.startDate).setFocusableInTouchMode(true);
+					findViewById(R.id.startTime).setFocusableInTouchMode(true);
+				}
 		}
 	}
 

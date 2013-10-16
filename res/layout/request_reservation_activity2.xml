@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+<ScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="@color/white">
 
-	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	                android:layout_width="match_parent"
-	                android:layout_height="1500dp"
-	                android:clickable="false"
-	                android:focusable="false"
-	                android:focusableInTouchMode="false">
+	<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="1500dp"
+		android:clickable="false"
+		android:focusable="false"
+		android:focusableInTouchMode="false">
 
 
 		<TextView
@@ -93,8 +96,8 @@
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/startVlanText"
 			android:layout_toRightOf="@+id/startVlan"
-			android:text="@string/vlan_auto"
-			android:onClick="disableVlan"/>
+			android:onClick="disableVlan"
+			android:text="@string/vlan_auto"/>
 
 		<TextView
 			android:id="@+id/endVlanText"
@@ -115,8 +118,8 @@
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/endVlanText"
 			android:layout_toRightOf="@+id/endVlan"
-			android:text="@string/vlan_auto"
-			android:onClick="disableVlan"/>
+			android:onClick="disableVlan"
+			android:text="@string/vlan_auto"/>
 
 		<View
 			android:id="@+id/seperator2"
@@ -173,7 +176,8 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/endDate"
-			android:text="@string/end_time"/>
+			android:text="@string/end_time"
+			/>
 
 		<EditText
 			android:id="@+id/endTime"

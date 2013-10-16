@@ -3,7 +3,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent" android:background="@android:color/white">
+              android:layout_height="fill_parent"
+              android:background="@android:color/white">
 
 	<TextView
 		android:layout_width="wrap_content"
@@ -14,8 +15,11 @@
 		android:layout_marginRight="20px"
 		android:layout_marginTop="20px"
 		android:layout_marginLeft="20px"
-		android:gravity="center" android:textColor="@color/custom_text_color_autobahn_android"
-        android:textIsSelectable="false" android:textStyle="bold" android:textSize="17dp"/>
+		android:gravity="center"
+		android:textColor="@color/textColor"
+		android:textIsSelectable="false"
+		android:textStyle="bold"
+		android:textSize="17dp"/>
 
 	<Button
 		android:layout_width="wrap_content"

@@ -57,7 +57,9 @@ public class TrackCircuitActivity extends Activity {
 	}
 
 	public void showReservations() {
-		if (exception != null) {
+
+        TextView header;
+        if (exception != null) {
 			Log.d("WARN", "circuit error");
 			Toast toast = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
 			toast.show();
@@ -67,8 +69,11 @@ public class TrackCircuitActivity extends Activity {
 		reservationID = AutobahnClient.getInstance().getTrackCircuits();
 		setContentView(R.layout.domain_reservation_activity);
 
+        header = (TextView)findViewById(R.id.header);
+        header.setText("Past reservations for " + idmName);
+
 		reservationList = (ListView) findViewById(R.id.listView);
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, reservationID);
+		adapter = new ArrayAdapter<String>(this, R.layout.list_item, reservationID);
 		reservationList.setAdapter(adapter);
 		reservationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override

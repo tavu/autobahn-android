@@ -8,13 +8,18 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TimePicker;
+
 import com.example.autobahn.R;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -76,26 +81,10 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 		((EditText) findViewById(R.id.startVlan)).setRawInputType(Configuration.KEYBOARD_12KEY);
 		((EditText) findViewById(R.id.endVlan)).setRawInputType(Configuration.KEYBOARD_12KEY);
 
-        Spinner timezone=((Spinner) findViewById(R.id.timezone));
-
-        List<String> list = new ArrayList<String>();
-        TimeZone timeZone=TimeZone.getDefault();
-        list.add(timeZone.getDisplayName());
-        list.add(TimeZone.getTimeZone("GMT").getDisplayName());
-
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        timezone.setAdapter(dataAdapter);
-
 		findViewById(R.id.startDate).setOnFocusChangeListener(this);
 		findViewById(R.id.endDate).setOnFocusChangeListener(this);
 		findViewById(R.id.startTime).setOnFocusChangeListener(this);
 		findViewById(R.id.endTime).setOnFocusChangeListener(this);
-
-
-        DomainAsyncTask dat=new DomainAsyncTask();
-        dat.execute();
 	}
 
 	@Override
@@ -118,7 +107,7 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 		}
 	}
 
-	public void disableVlan(View view) {
+	public void disableCheckboxForms(View view) {
 		boolean checked = ((CheckBox) view).isChecked();
 		switch (view.getId()) {
 			case R.id.startVlanAuto:
@@ -135,6 +124,16 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 					findViewById(R.id.endVlan).setFocusableInTouchMode(true);
 				}
 				break;
+			case R.id.startNow:
+				if (checked) {
+					enableStartTime = false;
+					findViewById(R.id.startDate).setFocusable(false);
+					findViewById(R.id.startTime).setFocusable(false);
+				} else {
+					enableStartTime = true;
+					findViewById(R.id.startDate).setFocusableInTouchMode(true);
+					findViewById(R.id.startTime).setFocusableInTouchMode(true);
+				}
 		}
 	}
 
@@ -173,6 +172,5 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 		}
 		DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
 		timeDisplay.setText(timeFormat.format(time));
-
 	}
 }

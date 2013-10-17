@@ -8,16 +8,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TimePicker;
-
+import android.widget.*;
 import com.example.autobahn.R;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -28,20 +25,37 @@ import java.util.Date;
  * Time: 2:26 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RequestActivity2 extends Activity implements View.OnFocusChangeListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class RequestActivity2 extends Activity implements View.OnFocusChangeListener, DatePickerDialog.OnDateSetListener,
+        TimePickerDialog.OnTimeSetListener, AdapterView.OnItemSelectedListener  {
+
+
 	private View lastClickedView;
     private AutobahnClientException exception=null;
+    final private String TAG="REQUEST_RES";
 
-    private class DomainAsyncTask extends AsyncTask<Void, Void, Void> {
+    private class AsTask extends AsyncTask<String, Void, String> {
 
         @Override
-        protected Void doInBackground(Void... type) {
-            try{
-                AutobahnClient.getInstance().fetchIdms();
-            } catch (AutobahnClientException e) {
-                exception=e;
+        protected String doInBackground(String... type) {
+
+            Log.d(TAG,"Async "+type[0]);
+            if(type[0].equals("DOMAINS")) {
+                try{
+                    AutobahnClient.getInstance().fetchIdms();
+                } catch (AutobahnClientException e) {
+                    exception=e;
+                }
+                return type[0];
             }
-            return null;
+            else {
+                try{
+                    AutobahnClient.getInstance().fetchPorts(type[0]);
+                } catch (AutobahnClientException e) {
+                    exception=e;
+                }
+                return type[0];
+            }
+
         }
 
         @Override
@@ -50,26 +64,38 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-            setDomains();
+        protected void onPostExecute(String result) {
+            if(exception!=null) {
+                Toast toast  = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
+                toast.show();
+                return ;
+            }
+
+            if(result.equals("DOMAINS")) {
+                setDomains();
+            }else {
+                setPorts(result);
+            }
         }
     };
 
+
+
     protected void setDomains() {
-        if(exception==null) {
-            Log.d("malakia", AutobahnClient.getInstance().getIdms().toString())      ;
+
             ArrayList<String> a1=new ArrayList<String>( AutobahnClient.getInstance().getIdms())    ;
             ArrayAdapter<String> startDomAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, a1 );
             Spinner sp1= (Spinner) findViewById(R.id.startDomain);
             startDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             sp1.setAdapter(startDomAdapter);
 
+
             ArrayList<String> a2=new ArrayList<String>( AutobahnClient.getInstance().getIdms())    ;
             ArrayAdapter<String> endDomAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, a2 );
             Spinner sp2= (Spinner) findViewById(R.id.endDomain);
             endDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             sp2.setAdapter(endDomAdapter);
-        }
+
     }
 
 	@Override
@@ -85,6 +111,27 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 		findViewById(R.id.endDate).setOnFocusChangeListener(this);
 		findViewById(R.id.startTime).setOnFocusChangeListener(this);
 		findViewById(R.id.endTime).setOnFocusChangeListener(this);
+
+        Spinner sp=(Spinner)(findViewById(R.id.startDomain) );
+        sp.setOnItemSelectedListener(this);
+        sp=(Spinner)(findViewById(R.id.endDomain) );
+        sp.setOnItemSelectedListener(this);
+
+
+        sp=(Spinner)(findViewById(R.id.startPort) );
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,new ArrayList<String>() );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp.setAdapter(adapter);
+
+        sp=(Spinner)(findViewById(R.id.endPort) );
+        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,new ArrayList<String>() );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp.setAdapter(adapter);
+
+
+        AsTask  ast=new AsTask ();
+        exception=null;
+        ast.execute("DOMAINS");
 	}
 
 	@Override
@@ -126,11 +173,9 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 				break;
 			case R.id.startNow:
 				if (checked) {
-					enableStartTime = false;
 					findViewById(R.id.startDate).setFocusable(false);
 					findViewById(R.id.startTime).setFocusable(false);
 				} else {
-					enableStartTime = true;
 					findViewById(R.id.startDate).setFocusableInTouchMode(true);
 					findViewById(R.id.startTime).setFocusableInTouchMode(true);
 				}
@@ -147,7 +192,6 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 	public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 		EditText dateDisplay = (EditText) lastClickedView;
 
-		//SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         DateFormat sdf=DateFormat.getDateInstance();
 		Date date = new Date(year,monthOfYear,dayOfMonth);
 
@@ -173,4 +217,65 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 		DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
 		timeDisplay.setText(timeFormat.format(time));
 	}
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+
+        Log.d(TAG,"edo");
+        String s=(String )parent.getItemAtPosition(pos);
+
+        Log.d(TAG, "domain:" + s+" have been selected");
+
+        AsTask as=new AsTask();
+        exception=null;
+        as.execute(s);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+            //do nothing
+    }
+
+
+    protected void setPorts(String domain) {
+
+
+        if(!NetCache.getInstance().hasPorts(domain)) {
+                //TODO
+            return;
+        }
+
+        Log.d(TAG, NetCache.getInstance().getPorts(domain).toString());
+
+        Spinner spinner= (Spinner) findViewById(R.id.startDomain);
+        String dom=null;
+        if(spinner.getSelectedItem()!=null) {
+            dom=spinner.getSelectedItem().toString();
+        }
+
+        if(dom!=null && dom.equals(domain) )  {
+
+            Log.d(TAG,"ports changed for start domain "+dom);
+            spinner=    (Spinner) findViewById(R.id.startPort);
+            ArrayAdapter<String> adapter=(ArrayAdapter<String>) spinner.getAdapter();
+            adapter.clear();
+            adapter.addAll(NetCache.getInstance().getPorts(dom));
+        }
+
+        dom=null;
+        spinner= (Spinner) findViewById(R.id.endDomain);
+        if(spinner.getSelectedItem()!=null) {
+            dom=spinner.getSelectedItem().toString();
+        }
+
+        if(dom!=null && dom.equals(domain) )  {
+            Log.d(TAG,"ports changed for end domain "+dom);
+            spinner=    (Spinner) findViewById(R.id.endPort);
+            ArrayAdapter<String> adapter=(ArrayAdapter<String>) spinner.getAdapter();
+            adapter.clear();
+            adapter.addAll(NetCache.getInstance().getPorts(dom));
+        }
+    }
+
 }

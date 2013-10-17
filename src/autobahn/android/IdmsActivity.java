@@ -2,7 +2,7 @@ package autobahn.android;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +19,11 @@ public class IdmsActivity extends Activity {
     ListView domainList;
     ArrayAdapter<String> adapter;
     AutobahnClientException exception=null;
+
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        showData();
+    }
 
     private void showData() {
         domains = AutobahnClient.getInstance().getIdms();
@@ -62,15 +67,18 @@ public class IdmsActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("create2","i have created");
         AsyncTask<Void, Void, Void> async = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... type) {
 
                 try {
                     AutobahnClient.getInstance().fetchIdms();
+
                 } catch (AutobahnClientException e) {
                     exception=e;
                 }
+
                 return null;
             }
 

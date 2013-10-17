@@ -49,6 +49,7 @@ public class SingleCircuitActivity extends Activity {
         setContentView(R.layout.single_circuit_activity);
         Bundle bundle = getIntent().getExtras();
         serviceID = bundle.getString("SERVICE_ID");
+
         async.execute();
 
     }
@@ -64,7 +65,10 @@ public class SingleCircuitActivity extends Activity {
             return;
         }
 
-        reservationInfo = AutobahnClient.getInstance().getReservationInfo();
+        reservationInfo = NetCache.getInstance().getLastReservation(serviceID);
+        if(reservationInfo==null) {
+            Log.wtf("WARN", "null res info");
+        }
         textView = (TextView)findViewById(R.id.service);
         textView.setText(reservationInfo.getId());
         textView = (TextView)findViewById(R.id.description);

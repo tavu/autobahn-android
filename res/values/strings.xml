@@ -67,6 +67,10 @@
 	<string name="login_failed">"Log in failed. Please check username and password"</string>
 	<string name="net_error">"Network error."</string>
 	<string name="failure_reason">Failure Reason</string>
+    <string name="error_404">Page not found!</string>
+    <string name="error_500">internal server error!</string>
+    <string name="error">Error:</string>
+
 
 
 	<string name="end_time">End Time</string>

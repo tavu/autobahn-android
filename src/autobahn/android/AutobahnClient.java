@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.autobahn.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
+import com.loopj.android.http.PersistentCookieStore;
 import net.geant.autobahn.android.ReservationInfo;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -16,7 +17,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.cookie.Cookie;
-import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
@@ -26,10 +26,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AutobahnClient {
 
@@ -44,7 +41,7 @@ public class AutobahnClient {
     private String scheme;
     private String host;
     private int port;
-    boolean isLogIn;
+    //boolean isLogIn;
     private String userName;
     private String password;
     private HttpContext localContext;
@@ -72,10 +69,8 @@ public class AutobahnClient {
     public AutobahnClient() {
         httpclient = new DefaultHttpClient();
         scheme = "http";
-        isLogIn = false;
-        CookieStore cookieStore = new BasicCookieStore();
-        localContext = new BasicHttpContext();
-        localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+        //CookieStore cookieStore = new BasicCookieStore();
+
         //TODO get the host from a property
         host = "62.217.125.174";
         port = 8080;
@@ -83,6 +78,9 @@ public class AutobahnClient {
 
     public void setContext(Context context) {
         this.context = context;
+        CookieStore cookieStore = new PersistentCookieStore(context);
+        localContext = new BasicHttpContext();
+        localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
     }
 
     public void setHost(String s) {
@@ -110,7 +108,13 @@ public class AutobahnClient {
     }
 
     public boolean hasAuthenticate() {
-        return isLogIn;
+        CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
+        for (Cookie c : cookieStore.getCookies()) {
+            if (c.getName().equals("SPRING_SECURITY_REMEMBER_ME_COOKIE") && !c.isExpired(new Date() ))  {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void clearData() {
@@ -121,7 +125,19 @@ public class AutobahnClient {
     }
 
     public synchronized void logIn() throws AutobahnClientException {
-        String query = "j_username=" + userName + "&j_password=" + password + "&_spring_security_remember_me=true";
+
+        if(hasAuthenticate()) {
+            Log.d(TAG,"Autobahn client has already authenticate");
+            return ;
+        }
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("j_username",userName));
+        params.add(new BasicNameValuePair("j_password",password));
+        params.add(new BasicNameValuePair("_spring_security_remember_me","true"));
+        String query = URLEncodedUtils.format(params, "utf-8");
+
+        //String query = "j_username=" + userName + "&j_password=" + password + "&_spring_security_remember_me=true";
         URI url = null;
         HttpPost httppost = null;
         HttpResponse response=null;
@@ -151,12 +167,8 @@ public class AutobahnClient {
 
 
         if(status == 200 ) {
-            CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
-            for (Cookie c : cookieStore.getCookies()) {
-                if (c.getName().equals("SPRING_SECURITY_REMEMBER_ME_COOKIE"))
-                    isLogIn = true;
-            }
-            if (!isLogIn) {
+
+            if (!hasAuthenticate()) {
                 String error = context.getString(R.string.login_failed);
                 AutobahnClientException ex = new AutobahnClientException(error);
                 throw ex;

@@ -10,18 +10,13 @@
 		android:layout_height="wrap_content"
 		android:text="@string/idm_title"
 		android:id="@+id/idm_title"
-		android:layout_gravity="center"
-        android:layout_marginLeft="30dp"
-		android:layout_marginRight="30dp"
-		android:layout_marginTop="30dp" android:textColor="@color/textColor"
-        android:textSize="17dp" android:layout_marginBottom="30dp" android:gravity="center" android:singleLine="false"/>
+        android:singleLine="false" style="@style/AutobahnHeaderText"/>
 
 	<ListView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:id="@+id/listView"
-		android:layout_gravity="center" android:divider="@drawable/gradient_divider"
-        android:drawSelectorOnTop="false" android:dividerHeight="1dp"/>
+        android:drawSelectorOnTop="false" style="@style/AutobahnList"/>
 	<!--android:fastScrollEnabled="false" android:fastScrollAlwaysVisible="false" -->
 
 

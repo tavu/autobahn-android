@@ -3,5 +3,36 @@
 
 	<style name="AutobahnTheme" parent="android:Theme.Holo.Light">
 		<item name="android:textColor">@color/textColor</item>
+        <item name="android:textSize">17dp</item>
 	</style>
+    <style name="AutobahnHeaderText" parent="AutobahnTheme">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_margin">20dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="AutobahnButton" parent="AutobahnTheme">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginRight">20dp</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:clickable">true</item>
+    </style>
+    <style name="AutobahnList" parent="AutobahnTheme">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:divider">@drawable/gradient_divider</item>
+        <item name="android:dividerHeight">0.5dp</item>
+    </style>
+    <style name="AutobahnPropertyName" parent="AutobahnTheme">
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18dp</item>
+    </style>
+    <style name="AutobahnPropertyValue" parent="AutobahnTheme">
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
 </resources>

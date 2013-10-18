@@ -1,6 +1,7 @@
 package autobahn.android;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.autobahn.R;
@@ -8,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
 import net.geant.autobahn.android.ReservationInfo;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -30,14 +32,16 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class AutobahnClient {
 
+	static AutobahnClient instance = null;
 	private static String LOGIN_URL = "/autobahn-gui/j_spring_security_check";
 	private static String DOMAIN_URL = "/autobahn-gui/portal/secure/android/idms";
 	private static String SERVICES_URL = "/autobahn-gui/portal/secure/android/services";
 	private static String SERVICE_URL = "/autobahn-gui/portal/secure/android/service";
-
+	boolean isLogIn;
 	private HttpClient httpclient;
 	private HttpGet httpget;
 	private HttpResponse response;
@@ -47,7 +51,6 @@ public class AutobahnClient {
 	private String scheme;
 	private String host;
 	private int port;
-	boolean isLogIn;
 	private String userName;
 	private String password;
 	private HttpContext localContext;
@@ -55,17 +58,7 @@ public class AutobahnClient {
 	private List<String> idms = new ArrayList();
 	private List<String> circuits = new ArrayList();
 	private ReservationInfo reservationInfo;
-
 	private String TAG = "WARN";
-
-	static AutobahnClient instance = null;
-
-	public static AutobahnClient getInstance() {
-		if (instance == null)
-			instance = new AutobahnClient();
-
-		return instance;
-	}
 
 	public AutobahnClient() {
 		httpclient = new DefaultHttpClient();
@@ -77,6 +70,13 @@ public class AutobahnClient {
 		//TODO get the host from a property
 		host = "62.217.125.174";
 		port = 8080;
+	}
+
+	public static AutobahnClient getInstance() {
+		if (instance == null)
+			instance = new AutobahnClient();
+
+		return instance;
 	}
 
 	public void setContext(Context context) {
@@ -91,20 +91,20 @@ public class AutobahnClient {
 		port = p;
 	}
 
-	public void setUserName(String s) {
-		userName = s;
-	}
-
 	public String getUserName() {
 		return userName;
 	}
 
-	public void setPassword(String pass) {
-		password = pass;
+	public void setUserName(String s) {
+		userName = s;
 	}
 
 	public String getPassword() {
 		return password;
+	}
+
+	public void setPassword(String pass) {
+		password = pass;
 	}
 
 	public boolean hasAuthenticate() {
@@ -114,27 +114,19 @@ public class AutobahnClient {
 	public void logIn() throws AutobahnClientException {
 		String query = "j_username=" + userName + "&j_password=" + password + "&_spring_security_remember_me=true";
 		URI url = null;
-		HttpPost httppost = null;
+		HttpResponse response = null;
 		try {
 			url = new URI(scheme, null, host, port, LOGIN_URL, query, null);
-			httppost = new HttpPost(url);
-			HttpResponse response = httpclient.execute(httppost, localContext);
-
+			response = new AutobahnMessenger().execute(url).get();
 		} catch (URISyntaxException e) {
 			String error = e.getMessage();
 			Log.d(TAG, error);
 			AutobahnClientException ex = new AutobahnClientException(error);
 			throw ex;
-		} catch (ClientProtocolException e) {
-			String error = e.getMessage();
-			Log.d(TAG, error);
-			AutobahnClientException ex = new AutobahnClientException(error);
-			throw ex;
-		} catch (IOException e) {
-			String error = e.getMessage();
-			Log.d(TAG, error);
-			AutobahnClientException ex = new AutobahnClientException(error);
-			throw ex;
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
 		}
 
 		CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
@@ -302,5 +294,38 @@ public class AutobahnClient {
 		return idms;
 	}
 
+	private class AutobahnMessenger extends AsyncTask<URI, Void, HttpResponse> {
+		protected AutobahnClientException exception = null;
 
+		@Override
+		protected HttpResponse doInBackground(URI... uris) {
+			if (uris.length == 0) return null;
+
+			HttpPost httpPost = new HttpPost(uris[0]);
+			HttpResponse response = null;
+
+			try {
+				response = httpclient.execute(httpPost, localContext);
+			} catch (ClientProtocolException e) {
+				String error = e.getMessage();
+				Log.d(TAG, error);
+				exception = new AutobahnClientException(error);
+			} catch (IOException e) {
+				String error = e.getMessage();
+				Log.d(TAG, error);
+				exception = new AutobahnClientException(error);
+			}
+			return response;
+		}
+
+		protected void onPostExecute(HttpResponse response) {
+			if (exception != null) {
+				try {
+					throw exception;
+				} catch (AutobahnClientException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

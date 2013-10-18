@@ -79,10 +79,10 @@ public class SingleCircuitActivity extends Activity {
         textView.setText(reservationInfo.getProvisionState());
         textView = (TextView)findViewById(R.id.lifecycleState);
         textView.setText(reservationInfo.getLifecycleState());
-        textView = (TextView)findViewById(R.id.startTime);
-    //    textView.setText(reservationInfo.getStartTime());
+        /*textView = (TextView)findViewById(R.id.startTime);
+        textView.setText(reservationInfo.getStartTime());
         textView = (TextView)findViewById(R.id.endTime);
-      //  textView.setText(reservationInfo.getEndTime());
+        textView.setText(reservationInfo.getEndTime());*/
         textView = (TextView)findViewById(R.id.endPort);
         textView.setText(reservationInfo.getEndPort());
         textView = (TextView)findViewById(R.id.startPort);

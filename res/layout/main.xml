@@ -10,32 +10,27 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/welcome"
-		android:gravity="center"
-		android:textStyle="bold"
-		android:textSize="20dp"
-		android:layout_margin="20px"
-		android:textColor="@color/textColor"/>
+        style="@style/AutobahnHeaderText"/>
 
 	<Button
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:id="@+id/request"
 		android:text="@string/request"
-		android:layout_margin="10px"
-		android:shadowColor="@color/textColor"/>
+        style="@style/AutobahnButton"/>
 
 	<Button
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/circuit"
 		android:id="@+id/idms"
-		android:layout_margin="10px"/>
+        style="@style/AutobahnButton"/>
 
 	<Button
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/about"
 		android:id="@+id/about"
-		android:layout_margin="10px"/>
+        style="@style/AutobahnButton"/>
 </LinearLayout>
 

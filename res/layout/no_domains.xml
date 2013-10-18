@@ -11,24 +11,14 @@
 		android:layout_height="wrap_content"
 		android:text="@string/no_domains"
 		android:id="@+id/noDomains"
-		android:layout_gravity="center"
-		android:layout_marginRight="20px"
-		android:layout_marginTop="20px"
-		android:layout_marginLeft="20px"
-		android:gravity="center"
-		android:textColor="@color/textColor"
-		android:textIsSelectable="false"
-		android:textStyle="bold"
-		android:textSize="17dp"/>
+        android:gravity="center"
+        android:textIsSelectable="false"
+        style="@style/AutobahnHeaderText"/>
 
 	<Button
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/back_to_menu"
 		android:id="@+id/menuButton"
-		android:layout_gravity="center"
-		android:layout_marginTop="20px"
-		android:layout_marginRight="20px"
-		android:layout_marginLeft="20px"
-		android:clickable="true"/>
+        style="@style/AutobahnButton"/>
 </LinearLayout>

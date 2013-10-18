@@ -29,7 +29,7 @@
 			android:label="@string/titlePrefs"/>
 		<activity android:name="autobahn.android.SingleCircuitActivity"/>
 		<activity
-			android:name="autobahn.android.RequestActivity2"
+			android:name="autobahn.android.RequestActivity"
 			android:windowSoftInputMode="stateHidden"/>
 
 

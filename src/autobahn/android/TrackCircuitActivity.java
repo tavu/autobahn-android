@@ -6,11 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.example.autobahn.R;
 
@@ -20,17 +16,17 @@ import java.util.List;
 
 public class TrackCircuitActivity extends Activity {
 
-	List<String> reservationID = new ArrayList<String>();
-	ListView reservationList;
-	ArrayAdapter<String> adapter;
-	AutobahnClientException exception = null;
-	String idmName;
+	private List<String> reservationID = new ArrayList<String>();
+    private ListView reservationList;
+    private ArrayAdapter<String> adapter;
+    private AutobahnClientException exception = null;
+    private String domainName;
 
-	AsyncTask<Void, Void, Void> async = new AsyncTask<Void, Void, Void>() {
+    private AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
 		@Override
 		protected Void doInBackground(Void... type) {
 			try {
-				AutobahnClient.getInstance().fetchTrackCircuit(idmName);
+				AutobahnClient.getInstance().fetchTrackCircuit(domainName);
 			} catch (AutobahnClientException e) {
 				exception = e;
 			}
@@ -48,17 +44,14 @@ public class TrackCircuitActivity extends Activity {
 		}
 	};
 
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.domain_reservation_activity);
-		Bundle extras = getIntent().getExtras();
-		idmName = extras.getString("DOMAIN_NAME");
-		async.execute();
-	}
+
 
 	public void showReservations() {
 
         TextView header;
+
+        reservationID = AutobahnClient.getInstance().getTrackCircuits();
+
         if (exception != null) {
 			Log.d("WARN", "circuit error");
 			Toast toast = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
@@ -66,11 +59,28 @@ public class TrackCircuitActivity extends Activity {
 			return;
 		}
 
-		reservationID = AutobahnClient.getInstance().getTrackCircuits();
-		setContentView(R.layout.domain_reservation_activity);
+        if (reservationID.isEmpty()) {
+            setContentView(R.layout.no_data);
+            header = (TextView)findViewById(R.id.header);
+            header.setText(R.string.noReservations);
+            Button button = (Button) findViewById(R.id.menuButton);
+            button.setText(R.string.backToDomains);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent prevActivity = new Intent();
+                    prevActivity.setClass(getApplicationContext(), IdmsActivity.class);
+                    startActivity(prevActivity);
+                    finish();
+                }
+            });
+        }
+        else {
+
+		setContentView(R.layout.domain_reservation_list);
 
         header = (TextView)findViewById(R.id.header);
-        header.setText("Past reservations for " + idmName);
+        header.setText("Past reservations for domain" + domainName);
 
 		reservationList = (ListView) findViewById(R.id.listView);
 		adapter = new ArrayAdapter<String>(this, R.layout.list_item, reservationID);
@@ -83,9 +93,17 @@ public class TrackCircuitActivity extends Activity {
 				Intent singleCircuitActivity = new Intent();
 				singleCircuitActivity.setClass(getApplicationContext(), SingleCircuitActivity.class);
 				singleCircuitActivity.putExtra("SERVICE_ID", serviceID);
-				singleCircuitActivity.putExtra("DOMAIN_NAME", idmName);
 				startActivity(singleCircuitActivity);
 			}
 		});
+        }
 	}
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.domain_reservation_list);
+        Bundle extras = getIntent().getExtras();
+        domainName = extras.getString("DOMAIN_NAME");
+        asyncTask.execute();
+    }
 }

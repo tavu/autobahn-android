@@ -50,6 +50,10 @@
 	<string name="no_domains">No domains are registered!</string>
 	<string name="back_to_menu">Back to Main Menu</string>
 
+    <!--Reservation Selection Activity Strings-->
+    <string name="noReservations">No reservations have been made from this domain yet.</string>
+    <string name="backToDomains">Back to Domain List</string>
+
 
     <!--Reservation Information Strings-->
 	<string name="service">Service</string>

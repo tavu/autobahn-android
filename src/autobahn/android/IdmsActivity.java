@@ -15,10 +15,35 @@ import java.util.List;
 
 public class IdmsActivity extends Activity {
 
-    List<String> domains;
-    ListView domainList;
-    ArrayAdapter<String> adapter;
-    AutobahnClientException exception=null;
+    private List<String> domains;
+    private ListView domainList;
+    private ArrayAdapter<String> adapter;
+    private AutobahnClientException exception=null;
+    private AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
+        @Override
+        protected Void doInBackground(Void... type) {
+
+            try {
+                AutobahnClient.getInstance().fetchIdms();
+
+            } catch (AutobahnClientException e) {
+                exception = e;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... progress) {
+            super.onProgressUpdate(progress);
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Log.d("WARN","Done Fetching Domains!");
+            showData();
+        }
+    };
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -26,6 +51,8 @@ public class IdmsActivity extends Activity {
     }
 
     private void showData() {
+
+        TextView header;
         domains = AutobahnClient.getInstance().getIdms();
 
         if(exception != null) {
@@ -33,8 +60,11 @@ public class IdmsActivity extends Activity {
             toast.show();
         }
         if (domains.isEmpty()) {
-            setContentView(R.layout.no_domains);
+            setContentView(R.layout.no_data);
+            header = (TextView)findViewById(R.id.header);
+            header.setText(R.string.no_domains);
             Button menuButton = (Button) findViewById(R.id.menuButton);
+            menuButton.setText(R.string.back_to_menu);
             menuButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -45,7 +75,10 @@ public class IdmsActivity extends Activity {
                 }
             });
         } else {
-            setContentView(R.layout.idm_selection_activity);
+            setContentView(R.layout.domain_reservation_list);
+            header = (TextView)findViewById(R.id.header);
+            header.setText(R.string.idm_title);
+
             domainList = (ListView) findViewById(R.id.listView);
             adapter = new ArrayAdapter<String>(this, R.layout.list_item, domains);
 
@@ -67,34 +100,8 @@ public class IdmsActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("create2","i have created");
-        AsyncTask<Void, Void, Void> async = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... type) {
 
-                try {
-                    AutobahnClient.getInstance().fetchIdms();
-
-                } catch (AutobahnClientException e) {
-                    exception=e;
-                }
-
-                return null;
-            }
-
-            @Override
-            protected void onProgressUpdate(Void... progress) {
-                super.onProgressUpdate(progress);
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                Log.d("WARN","Done Fetching Domains!");
-                showData();
-            }
-        };
-        async.execute();
-
+        asyncTask.execute();
 
     }
 }

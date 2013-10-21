@@ -64,23 +64,20 @@ public class MainMenu extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		//
-		inflater.inflate(R.menu.menu, menu);
 
-		return true; //
+		inflater.inflate(R.menu.action_bar, menu);
+
+		return true;
 	}
 
 	// Called when an options item is clicked
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			//
-			case R.id.itemPrefs:
-				startActivity(new Intent(this, PrefsActivity.class)); //
+			case R.id.preferences:
+				startActivity(new Intent(this, PreferencesActivity.class));
 				break;
 		}
 		return true;
-		//
 	}
-
 }

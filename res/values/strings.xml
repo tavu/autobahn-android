@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--Geneeric strings-->
+	<!--Geneeric strings-->
 	<string name="app_name">Autobahn Application</string>
 	<string name="welcome">Welcome to Autobahn</string>
 
-    <!--Main Menu Strings-->
+	<!--Main Menu Strings-->
 	<string name="about">About</string>
 	<string name="request">Reservation Request</string>
 	<string name="reservations">Show Past Reservations</string>
 
-    <!--Autobahn Information Strings-->
+	<!--Autobahn Information Strings-->
 	<string name="aboutTitle">About BoD</string>
 	<string name="info_1">AutoBAHN is developed by the</string>
     <string name="link_1"><a href="www.geant.net">GEANT project</a>.
@@ -32,26 +32,26 @@
         <a href="https://issues.geant.net/jira/browse/MDSD">https://issues.geant.net/jira/browse/MDSD</a>
     </string>
 
-    <!--Login Strings-->
+	<!--Login Strings-->
 	<string name="remember">Remember Me</string>
 	<string name="username">Username</string>
 	<string name="password">Password</string>
 	<string name="log_in">Log In</string>
 
-    <!--Preferences Strings-->
-    <string name="titlePrefs">Preferences</string>
-    <string name="url">Autobahn url</string>
-    <string name="summaryUrl">Please enter the url of the Autobahn Portal</string>
-    <string name="summaryPassword">"Please enter your password"</string>
-    <string name="summaryUsername">"Please enter your username"</string>
+	<!--Preferences Strings-->
+	<string name="titlePrefs">Preferences</string>
+	<string name="url">Autobahn url</string>
+	<string name="summaryUrl">Please enter the url of the Autobahn Portal</string>
+	<string name="summaryPassword">"Please enter your password"</string>
+	<string name="summaryUsername">"Please enter your username"</string>
 
-    <!--Domain Selection Activity Strings-->
+	<!--Domain Selection Activity Strings-->
 	<string name="idm_title">Please select one of the available domains below to view past reservations</string>
 	<string name="no_domains">No domains are registered!</string>
 	<string name="back_to_menu">Back to Main Menu</string>
 
 
-    <!--Reservation Information Strings-->
+	<!--Reservation Information Strings-->
 	<string name="service">Service</string>
 	<string name="homedomain">Home Domain</string>
 	<string name="destinationdomain">Destination Domain</string>
@@ -68,30 +68,29 @@
 	<string name="endDate">End Date</string>
 	<string name="description">Description</string>
 	<string name="delay">Delay [ms]</string>
-    <string name="startVlan">Start VLAN</string>
-    <string name="endVlan">End VLAN</string>
-    <string name="capacity">Capacity[Mbits/s]</string>
-    <string name="mtuSize">MTU size[bytes]</string>
-    <string name="vlan_auto">Automatically set vlan</string>
-    <string name="startDomain">Start domain</string>
-    <string name="endDomain">End domain</string>
-    <string name="startNow">Start now</string>
-    <string name="reservationState">Reservation State</string>
-    <string name="provisionState">Provision State</string>
-    <string name="lifecycleState">Lifecycle State</string>
-
-
+	<string name="startVlan">Start VLAN</string>
+	<string name="endVlan">End VLAN</string>
+	<string name="capacity">Capacity[Mbits/s]</string>
+	<string name="mtuSize">MTU size[bytes]</string>
+	<string name="vlan_auto">Automatically set vlan</string>
+	<string name="startDomain">Start domain</string>
+	<string name="endDomain">End domain</string>
+	<string name="startNow">Start now</string>
+	<string name="reservationState">Reservation State</string>
+	<string name="provisionState">Provision State</string>
+	<string name="lifecycleState">Lifecycle State</string>
+	<string name="submitRequest">Submit Request</string>
 
 
 	<!-- ERRORS -->
 	<string name="login_failed">"Log in failed. Please check username and password"</string>
 	<string name="net_error">"Network error."</string>
 	<string name="failure_reason">Failure Reason</string>
-    <string name="error_404">Page not found!</string>
-    <string name="error_500">internal server error!</string>
-    <string name="error">Error:</string>
+	<string name="error_404">Page not found!</string>
+	<string name="error_500">Internal server error!</string>
+	<string name="error">Error:</string>
 
-    <string name="LogInFirst">Please log in first.</string>
+	<string name="LogInFirst">Please log in first.</string>
 
 
 </resources>

@@ -3,10 +3,15 @@ package autobahn.android;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -59,6 +64,7 @@ public class RequestActivity extends Activity implements View.OnFocusChangeListe
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.request_reservation_activity);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		((EditText) findViewById(R.id.startVlan)).setRawInputType(Configuration.KEYBOARD_12KEY);
 		((EditText) findViewById(R.id.endVlan)).setRawInputType(Configuration.KEYBOARD_12KEY);
@@ -151,6 +157,33 @@ public class RequestActivity extends Activity implements View.OnFocusChangeListe
 		}
 		DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
 		timeDisplay.setText(timeFormat.format(time));
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+
+		inflater.inflate(R.menu.action_bar, menu);
+
+		return true;
+	}
+
+	// Called when an options item is clicked
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.preferences:
+				startActivity(new Intent(this, PreferencesActivity.class));
+				break;
+			case android.R.id.home:
+				NavUtils.navigateUpFromSameTask(this);
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	public void submitRequest(View view) {
+		// TODO: Submit request to autobahn
 	}
 
 	private class DomainAsyncTask extends AsyncTask<Void, Void, Void> {

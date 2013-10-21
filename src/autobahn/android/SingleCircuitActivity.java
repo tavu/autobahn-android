@@ -1,6 +1,7 @@
 package autobahn.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +23,8 @@ public class SingleCircuitActivity extends Activity {
     private String serviceID;
     private AutobahnClientException exception;
 
-    private AsyncTask<Void, Void, Void> async = new AsyncTask<Void, Void, Void>() {
+    private class CircuitTask extends AsyncTask<Void, Void, Void> {
+
         @Override
         protected Void doInBackground(Void... type) {
             try{
@@ -49,9 +51,41 @@ public class SingleCircuitActivity extends Activity {
         setContentView(R.layout.single_circuit_activity);
         Bundle bundle = getIntent().getExtras();
         serviceID = bundle.getString("SERVICE_ID");
+    }
 
-        async.execute();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        exception=null;
+        if(NetCache.getInstance().getTrackCircuits(serviceID)==null) {
+            if(!AutobahnClient.getInstance().hasAuthenticate()) {
+                Log.d("SSA","not auth");
+                Intent logInIntent = new Intent();
+                logInIntent.setClass(getApplicationContext(), LoginActivity.class);
+                Log.d("SSA","edo2");
+                logInIntent.putExtra(LoginActivity.BACK, true);
+                startActivityForResult(logInIntent,1);
+            } else {
+                Log.d("SSA","edo");
+                CircuitTask async=new CircuitTask();
+                async.execute();
+            }
+        } else {
+            showReservationInfo();
+        }
 
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("SSA","edo1");
+
+        if(LoginActivity.LOGIN_AND_GO_BACK==requestCode && resultCode==RESULT_OK) {
+            CircuitTask async=new CircuitTask();
+            async.execute();
+        }
     }
 
     public void showReservationInfo(){

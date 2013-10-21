@@ -20,18 +20,51 @@ public class IdmsActivity extends Activity {
     ArrayAdapter<String> adapter;
     AutobahnClientException exception=null;
 
+    private class idmTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... type) {
+
+            try {
+                AutobahnClient.getInstance().fetchIdms();
+
+            } catch (AutobahnClientException e) {
+                exception=e;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... progress) {
+            super.onProgressUpdate(progress);
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Log.d("WARN","Done Fetching Domains!");
+            showData();
+        }
+    };
+
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         showData();
     }
 
     private void showData() {
-        domains = AutobahnClient.getInstance().getIdms();
 
         if(exception != null) {
             Toast toast  = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
             toast.show();
         }
+
+        domains = NetCache.getInstance().getIdms();
+
+        if(domains==null) {
+            //TODO
+            return ;
+        }
+
         if (domains.isEmpty()) {
             setContentView(R.layout.no_domains);
             Button menuButton = (Button) findViewById(R.id.menuButton);
@@ -68,33 +101,37 @@ public class IdmsActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("create2","i have created");
-        AsyncTask<Void, Void, Void> async = new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... type) {
 
-                try {
-                    AutobahnClient.getInstance().fetchIdms();
-
-                } catch (AutobahnClientException e) {
-                    exception=e;
-                }
-
-                return null;
+        exception=null;
+        if(NetCache.getInstance().getIdms() == null) {
+            if(!AutobahnClient.getInstance().hasAuthenticate()) {
+                Log.d("IDMS","not auth");
+                Intent logInIntent = new Intent();
+                logInIntent.setClass(getApplicationContext(), LoginActivity.class);
+                Log.d("IDMS","edo2");
+                logInIntent.putExtra(LoginActivity.BACK, true);
+                startActivityForResult(logInIntent,LoginActivity.LOGIN_AND_GO_BACK);
             }
-
-            @Override
-            protected void onProgressUpdate(Void... progress) {
-                super.onProgressUpdate(progress);
+            else {
+                Log.d("IDMS","edo");
+                idmTask async=new idmTask();
+                async.execute();
             }
-
-            @Override
-            protected void onPostExecute(Void result) {
-                Log.d("WARN","Done Fetching Domains!");
-                showData();
-            }
-        };
-        async.execute();
+        } else {
+            showData();
+        }
 
 
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.d("IDMS", " "+resultCode+" "+RESULT_OK);
+        if(LoginActivity.LOGIN_AND_GO_BACK==requestCode && resultCode==RESULT_OK) {
+            idmTask async=new idmTask();
+            async.execute();
+        }
     }
 }

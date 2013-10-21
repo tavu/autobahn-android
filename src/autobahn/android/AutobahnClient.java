@@ -110,8 +110,9 @@ public class AutobahnClient {
     public boolean hasAuthenticate() {
         CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
         for (Cookie c : cookieStore.getCookies()) {
+            Log.d(TAG,c.toString());
             if (c.getName().equals("SPRING_SECURITY_REMEMBER_ME_COOKIE") && !c.isExpired(new Date() ))  {
-                return true;
+                return false;
             }
         }
         return false;
@@ -128,7 +129,7 @@ public class AutobahnClient {
 
         if(hasAuthenticate()) {
             Log.d(TAG,"Autobahn client has already authenticate");
-            return ;
+            //return ;
         }
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -168,12 +169,11 @@ public class AutobahnClient {
 
         if(status == 200 ) {
 
-            if (!hasAuthenticate()) {
+            if (!hasAuthenticate() && false) {
                 String error = context.getString(R.string.login_failed);
                 AutobahnClientException ex = new AutobahnClientException(error);
                 throw ex;
             }
-
         } else if(status==404) {
             String error = context.getString(R.string.error_404);
             AutobahnClientException ex = new AutobahnClientException(error);
@@ -302,6 +302,7 @@ public class AutobahnClient {
             throw ex;
         }
 
+        NetCache.getInstance().setIdms(l);
         idms = l;
     }
 

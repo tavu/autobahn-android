@@ -95,5 +95,7 @@
     <string name="error_500">internal server error!</string>
     <string name="error">Error:</string>
 
+    <string name="LogInFirst">Please log in first.</string>
+
 
 </resources>

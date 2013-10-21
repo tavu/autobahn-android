@@ -1,7 +1,6 @@
 package autobahn.android;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,9 +13,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.example.autobahn.R;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 
 public class LoginActivity extends Activity implements  View.OnClickListener {
 
@@ -24,6 +20,10 @@ public class LoginActivity extends Activity implements  View.OnClickListener {
     EditText usernameField;
     EditText passwordField;
     AutobahnClient client;
+    boolean goBack=false;
+
+    public static final String BACK="COME_BACK";
+    public static final int LOGIN_AND_GO_BACK=1;
 
 
     public final TextWatcher watcher = new TextWatcher() {
@@ -73,6 +73,15 @@ public class LoginActivity extends Activity implements  View.OnClickListener {
 
         loginButton.setOnClickListener(this);
 
+        Bundle bundle = getIntent().getExtras();
+
+        if(bundle!=null && bundle.getBoolean(BACK,false) ) {
+            goBack=true;
+            Toast toast = Toast.makeText(this, getString(R.string.LogInFirst), Toast.LENGTH_LONG);
+            loginButton.setEnabled(true);
+            toast.show();
+        }
+
 
     }
 
@@ -100,18 +109,20 @@ public class LoginActivity extends Activity implements  View.OnClickListener {
         try {
             client.logIn();
         } catch (AutobahnClientException e) {
-            Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
             loginButton.setEnabled(true);
             toast.show();
             return ;
         }
 
-
-        //loginButton.setEnabled(true);
-
-        Intent menuActivity = new Intent();
-        menuActivity.setClass(getApplicationContext(),MainMenu.class);
-        startActivity(menuActivity);
+        if(goBack ) {
+            setResult(RESULT_OK);
+            finish();
+        } else{
+            Intent menuActivity = new Intent();
+            menuActivity.setClass(getApplicationContext(),MainMenu.class);
+            startActivity(menuActivity);
+        }
 
     }
 }

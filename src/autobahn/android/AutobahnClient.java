@@ -3,14 +3,11 @@ package autobahn.android;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-
 import com.example.autobahn.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.loopj.android.http.PersistentCookieStore;
-
 import net.geant.autobahn.android.ReservationInfo;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -203,7 +200,11 @@ public class AutobahnClient {
 					throw new AutobahnClientException(errorStr);
 				}
 
-				Log.d(TAG, json);
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("j_username",userName));
+        params.add(new BasicNameValuePair("j_password",password));
+        params.add(new BasicNameValuePair("_spring_security_remember_me","true"));
+        String query = URLEncodedUtils.format(params, "utf-8");
 
 				if (json == null) {
 					String errorStr = context.getString(R.string.net_error);
@@ -222,6 +223,7 @@ public class AutobahnClient {
 				throw new AutobahnClientException(error + status);
 		}
 
+        int status=response.getStatusLine().getStatusCode();
 
 	}
 
@@ -244,7 +246,7 @@ public class AutobahnClient {
 			throw new AutobahnClientException(error);
 		}
 
-		String json = handleGetRequest(url);
+    private String handleGetRequest(URI url) throws AutobahnClientException{
 
 		Gson gson = new Gson();
 		try {
@@ -278,8 +280,6 @@ public class AutobahnClient {
 			throw new AutobahnClientException(error);
 		}
 
-		idms = l;
-	}
 
 	public ReservationInfo getReservationInfo() {
 		return reservationInfo;

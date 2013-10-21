@@ -23,10 +23,12 @@ public class TrackCircuitActivity extends Activity {
     private String domainName;
 
     private AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
+	private class TrackCircuitTask extends AsyncTask<Void, Void, Void>{
 		@Override
 		protected Void doInBackground(Void... type) {
+            exception=null;
 			try {
-				AutobahnClient.getInstance().fetchTrackCircuit(domainName);
+				AutobahnClient.getInstance().fetchTrackCircuit(idmName);
 			} catch (AutobahnClientException e) {
 				exception = e;
 			}
@@ -44,9 +46,37 @@ public class TrackCircuitActivity extends Activity {
 		}
 	};
 
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.domain_reservation_activity);
+		Bundle extras = getIntent().getExtras();
+		idmName = extras.getString("DOMAIN_NAME");
+
+        if(!AutobahnClient.getInstance().hasAuthenticate()) {
+            Intent logInIntent = new Intent();
+            logInIntent.setClass(getApplicationContext(), LoginActivity.class);
+            logInIntent.putExtra(LoginActivity.BACK, true);
+            startActivityForResult(logInIntent,LoginActivity.LOGIN_AND_GO_BACK);
+        }
+        else {
+            TrackCircuitTask async=new TrackCircuitTask();
+            async.execute();
+        }
+	}
 
 
 	public void showReservations() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(LoginActivity.LOGIN_AND_GO_BACK==requestCode && resultCode==RESULT_OK) {
+            TrackCircuitTask async=new TrackCircuitTask();
+            async.execute();
+        }
+    }
+
+
+    public void showReservations() {
 
         TextView header;
 
@@ -76,14 +106,19 @@ public class TrackCircuitActivity extends Activity {
             });
         }
         else {
+        reservationsID = NetCache.getInstance().getTrackCircuits(idmName);
+        if(reservationsID==null) {
+            //TODO
+            return ;
+        }
 
-		setContentView(R.layout.domain_reservation_list);
+		setContentView(R.layout.domain_reservation_activity);
 
         header = (TextView)findViewById(R.id.header);
-        header.setText("Past reservations for domain" + domainName);
+        header.setText("Past reservations for " + idmName);
 
 		reservationList = (ListView) findViewById(R.id.listView);
-		adapter = new ArrayAdapter<String>(this, R.layout.list_item, reservationID);
+		adapter = new ArrayAdapter<String>(this, R.layout.list_item, reservationsID);
 		reservationList.setAdapter(adapter);
 		reservationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -93,6 +128,7 @@ public class TrackCircuitActivity extends Activity {
 				Intent singleCircuitActivity = new Intent();
 				singleCircuitActivity.setClass(getApplicationContext(), SingleCircuitActivity.class);
 				singleCircuitActivity.putExtra("SERVICE_ID", serviceID);
+				singleCircuitActivity.putExtra("DOMAIN_NAME", idmName);
 				startActivity(singleCircuitActivity);
 			}
 		});

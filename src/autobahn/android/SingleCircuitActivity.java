@@ -51,36 +51,31 @@ public class SingleCircuitActivity extends Activity {
         setContentView(R.layout.single_reservation_activity);
         Bundle bundle = getIntent().getExtras();
         serviceID = bundle.getString("SERVICE_ID");
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+
         exception=null;
         if(NetCache.getInstance().getTrackCircuits(serviceID)==null) {
             if(!AutobahnClient.getInstance().hasAuthenticate()) {
-                Log.d("SSA","not auth");
                 Intent logInIntent = new Intent();
                 logInIntent.setClass(getApplicationContext(), LoginActivity.class);
-                Log.d("SSA","edo2");
                 logInIntent.putExtra(LoginActivity.BACK, true);
-                startActivityForResult(logInIntent,1);
+                startActivityForResult(logInIntent,LoginActivity.LOGIN_AND_GO_BACK);
             } else {
-                Log.d("SSA","edo");
                 CircuitTask async=new CircuitTask();
                 async.execute();
             }
         } else {
             showReservationInfo();
         }
+    }
 
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("SSA","edo1");
 
         if(LoginActivity.LOGIN_AND_GO_BACK==requestCode && resultCode==RESULT_OK) {
             CircuitTask async=new CircuitTask();
@@ -93,7 +88,7 @@ public class SingleCircuitActivity extends Activity {
         TextView textView;
 
         if (exception != null) {
-            Log.d("WARN", "error");
+
             Toast toast = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
             toast.show();
             return;

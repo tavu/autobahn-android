@@ -8,7 +8,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TimePicker;
 
 import com.example.autobahn.R;
 
@@ -18,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,56 +32,33 @@ import java.util.Date;
  * Time: 2:26 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RequestActivity2 extends Activity implements View.OnFocusChangeListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class RequestActivity extends Activity implements View.OnFocusChangeListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 	private View lastClickedView;
-    private boolean enableStartTime = true;
-    private AutobahnClientException exception=null;
+	private boolean enableStartTime = true;
+	private AutobahnClientException exception = null;
 
-    private class DomainAsyncTask extends AsyncTask<Void, Void, Void> {
+	protected void setDomains() {
+		if (exception == null) {
+			Log.d("malakia", AutobahnClient.getInstance().getIdms().toString());
+			ArrayList<String> a1 = new ArrayList<String>(AutobahnClient.getInstance().getIdms());
+			ArrayAdapter<String> startDomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, a1);
+			Spinner sp1 = (Spinner) findViewById(R.id.startDomain);
+			startDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			sp1.setAdapter(startDomAdapter);
 
-        @Override
-        protected Void doInBackground(Void... type) {
-            try{
-                AutobahnClient.getInstance().fetchIdms();
-            } catch (AutobahnClientException e) {
-                exception=e;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... progress) {
-            super.onProgressUpdate(progress);
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            setDomains();
-        }
-    };
-
-    protected void setDomains() {
-        if(exception==null) {
-            Log.d("malakia", AutobahnClient.getInstance().getIdms().toString())      ;
-            ArrayList<String> a1=new ArrayList<String>( AutobahnClient.getInstance().getIdms())    ;
-            ArrayAdapter<String> startDomAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, a1 );
-            Spinner sp1= (Spinner) findViewById(R.id.startDomain);
-            startDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sp1.setAdapter(startDomAdapter);
-
-            ArrayList<String> a2=new ArrayList<String>( AutobahnClient.getInstance().getIdms())    ;
-            ArrayAdapter<String> endDomAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, a2 );
-            Spinner sp2= (Spinner) findViewById(R.id.endDomain);
-            endDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sp2.setAdapter(endDomAdapter);
-        }
-    }
+			ArrayList<String> a2 = new ArrayList<String>(AutobahnClient.getInstance().getIdms());
+			ArrayAdapter<String> endDomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, a2);
+			Spinner sp2 = (Spinner) findViewById(R.id.endDomain);
+			endDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			sp2.setAdapter(endDomAdapter);
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.request_reservation_activity2);
+		setContentView(R.layout.request_reservation_activity);
 
 		((EditText) findViewById(R.id.startVlan)).setRawInputType(Configuration.KEYBOARD_12KEY);
 		((EditText) findViewById(R.id.endVlan)).setRawInputType(Configuration.KEYBOARD_12KEY);
@@ -137,7 +120,6 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 	}
 
 	public void showDatePicker(View view) {
-		// TODO: change min API level to 11
 		DatePickerDialog dialog = new DatePickerDialog(this, this, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 		lastClickedView = view;
 		dialog.show();
@@ -146,9 +128,7 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 	public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 		EditText dateDisplay = (EditText) lastClickedView;
 
-		//SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        DateFormat sdf=DateFormat.getDateInstance();
-		Date date = new Date(year,monthOfYear,dayOfMonth);
+		Date date = new GregorianCalendar(year, monthOfYear, dayOfMonth).getTime();
 
 		DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this);
 		dateDisplay.setText(dateFormat.format(date));
@@ -167,9 +147,32 @@ public class RequestActivity2 extends Activity implements View.OnFocusChangeList
 		Date time = null;
 		try {
 			time = sdf.parse(hourOfDay + ":" + minute);
-		} catch (ParseException e) {
+		} catch (ParseException ignored) {
 		}
 		DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
 		timeDisplay.setText(timeFormat.format(time));
+	}
+
+	private class DomainAsyncTask extends AsyncTask<Void, Void, Void> {
+
+		@Override
+		protected Void doInBackground(Void... type) {
+			try {
+				AutobahnClient.getInstance().fetchIdms();
+			} catch (AutobahnClientException e) {
+				exception = e;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onProgressUpdate(Void... progress) {
+			super.onProgressUpdate(progress);
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			setDomains();
+		}
 	}
 }

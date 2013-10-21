@@ -22,7 +22,7 @@
 			android:layout_alignLeft="@+id/req_start_port"
 			android:layout_alignParentTop="true"
 			android:enabled="true"
-			android:text="@string/start_domain"/>
+			android:text="@string/startDomain"/>
 
 		<Spinner
 			android:id="@+id/startDomain"
@@ -35,7 +35,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/startDomain"
-			android:text="@string/start_port"/>
+			android:text="@string/startPort"/>
 
 		<Spinner
 			android:id="@+id/startPort"
@@ -48,7 +48,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/startPort"
-			android:text="@string/end_domain"/>
+			android:text="@string/endDomain"/>
 
 		<Spinner
 			android:id="@+id/endDomain"
@@ -61,7 +61,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/endDomain"
-			android:text="@string/end_port"/>
+			android:text="@string/endPort"/>
 
 		<Spinner
 			android:id="@+id/endPort"
@@ -82,7 +82,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/seperator1"
-			android:text="@string/start_vlan"/>
+			android:text="@string/startVlan"/>
 
 		<EditText
 			android:id="@+id/startVlan"
@@ -104,7 +104,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/startVlan"
-			android:text="@string/end_vlan"/>
+			android:text="@string/endVlan"/>
 
 		<EditText
 			android:id="@+id/endVlan"
@@ -128,25 +128,25 @@
 			android:layout_below="@+id/endVlan"
 			android:background="@android:color/darker_gray"/>
 
-        <TextView
-                android:id="@+id/timezoneText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/seperator2"
-                android:text="@string/start_date"/>
+		<TextView
+			android:id="@+id/timezoneText"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/seperator2"
+			android:text="@string/startDate"/>
 
-        <Spinner
-                android:id="@+id/timezone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/timezoneText"/>
+		<Spinner
+			android:id="@+id/timezone"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/timezoneText"/>
 
 		<TextView
 			android:id="@+id/startDateText"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/timezone"
-			android:text="@string/start_date"/>
+			android:text="@string/startDate"/>
 
 		<EditText
 			android:id="@+id/startDate"
@@ -169,7 +169,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/startDate"
-			android:text="@string/start_time"/>
+			android:text="@string/startTime"/>
 
 		<EditText
 			android:id="@+id/startTime"
@@ -183,7 +183,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/startTime"
-			android:text="@string/end_date"/>
+			android:text="@string/endDate"/>
 
 		<EditText
 			android:id="@+id/endDate"
@@ -197,7 +197,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/endDate"
-			android:text="@string/end_time"
+			android:text="@string/endTime"
 			/>
 
 		<EditText

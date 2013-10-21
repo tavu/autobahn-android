@@ -65,7 +65,7 @@ public class AutobahnClient {
         //CookieStore cookieStore = new BasicCookieStore();
 
         //TODO get the host from a property
-        host = "62.217.125.174";
+        host = "62.217.124.241";
         port = 8080;
     }
 

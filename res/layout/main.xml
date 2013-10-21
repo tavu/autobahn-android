@@ -22,7 +22,7 @@
 	<Button
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/circuit"
+		android:text="@string/reservations"
 		android:id="@+id/idms"
         style="@style/AutobahnButton"/>
 

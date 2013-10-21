@@ -55,7 +55,10 @@ public class NetCache {
     }
 
     public List<String> getIdms() {
-        return idms;
+        if(idms==null){
+            return null;
+        }
+        return new ArrayList<String>(idms);
     }
 
     public void setLastResInfo(String id ,ReservationInfo res) {

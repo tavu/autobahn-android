@@ -20,15 +20,16 @@ import java.util.List;
 
 public class TrackCircuitActivity extends Activity {
 
-	List<String> reservationID = new ArrayList<String>();
+	List<String> reservationsID = new ArrayList<String>();
 	ListView reservationList;
 	ArrayAdapter<String> adapter;
 	AutobahnClientException exception = null;
 	String idmName;
 
-	AsyncTask<Void, Void, Void> async = new AsyncTask<Void, Void, Void>() {
+	private class TrackCircuitTask extends AsyncTask<Void, Void, Void>{
 		@Override
 		protected Void doInBackground(Void... type) {
+            exception=null;
 			try {
 				AutobahnClient.getInstance().fetchTrackCircuit(idmName);
 			} catch (AutobahnClientException e) {
@@ -53,10 +54,30 @@ public class TrackCircuitActivity extends Activity {
 		setContentView(R.layout.domain_reservation_activity);
 		Bundle extras = getIntent().getExtras();
 		idmName = extras.getString("DOMAIN_NAME");
-		async.execute();
+
+        if(!AutobahnClient.getInstance().hasAuthenticate()) {
+            Intent logInIntent = new Intent();
+            logInIntent.setClass(getApplicationContext(), LoginActivity.class);
+            logInIntent.putExtra(LoginActivity.BACK, true);
+            startActivityForResult(logInIntent,LoginActivity.LOGIN_AND_GO_BACK);
+        }
+        else {
+            TrackCircuitTask async=new TrackCircuitTask();
+            async.execute();
+        }
 	}
 
-	public void showReservations() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(LoginActivity.LOGIN_AND_GO_BACK==requestCode && resultCode==RESULT_OK) {
+            TrackCircuitTask async=new TrackCircuitTask();
+            async.execute();
+        }
+    }
+
+
+    public void showReservations() {
 
         TextView header;
         if (exception != null) {
@@ -66,14 +87,19 @@ public class TrackCircuitActivity extends Activity {
 			return;
 		}
 
-		reservationID = AutobahnClient.getInstance().getTrackCircuits();
+        reservationsID = NetCache.getInstance().getTrackCircuits(idmName);
+        if(reservationsID==null) {
+            //TODO
+            return ;
+        }
+
 		setContentView(R.layout.domain_reservation_activity);
 
         header = (TextView)findViewById(R.id.header);
         header.setText("Past reservations for " + idmName);
 
 		reservationList = (ListView) findViewById(R.id.listView);
-		adapter = new ArrayAdapter<String>(this, R.layout.list_item, reservationID);
+		adapter = new ArrayAdapter<String>(this, R.layout.list_item, reservationsID);
 		reservationList.setAdapter(adapter);
 		reservationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override

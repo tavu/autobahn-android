@@ -39,14 +39,14 @@ public class RequestActivity extends Activity implements View.OnFocusChangeListe
 
 	protected void setDomains() {
 		if (exception == null) {
-			Log.d("malakia", AutobahnClient.getInstance().getIdms().toString());
-			ArrayList<String> a1 = new ArrayList<String>(AutobahnClient.getInstance().getIdms());
+			Log.d("domains", NetCache.getInstance().getIdms().toString());
+			ArrayList<String> a1 = new ArrayList<String>(NetCache.getInstance().getIdms());
 			ArrayAdapter<String> startDomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, a1);
 			Spinner sp1 = (Spinner) findViewById(R.id.startDomain);
 			startDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			sp1.setAdapter(startDomAdapter);
 
-			ArrayList<String> a2 = new ArrayList<String>(AutobahnClient.getInstance().getIdms());
+			ArrayList<String> a2 = new ArrayList<String>(NetCache.getInstance().getIdms());
 			ArrayAdapter<String> endDomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, a2);
 			Spinner sp2 = (Spinner) findViewById(R.id.endDomain);
 			endDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

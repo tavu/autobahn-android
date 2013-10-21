@@ -48,7 +48,7 @@ public class SingleCircuitActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.single_circuit_activity);
+        setContentView(R.layout.single_reservation_activity);
         Bundle bundle = getIntent().getExtras();
         serviceID = bundle.getString("SERVICE_ID");
 

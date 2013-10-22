@@ -15,100 +15,98 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 public class NetCache {
-    static NetCache instance = null;
+	static NetCache instance = null;
+	private String TAG = "CACHE";
+	private List<String> idms = new ArrayList();
+	private List<String> reservations = new ArrayList();
+	private ReservationInfo lastResInfo;
+	private String lastResId;
+	private String lastDomRes;
+	private Map<String, ArrayList<String>> ports;
 
-    private String TAG = "CACHE";
+	private NetCache() {
+		idms = null;
+		reservations = null;
+		lastDomRes = null;
+		lastResId = null;
+		lastResInfo = null;
 
-    public static NetCache getInstance() {
-        if (instance == null) {
-            instance = new NetCache();
-        }
+		ports = new HashMap<String, ArrayList<String>>();
+	}
 
-        return instance;
-    }
+	public static NetCache getInstance() {
+		if (instance == null) {
+			instance = new NetCache();
+		}
 
-    private List<String> idms = new ArrayList();
-    private List<String> reservations = new ArrayList();
-    private ReservationInfo lastResInfo;
-    private String lastResId;
-    private String lastDomRes;
-    private Map<String,ArrayList<String>> ports;
+		return instance;
+	}
 
-    List<String> getTrackCircuits(String dom) {
-        if(dom.equals(lastDomRes) ) {
-            return reservations;
-        }else {
-            lastDomRes=null;
-            reservations=null;
-        }
-        return null;
-    }
+	List<String> getTrackCircuits(String dom) {
+		if (dom.equals(lastDomRes)) {
+			return reservations;
+		} else {
+			lastDomRes = null;
+			reservations = null;
+		}
+		return null;
+	}
 
-    private NetCache() {
-        idms=null;
-        reservations=null;
-        lastDomRes=null;
-        lastResId=null;
-        lastResInfo=null;
+	public List<String> getIdms() {
+		if (idms == null) {
+			return null;
+		}
+		return new ArrayList<String>(idms);
+	}
 
-        ports=new HashMap<String, ArrayList<String>>();
-    }
+	public void setIdms(List<String> idms) {
+		this.idms = idms;
+	}
 
-    public List<String> getIdms() {
-        if(idms==null){
-            return null;
-        }
-        return new ArrayList<String>(idms);
-    }
+	public void setLastResInfo(String id, ReservationInfo res) {
+		lastResInfo = res;
+		lastResId = id;
 
-    public void setLastResInfo(String id ,ReservationInfo res) {
-        lastResInfo=res;
-        lastResId=id;
+	}
 
-    }
+	public ReservationInfo getLastReservation(String lastResId) {
+		if (lastResId.equals(this.lastResId)) {
+			return lastResInfo;
+		} else {
+			lastResInfo = null;
+			return null;
+		}
+	}
 
-    public ReservationInfo getLastReservation(String lastResId) {
-        if(lastResId.equals(this.lastResId) ) {
-            return lastResInfo;
-        }else {
-            lastResInfo=null;
-            return null;
-        }
-    }
+	public void setReservations(List<String> res, String domain) {
+		reservations = res;
+		lastDomRes = domain;
+	}
 
-    public void setIdms(List<String> idms) {
-        this.idms=idms;
-    }
+	public List<String> getPorts(String dom) {
+		if (ports.containsKey(dom)) {
+			return new ArrayList<String>(ports.get(dom));
+		}
+		return null;
+	}
 
-    public void setReservations(List<String> res,String domain) {
-        reservations=res;
-        lastDomRes=domain;
-    }
+	public boolean hasPorts(String dom) {
+		return ports.containsKey(dom);
+	}
 
-    public List<String> getPorts(String dom) {
-        if(ports.containsKey(dom)) {
-            return new ArrayList<String>(ports.get(dom) );
-        }
-        return null;
-    }
+	public void addPorts(String dom, List<String> ports) {
+		ArrayList<String> array = new ArrayList<String>(ports);
+		this.ports.put(dom, array);
+	}
 
-    public boolean hasPorts(String dom) {
-        return ports.containsKey(dom);
-    }
-
-    public void addPorts(String dom,List<String> ports) {
-        ArrayList<String> array=new ArrayList<String>(ports);
-        this.ports.put(dom,array);
-    }
-
-    public void clear() {
-        ports.clear();
-        idms=null;
-        reservations=null;
-        lastDomRes=null;
-        lastResId=null;
-        lastResInfo=null;
-    }
+	public void clear() {
+		ports.clear();
+		idms = null;
+		reservations = null;
+		lastDomRes = null;
+		lastResId = null;
+		lastResInfo = null;
+	}
 }
 
 

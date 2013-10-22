@@ -19,6 +19,7 @@ import net.geant.autobahn.android.ReservationInfo;
  */
 public class SingleCircuitActivity extends Activity {
 
+    private final String TAG = "DEBUG";
     private ReservationInfo reservationInfo;
     private String serviceID;
     private AutobahnClientException exception;
@@ -48,7 +49,7 @@ public class SingleCircuitActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.single_circuit_activity);
+        setContentView(R.layout.single_reservation_activity);
         Bundle bundle = getIntent().getExtras();
         serviceID = bundle.getString("SERVICE_ID");
 

@@ -5,35 +5,41 @@
 	android:versionCode="1"
 	android:versionName="1.0">
 
-	<uses-sdk android:minSdkVersion="11"/>
+	<uses-sdk
+		android:minSdkVersion="11"
+		android:targetSdkVersion="18"/>
 	<application
 		android:label="@string/app_name"
 		android:theme="@style/AutobahnTheme">
-	<activity
-			android:name="autobahn.android.MainMenu"
-			android:label="@string/app_name">
+		<activity
+			android:name="autobahn.android.MainMenu">
 		</activity>
-		<activity android:name="autobahn.android.TrackCircuitActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize"/>
-        <activity android:name="autobahn.android.AboutActivity"/>
+		<activity
+			android:name="autobahn.android.TrackCircuitActivity"
+			android:configChanges="keyboardHidden|orientation|screenSize"/>
+		<activity
+			android:name="autobahn.android.AboutActivity"
+			android:parentActivityName="autobahn.android.MainMenu"/>
 		<activity android:name="autobahn.android.LoginActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
-		<activity android:name="autobahn.android.IdmsActivity"
-                  android:configChanges="keyboardHidden|orientation|screenSize"/>/>
 		<activity
-			android:name="autobahn.android.PrefsActivity"
+			android:name="autobahn.android.IdmsActivity"
+			android:configChanges="keyboardHidden|orientation|screenSize"/>
+		<activity
+			android:name="autobahn.android.PreferencesActivity"
 			android:label="@string/titlePrefs"/>
 		<activity android:name="autobahn.android.SingleCircuitActivity"/>
 		<activity
 			android:name="autobahn.android.RequestActivity"
+			android:parentActivityName="autobahn.android.MainMenu"
 			android:windowSoftInputMode="stateHidden"/>
 
 
-    </application>
+	</application>
 
 	 
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>

@@ -86,6 +86,11 @@ public class TrackCircuitActivity extends Activity {
             return;
         }
 
+        if (reservationID == null) {
+            //TODO
+            return;
+        }
+
         if (reservationID.isEmpty()) {
             setContentView(R.layout.no_data);
             header = (TextView) findViewById(R.id.header);
@@ -102,53 +107,28 @@ public class TrackCircuitActivity extends Activity {
                 }
             });
         } else {
-            reservationID = NetCache.getInstance().getTrackCircuits(domainName);
+            setContentView(R.layout.domain_reservation_list);
 
+            header = (TextView) findViewById(R.id.header);
+            header.setText("Past reservations for domain" + domainName);
 
-            if (reservationID == null) {
-                //TODO
-                return;
-            }
-
-            if (reservationID.isEmpty()) {
-                setContentView(R.layout.no_data);
-                header = (TextView) findViewById(R.id.header);
-                header.setText(R.string.noReservations);
-                Button menuButton = (Button) findViewById(R.id.menuButton);
-                menuButton.setText(R.string.backToDomains);
-                menuButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent menu = new Intent();
-                        menu.setClass(getApplicationContext(), IdmsActivity.class);
-                        startActivity(menu);
-                        finish();
-                    }
-                });
-            } else {
-
-                setContentView(R.layout.domain_reservation_list);
-
-                header = (TextView) findViewById(R.id.header);
-                header.setText("Past reservations for domain" + domainName);
-
-                reservationList = (ListView) findViewById(R.id.listView);
-                adapter = new ArrayAdapter<String>(this, R.layout.list_item, reservationID);
-                reservationList.setAdapter(adapter);
-                reservationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        TextView item = (TextView) view;
-                        String serviceID = item.getText().toString();
-                        Intent singleCircuitActivity = new Intent();
-                        singleCircuitActivity.setClass(getApplicationContext(), SingleCircuitActivity.class);
-                        singleCircuitActivity.putExtra("SERVICE_ID", serviceID);
-                        singleCircuitActivity.putExtra("DOMAIN_NAME", domainName);
-                        startActivity(singleCircuitActivity);
-                    }
-                });
-            }
+            reservationList = (ListView) findViewById(R.id.listView);
+            adapter = new ArrayAdapter<String>(this, R.layout.list_item, reservationID);
+            reservationList.setAdapter(adapter);
+            reservationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    TextView item = (TextView) view;
+                    String serviceID = item.getText().toString();
+                    Intent singleCircuitActivity = new Intent();
+                    singleCircuitActivity.setClass(getApplicationContext(), SingleCircuitActivity.class);
+                    singleCircuitActivity.putExtra("SERVICE_ID", serviceID);
+                    singleCircuitActivity.putExtra("DOMAIN_NAME", domainName);
+                    startActivity(singleCircuitActivity);
+                }
+            });
         }
+
     }
 
 }

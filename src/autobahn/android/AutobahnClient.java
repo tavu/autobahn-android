@@ -51,7 +51,7 @@ public class AutobahnClient {
 	private String password;
 	private HttpContext localContext;
 	private Context context = null;
-	private String TAG = "CLIENT";
+	private String TAG = "Autobahn";
 
 	public AutobahnClient() {
 		httpclient = new DefaultHttpClient();
@@ -59,7 +59,7 @@ public class AutobahnClient {
 		//CookieStore cookieStore = new BasicCookieStore();
 
 		//TODO get the host from a property
-		host = "62.217.125.174";
+		host = "62.217.124.241";
 		port = 8080;
 	}
 
@@ -172,6 +172,7 @@ public class AutobahnClient {
 	private String handleGetRequest(URI url) throws AutobahnClientException {
 
 		httpget = new HttpGet(url);
+        Log.d(TAG,url.toString());
 		HttpResponse response;
 		response = null;
 		try {
@@ -248,7 +249,8 @@ public class AutobahnClient {
 
 	public synchronized void fetchIdms() throws AutobahnClientException {
 
-		URI url;
+        Log.d(TAG, "Fetching Domains...");
+        URI url;
 		url = null;
 		try {
 			url = new URI(scheme, null, host, port, DOMAIN_URL, null, null);
@@ -258,16 +260,15 @@ public class AutobahnClient {
 		}
 
 		String json = handleGetRequest(url);
-
-		Gson gson = new Gson();
+        Gson gson = new Gson();
 		ArrayList<String> l = new ArrayList<String>();
-
 		try {
 			l = gson.fromJson(json, l.getClass());
 		} catch (JsonParseException e) {
 			String error = context.getString(R.string.net_error);
 			throw new AutobahnClientException(error);
 		}
+
 		NetCache.getInstance().setIdms(l);
 	}
 
@@ -287,7 +288,6 @@ public class AutobahnClient {
 		}
 
 		String json = handleGetRequest(url);
-
 		Gson gson = new Gson();
 		ArrayList<String> ports = new ArrayList<String>();
 		try {

@@ -15,6 +15,7 @@ import java.util.List;
 
 public class IdmsActivity extends Activity {
 
+    private final String TAG = "Autobahn";
     private List<String> domains;
     private ListView domainList;
     private ArrayAdapter<String> adapter;
@@ -25,8 +26,8 @@ public class IdmsActivity extends Activity {
         protected Void doInBackground(Void... type) {
 
             try {
+                Log.d(TAG, "Calling fetchIdms...");
                 AutobahnClient.getInstance().fetchIdms();
-
             } catch (AutobahnClientException e) {
                 exception = e;
             }
@@ -41,7 +42,7 @@ public class IdmsActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void result) {
-            Log.d("WARN", "Done Fetching Domains!");
+            Log.d(TAG, "Done Fetching Domains!");
             showData();
         }
     }
@@ -63,11 +64,12 @@ public class IdmsActivity extends Activity {
         domains = NetCache.getInstance().getIdms();
 
         if (domains == null) {
-            //TODO
+            Log.d(TAG, "Domains is NULL...");
             return;
         }
 
         if (domains.isEmpty()) {
+            Log.d(TAG, "Domains is Empty");
             setContentView(R.layout.no_data);
             header = (TextView) findViewById(R.id.header);
             header.setText(R.string.no_domains);
@@ -108,19 +110,20 @@ public class IdmsActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d("create2", "i have created");
+        Log.d(TAG, "Creating Domain Selection Activity...");
 
         exception = null;
         if (NetCache.getInstance().getIdms() == null) {
+            Log.d(TAG, "Domains is null...");
             if (!AutobahnClient.getInstance().hasAuthenticate()) {
-                Log.d("IDMS", "not auth");
+                Log.d(TAG, "Not Authorized!!!");
                 Intent logInIntent = new Intent();
                 logInIntent.setClass(getApplicationContext(), LoginActivity.class);
-                Log.d("IDMS", "edo2");
                 logInIntent.putExtra(LoginActivity.BACK, true);
                 startActivityForResult(logInIntent, LoginActivity.LOGIN_AND_GO_BACK);
+
             } else {
-                Log.d("IDMS", "edo");
+                Log.d(TAG, "Creating async task...");
                 IdmTask async = new IdmTask();
                 async.execute();
             }
@@ -134,7 +137,7 @@ public class IdmsActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Log.d("IDMS", " " + resultCode + " " + RESULT_OK);
+        Log.d(TAG, " " + resultCode + " " + RESULT_OK);
         if (LoginActivity.LOGIN_AND_GO_BACK == requestCode && resultCode == RESULT_OK) {
             IdmTask async = new IdmTask();
             async.execute();

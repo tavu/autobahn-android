@@ -19,6 +19,7 @@ import net.geant.autobahn.android.ReservationInfo;
  */
 public class SingleCircuitActivity extends Activity {
 
+    private final String TAG = "DEBUG";
     private ReservationInfo reservationInfo;
     private String serviceID;
     private AutobahnClientException exception;

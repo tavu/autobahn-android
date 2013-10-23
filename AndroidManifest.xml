@@ -6,7 +6,7 @@
 	android:versionName="1.0">
 
 	<uses-sdk
-		android:minSdkVersion="11"
+		android:minSdkVersion="14"
 		android:targetSdkVersion="18"/>
 	<application
 		android:label="@string/app_name"
@@ -18,8 +18,10 @@
 			android:name="autobahn.android.TrackCircuitActivity"
 			android:configChanges="keyboardHidden|orientation|screenSize"/>
 		<activity
-			android:name="autobahn.android.AboutActivity"
-			android:parentActivityName="autobahn.android.MainMenu"/>
+			android:name="autobahn.android.AboutActivity"/>
+
+
+
 		<activity android:name="autobahn.android.LoginActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
@@ -34,9 +36,8 @@
 			android:label="@string/titlePrefs"/>
 		<activity android:name="autobahn.android.SingleCircuitActivity"/>
 		<activity
-			android:name="autobahn.android.RequestActivity"
-			android:parentActivityName="autobahn.android.MainMenu"
-			android:windowSoftInputMode="stateHidden"/>
+			android:name="autobahn.android.RequestActivity">
+        </activity>
 
 
 	</application>

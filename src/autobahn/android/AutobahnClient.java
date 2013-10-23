@@ -59,7 +59,7 @@ public class AutobahnClient {
 		//CookieStore cookieStore = new BasicCookieStore();
 
 		//TODO get the host from a property
-		host = "62.217.124.241";
+		host = "62.217.125.174";
 		port = 8080;
 	}
 
@@ -187,6 +187,7 @@ public class AutobahnClient {
 
 		String json = null;
 		int status = response.getStatusLine().getStatusCode();
+        Log.d(TAG,"status:"+status);
 		if (status == 200) {
 			try {
 				json = EntityUtils.toString(response.getEntity());

@@ -13,22 +13,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TimePicker;
-
+import android.widget.*;
 import com.example.autobahn.R;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -126,11 +117,9 @@ public class RequestActivity extends Activity implements View.OnFocusChangeListe
 				break;
 			case R.id.startNow:
 				if (checked) {
-					enableStartTime = false;
 					findViewById(R.id.startDate).setFocusable(false);
 					findViewById(R.id.startTime).setFocusable(false);
 				} else {
-					enableStartTime = true;
 					findViewById(R.id.startDate).setFocusableInTouchMode(true);
 					findViewById(R.id.startTime).setFocusableInTouchMode(true);
 				}

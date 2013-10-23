@@ -38,13 +38,14 @@ import java.util.GregorianCalendar;
  * To change this template use File | Settings | File Templates.
  */
 public class RequestActivity extends Activity implements View.OnFocusChangeListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-	private View lastClickedView;
+	private final String TAG = "Autobahn";
+    private View lastClickedView;
 	private boolean enableStartTime = true;
 	private AutobahnClientException exception = null;
 
 	protected void setDomains() {
 		if (exception == null) {
-			Log.d("domains", NetCache.getInstance().getIdms().toString());
+			Log.d(TAG, NetCache.getInstance().getIdms().toString());
 			ArrayList<String> a1 = new ArrayList<String>(NetCache.getInstance().getIdms());
 			ArrayAdapter<String> startDomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, a1);
 			Spinner sp1 = (Spinner) findViewById(R.id.startDomain);
@@ -115,10 +116,12 @@ public class RequestActivity extends Activity implements View.OnFocusChangeListe
 			case R.id.startNow:
 				if (checked) {
 					enableStartTime = false;
-					findViewById(R.id.startDate).setFocusable(false);
-					findViewById(R.id.startTime).setFocusable(false);
+					findViewById(R.id.startDate).setEnabled(false);
+                    findViewById(R.id.startTime).setEnabled(false) ;
 				} else {
 					enableStartTime = true;
+                    findViewById(R.id.startDate).setEnabled(true);
+                    findViewById(R.id.startTime).setEnabled(true) ;
 					findViewById(R.id.startDate).setFocusableInTouchMode(true);
 					findViewById(R.id.startTime).setFocusableInTouchMode(true);
 				}

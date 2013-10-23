@@ -21,6 +21,7 @@ public class MainMenu extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.main);
 
 		button = (Button) findViewById(R.id.about);

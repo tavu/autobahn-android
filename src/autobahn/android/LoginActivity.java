@@ -62,6 +62,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 			Intent menuActivity = new Intent();
 			menuActivity.setClass(getApplicationContext(), MainMenu.class);
 			startActivity(menuActivity);
+            finish();
 		}
 
 	}

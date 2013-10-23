@@ -110,7 +110,7 @@ public class TrackCircuitActivity extends Activity {
             setContentView(R.layout.domain_reservation_list);
 
             header = (TextView) findViewById(R.id.header);
-            header.setText("Past reservations for domain" + domainName);
+            header.setText("Past reservations for domain " + domainName);
 
             reservationList = (ListView) findViewById(R.id.listView);
             adapter = new ArrayAdapter<String>(this, R.layout.list_item, reservationID);

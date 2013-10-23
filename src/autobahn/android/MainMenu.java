@@ -14,14 +14,21 @@ import com.example.autobahn.R;
 public class MainMenu extends Activity {
 	/**
 	 * Called when the activity is first created.
-	 */
+	**/
 
-	Button button;
+    private AutobahnClient client;
+    private AutobahnClientException exception = null;
 
-	@Override
+
+    @Override
 	public void onCreate(Bundle savedInstanceState) {
+
+        startupCheck();
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+
+        Button button;
+
+        setContentView(R.layout.main);
 
 		button = (Button) findViewById(R.id.about);
 
@@ -80,4 +87,32 @@ public class MainMenu extends Activity {
 		}
 		return true;
 	}
+
+
+    /*
+        Stores the host and the port in the Autobahn Client Instance
+     */
+    private void initClient() {
+        client = AutobahnClient.getInstance();
+        client.setContext(this);
+
+    }
+
+    private void startupCheck(){
+        initClient();
+        if(!AutobahnClient.getInstance().hasAuthenticate()){
+            Intent logInActivity = new Intent();
+            logInActivity.setClass(getApplicationContext(),LoginActivity.class);
+            startActivityForResult(logInActivity,LoginActivity.LOGIN_AND_GO_BACK);
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode,int resultCode,Intent data)
+    {
+        if (resultCode == RESULT_CANCELED)
+            finish();
+    }
+
 }

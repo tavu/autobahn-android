@@ -13,13 +13,22 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TimePicker;
+
 import com.example.autobahn.R;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,20 +38,16 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class RequestActivity extends Activity implements View.OnFocusChangeListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-	private View lastClickedView;
-	private boolean enableStartTime = true;
+	private final String TAG = "Autobahn";
+    private View lastClickedView;
 	private AutobahnClientException exception = null;
 
     static private  final int LOG_IN_FOR_IDMS=2;
     static private  final int LOG_IN_FOR_PORTS=3;
 
 	protected void setDomains() {
-		if (exception != null) {
-            Toast toast = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
-            toast.show();
-            return;
-        }
-			Log.d("domains", NetCache.getInstance().getIdms().toString());
+		if (exception == null) {
+			Log.d(TAG, NetCache.getInstance().getIdms().toString());
 			ArrayList<String> a1 = new ArrayList<String>(NetCache.getInstance().getIdms());
 			ArrayAdapter<String> startDomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, a1);
 			Spinner sp1 = (Spinner) findViewById(R.id.startDomain);
@@ -54,7 +59,7 @@ public class RequestActivity extends Activity implements View.OnFocusChangeListe
 			Spinner sp2 = (Spinner) findViewById(R.id.endDomain);
 			endDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			sp2.setAdapter(endDomAdapter);
-
+		}
 	}
 
 	@Override
@@ -71,28 +76,6 @@ public class RequestActivity extends Activity implements View.OnFocusChangeListe
 		findViewById(R.id.endDate).setOnFocusChangeListener(this);
 		findViewById(R.id.startTime).setOnFocusChangeListener(this);
 		findViewById(R.id.endTime).setOnFocusChangeListener(this);
-
-
-        Log.d("REQUE2","edo");
-
-
-        if(NetCache.getInstance().getIdms()==null) {
-            Log.d("REQUE2","edo2");
-            if(!AutobahnClient.getInstance().hasAuthenticate()) {
-                Intent logInIntent = new Intent();
-                logInIntent.setClass(getApplicationContext(), LoginActivity.class);
-                logInIntent.putExtra(LoginActivity.BACK, true);
-                startActivityForResult(logInIntent,LOG_IN_FOR_IDMS);
-            } else {
-                Log.d("REQUE2","thr");
-                DomainAsyncTask async=new DomainAsyncTask();
-                async.execute();
-            }
-        }else {
-            setDomains();
-        }
-
-
 	}
 
     @Override
@@ -230,7 +213,6 @@ public class RequestActivity extends Activity implements View.OnFocusChangeListe
 			} catch (AutobahnClientException e) {
 				exception = e;
 			}
-
 			return null;
 		}
 

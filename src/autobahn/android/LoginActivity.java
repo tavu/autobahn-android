@@ -8,10 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,8 +19,8 @@ import com.example.autobahn.R;
 public class LoginActivity extends Activity implements View.OnClickListener {
 
 	public static final String BACK = "COME_BACK";
-	public static final int LOGIN_AND_GO_BACK = 1;
-	public final TextWatcher watcher = new TextWatcher() {
+    public static final int LOGIN_AND_GO_BACK = 1;
+    private final TextWatcher watcher = new TextWatcher() {
 		@Override
 		public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
 			//To change body of implemented methods use File | Settings | File Templates.
@@ -39,12 +36,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 			checkFields();
 		}
 	};
-	Button loginButton;
-	EditText usernameField;
-	EditText passwordField;
-	AutobahnClient client;
-	boolean goBack = false;
-	AutobahnClientException exception = null;
+    private Button loginButton;
+    private EditText usernameField;
+    private EditText passwordField;
+    private boolean goBack = false;
+    private AutobahnClientException exception = null;
 
 	private void afterLogIn() {
 
@@ -55,30 +51,18 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 			return;
 		}
 
-		if (goBack) {
+		if (goBack)
 			setResult(RESULT_OK);
-			finish();
-		} else {
-			Intent menuActivity = new Intent();
-			menuActivity.setClass(getApplicationContext(), MainMenu.class);
-			startActivity(menuActivity);
-		}
+		else
+            setResult(RESULT_CANCELED);
 
-	}
+        finish();
+    }
 
-	/*
-		stores at client the host and the port
-	 */
-	private void initClient() {
-		client = AutobahnClient.getInstance();
-		client.setContext(this);
-
-	}
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		initClient();
 		setContentView(R.layout.login);
 
 		loginButton = (Button) findViewById(R.id.loginButton);
@@ -125,8 +109,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		String username = usernameField.getText().toString();
 		String password = passwordField.getText().toString();
 
-		client.setUserName(username);
-		client.setPassword(password);
+		AutobahnClient.getInstance().setUserName(username);
+        AutobahnClient.getInstance().setPassword(password);
 
 		LoginTask task = new LoginTask();
 		task.execute();
@@ -175,4 +159,5 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 			afterLogIn();
 		}
 	}
+
 }

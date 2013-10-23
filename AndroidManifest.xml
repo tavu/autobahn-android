@@ -13,6 +13,10 @@
 		android:theme="@style/AutobahnTheme">
 		<activity
 			android:name="autobahn.android.MainMenu">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
 		</activity>
 		<activity
 			android:name="autobahn.android.TrackCircuitActivity"
@@ -21,10 +25,6 @@
 			android:name="autobahn.android.AboutActivity"
 			android:parentActivityName="autobahn.android.MainMenu"/>
 		<activity android:name="autobahn.android.LoginActivity">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
-				<category android:name="android.intent.category.LAUNCHER"/>
-			</intent-filter>
 		</activity>
 		<activity
 			android:name="autobahn.android.IdmsActivity"
@@ -39,7 +39,7 @@
 			android:windowSoftInputMode="stateHidden"/>
 
 
-	</application>
+    </application>
 
 	 
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>

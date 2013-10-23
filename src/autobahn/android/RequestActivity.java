@@ -40,7 +40,6 @@ import java.util.GregorianCalendar;
 public class RequestActivity extends Activity implements View.OnFocusChangeListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 	private final String TAG = "Autobahn";
     private View lastClickedView;
-	private boolean enableStartTime = true;
 	private AutobahnClientException exception = null;
 
 	protected void setDomains() {
@@ -101,29 +100,25 @@ public class RequestActivity extends Activity implements View.OnFocusChangeListe
 		switch (view.getId()) {
 			case R.id.startVlanAuto:
 				if (checked) {
-					findViewById(R.id.startVlan).setFocusable(false);
+					findViewById(R.id.startVlan).setEnabled(false);
 				} else {
-					findViewById(R.id.startVlan).setFocusableInTouchMode(true);
+					findViewById(R.id.startVlan).setEnabled(true);
 				}
 				break;
 			case R.id.endVlanAuto:
 				if (checked) {
-					findViewById(R.id.endVlan).setFocusable(false);
+					findViewById(R.id.endVlan).setEnabled(false);
 				} else {
-					findViewById(R.id.endVlan).setFocusableInTouchMode(true);
+					findViewById(R.id.endVlan).setEnabled(true);
 				}
 				break;
 			case R.id.startNow:
 				if (checked) {
-					enableStartTime = false;
 					findViewById(R.id.startDate).setEnabled(false);
                     findViewById(R.id.startTime).setEnabled(false) ;
 				} else {
-					enableStartTime = true;
                     findViewById(R.id.startDate).setEnabled(true);
                     findViewById(R.id.startTime).setEnabled(true) ;
-					findViewById(R.id.startDate).setFocusableInTouchMode(true);
-					findViewById(R.id.startTime).setFocusableInTouchMode(true);
 				}
 		}
 	}

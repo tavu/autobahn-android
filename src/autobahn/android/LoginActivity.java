@@ -8,7 +8,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.*;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -88,8 +91,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 			loginButton.setEnabled(true);
 			toast.show();
 		}
-
-
 	}
 
 	public void checkFields() {
@@ -109,6 +110,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		String username = usernameField.getText().toString();
 		String password = passwordField.getText().toString();
 
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		settings.edit().putString(PreferencesActivity.USERNAME_PREFERENCE_KEY, username).commit();
+		settings.edit().putString(PreferencesActivity.PASSWORD_PREFERENCE_KEY, password).commit();
+//		client.setUserName(username);
+//		client.setPassword(password);
 		AutobahnClient.getInstance().setUserName(username);
         AutobahnClient.getInstance().setPassword(password);
 
@@ -159,5 +165,4 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 			afterLogIn();
 		}
 	}
-
 }

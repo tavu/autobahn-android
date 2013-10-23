@@ -1,6 +1,8 @@
 package autobahn.android;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.example.autobahn.R;
@@ -56,11 +58,7 @@ public class AutobahnClient {
 	public AutobahnClient() {
 		httpclient = new DefaultHttpClient();
 		scheme = "http";
-		//CookieStore cookieStore = new BasicCookieStore();
 
-		//TODO get the host from a property
-		host = "62.217.125.174";
-		port = 8080;
 	}
 
 	public static AutobahnClient getInstance() {
@@ -73,6 +71,7 @@ public class AutobahnClient {
 	public void setContext(Context context) {
 		this.context = context;
 		CookieStore cookieStore = new PersistentCookieStore(context);
+
 		localContext = new BasicHttpContext();
 		localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
 	}
@@ -117,6 +116,8 @@ public class AutobahnClient {
 			Log.d(TAG, "Autobahn client has already authenticate");
 			return;
 		}
+
+		retrieveLoginInfo();
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("j_username", userName));
@@ -169,6 +170,19 @@ public class AutobahnClient {
 		}
 	}
 
+	/**
+	 * Retrieves username, password and autobahn url
+	 * from local preferences, and sets them to autobahn variables
+	 */
+	private void retrieveLoginInfo() {
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+		host = sharedPref.getString(PreferencesActivity.HOST_PREFERENCE_KEY, "");
+		port = 8080;
+
+		userName = sharedPref.getString(PreferencesActivity.USERNAME_PREFERENCE_KEY, "");
+		password = sharedPref.getString(PreferencesActivity.PASSWORD_PREFERENCE_KEY, "");
+	}
+
 	private String handleGetRequest(URI url) throws AutobahnClientException {
 
 		httpget = new HttpGet(url);
@@ -187,7 +201,6 @@ public class AutobahnClient {
 
 		String json = null;
 		int status = response.getStatusLine().getStatusCode();
-        Log.d(TAG,"status:"+status);
 		if (status == 200) {
 			try {
 				json = EntityUtils.toString(response.getEntity());

@@ -22,7 +22,7 @@ public class NetCache {
 	private ReservationInfo lastResInfo;
 	private String lastResId;
 	private String lastDomRes;
-	private Map<String, ArrayList<String>> ports;
+	private Map<String, ArrayList<String>> ports = new HashMap();
 
 	private NetCache() {
 		idms = null;
@@ -31,7 +31,6 @@ public class NetCache {
 		lastResId = null;
 		lastResInfo = null;
 
-		ports = new HashMap<String, ArrayList<String>>();
 	}
 
 	public static NetCache getInstance() {

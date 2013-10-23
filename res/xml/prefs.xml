@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference android:title="@string/url"
-        android:summary="@string/summaryUrl"
-        android:key="url">
-    </EditTextPreference>
+	<EditTextPreference
+		android:defaultValue="62.217.124.241"
+		android:key="url"
+		android:summary="@string/summaryUrl"
+		android:title="@string/url">
+	</EditTextPreference>
 
-    <EditTextPreference android:title="@string/username"
-        android:summary="@string/summaryUsername"
-        android:key="username">
-    </EditTextPreference>
+	<EditTextPreference
+		android:key="username"
+		android:summary="@string/summaryUsername"
+		android:title="@string/username">
+	</EditTextPreference>
 
-
-    <EditTextPreference android:title="@string/password"
-        android:password="true" android:summary="@string/summaryPassword"
-        android:key="password">
-    </EditTextPreference>
+	<EditTextPreference
+		android:inputType="textPassword"
+		android:key="password"
+		android:password="true"
+		android:summary="@string/summaryPassword"
+		android:title="@string/password">
+	</EditTextPreference>
 
 </PreferenceScreen>

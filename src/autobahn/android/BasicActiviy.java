@@ -33,7 +33,6 @@ public class BasicActiviy extends Activity {
     private int LOG_IN_REQ=9;
 
     public BasicActiviy() {
-
     }
 
 
@@ -161,12 +160,10 @@ public class BasicActiviy extends Activity {
         @Override
         protected void onPostExecute(Void result) {
 
-            Log.d(TAG,"EX ");
             if(e!=null) {
                 showError(e,call,param);
                 return ;
             }
-            Log.d(TAG,"EX2 "+param);
 
             Object obj=dataFromCache(call,param);
             if(obj==null) {
@@ -174,7 +171,6 @@ public class BasicActiviy extends Activity {
                 showError(e,call,param);
                 return;
             }
-            Log.d(TAG,"EX3 ");
             showData(obj,call,param);
         }
     }

@@ -4,14 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
 import com.example.autobahn.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.loopj.android.http.PersistentCookieStore;
-
 import net.geant.autobahn.android.ReservationInfo;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -22,9 +19,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.cookie.Cookie;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
@@ -38,11 +38,13 @@ import java.util.List;
 public class AutobahnClient {
 
 	static AutobahnClient instance = null;
-	private static String LOGIN_URL = "/autobahn-gui/j_spring_security_check";
-	private static String DOMAIN_URL = "/autobahn-gui/portal/secure/android/idms";
-	private static String SERVICES_URL = "/autobahn-gui/portal/secure/android/services";
-	private static String SERVICE_URL = "/autobahn-gui/portal/secure/android/service";
-	private static String PORTS_URL = "/autobahn-gui/portal/secure/android/ports";
+	private static final String LOGIN_URL = "/autobahn-gui/j_spring_security_check";
+	private static final String DOMAIN_URL = "/autobahn-gui/portal/secure/android/idms";
+	private static final String SERVICES_URL = "/autobahn-gui/portal/secure/android/services";
+	private static final String SERVICE_URL = "/autobahn-gui/portal/secure/android/service";
+	private static final String PORTS_URL = "/autobahn-gui/portal/secure/android/ports";
+    private static final String SUBMIT_URL="";
+
 	private HttpClient httpclient;
 	private HttpGet httpget;
 	private String scheme;
@@ -363,4 +365,50 @@ public class AutobahnClient {
 
 		NetCache.getInstance().setLastResInfo(serviceID, reservationInfo);
 	}
+
+    public synchronized void submitReservation(ReservationInfo info) throws AutobahnClientException {
+
+        URI url;
+        HttpPost httppost;
+        HttpResponse response;
+        try {
+            url = new URI(scheme, null, host, port, SUBMIT_URL, null, null);
+            httppost = new HttpPost(url);
+            Gson gson = new Gson();
+            String json=gson.toJson(info);
+            StringEntity se = new StringEntity( json);
+            se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            httppost.setEntity(se);
+            response = httpclient.execute(httppost, localContext);
+
+        } catch (URISyntaxException e) {
+            String error = e.getMessage();
+            Log.d(TAG, error);
+            throw new AutobahnClientException(error);
+        } catch (ClientProtocolException e) {
+            String error = e.getMessage();
+            Log.d(TAG, error);
+            throw new AutobahnClientException(error);
+        } catch (IOException e) {
+            String error = e.getMessage();
+            Log.d(TAG, error);
+            throw new AutobahnClientException(error);
+        }
+
+        int status = response.getStatusLine().getStatusCode();
+
+
+        if (status == 200) {
+            return;
+        } else if (status == 404) {
+            String error = context.getString(R.string.error_404);
+            throw new AutobahnClientException(error);
+        } else if (status == 500) {
+            String error = context.getString(R.string.error_404);
+            throw new AutobahnClientException(error);
+        } else {
+            String error = context.getString(R.string.error);
+            throw new AutobahnClientException(error + status);
+        }
+    }
 }

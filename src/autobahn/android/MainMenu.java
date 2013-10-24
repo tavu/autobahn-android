@@ -2,13 +2,13 @@ package autobahn.android;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
 import com.example.autobahn.R;
 
 public class MainMenu extends Activity {
@@ -66,6 +66,28 @@ public class MainMenu extends Activity {
 			}
 		});
 
+        button = (Button) findViewById(R.id.logOut);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String msg=getString( R.string.log_out_msg );
+                try {
+                    //TODO perfome the actual logOut at the  AutobahnClient and create a thread
+                    AutobahnClient.getInstance().logOut();
+                } catch (AutobahnClientException e) {
+                    msg=e.getMessage();
+                }
+
+                Intent logInActivity = new Intent();
+                logInActivity.putExtra(LoginActivity.MSG,msg);
+                logInActivity.setClass(getApplicationContext(),LoginActivity.class);
+                startActivityForResult(logInActivity, LoginActivity.LOGIN_AND_GO_BACK);
+
+
+            }
+        });
+
 	}
 
 	@Override
@@ -103,9 +125,15 @@ public class MainMenu extends Activity {
         if(!AutobahnClient.getInstance().hasAuthenticate()){
             Intent logInActivity = new Intent();
             logInActivity.setClass(getApplicationContext(),LoginActivity.class);
-            startActivityForResult(logInActivity,LoginActivity.LOGIN_AND_GO_BACK);
+            //startActivityForResult(logInActivity,LoginActivity.LOGIN_AND_GO_BACK);
         }
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setContentView(R.layout.main);
     }
 
     @Override

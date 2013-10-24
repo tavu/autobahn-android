@@ -37,6 +37,8 @@
 	<string name="username">Username</string>
 	<string name="password">Password</string>
 	<string name="log_in">Log In</string>
+    <string name="log_out">Log out</string>
+    <string name="log_out_msg">successfully logged out</string>
 
 	<!--Preferences Strings-->
 	<string name="titlePrefs">Preferences</string>
@@ -94,7 +96,7 @@
 	<string name="error_500">Internal server error!</string>
 	<string name="error">Error:</string>
 
-	<string name="LogInFirst">Please log in first.</string>
+	<string name="Log_in_first">Please log in first.</string>
 
 
 </resources>

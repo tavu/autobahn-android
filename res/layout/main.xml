@@ -32,5 +32,12 @@
 		android:text="@string/about"
 		android:id="@+id/about"
         style="@style/AutobahnButton"/>
+
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/log_out"
+            android:id="@+id/logOut"
+            style="@style/AutobahnButton"/>
 </LinearLayout>
 

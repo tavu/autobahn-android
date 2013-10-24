@@ -1,9 +1,7 @@
 package autobahn.android;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,39 +11,11 @@ import com.example.autobahn.R;
 import java.util.List;
 
 
-public class IdmsActivity extends Activity {
+public class IdmsActivity extends BasicActiviy {
 
-    private final String TAG = "Autobahn";
     private List<String> domains;
     private ListView domainList;
     private ArrayAdapter<String> adapter;
-    private AutobahnClientException exception = null;
-
-    private class IdmTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... type) {
-
-            try {
-                Log.d(TAG, "Calling fetchIdms...");
-                AutobahnClient.getInstance().fetchIdms();
-            } catch (AutobahnClientException e) {
-                exception = e;
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... progress) {
-            super.onProgressUpdate(progress);
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            Log.d(TAG, "Done Fetching Domains!");
-            showData();
-        }
-    }
 
 
     public void onConfigurationChanged(Configuration newConfig) {
@@ -56,10 +26,6 @@ public class IdmsActivity extends Activity {
     private void showData() {
 
         TextView header;
-        if (exception != null) {
-            Toast toast = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
-            toast.show();
-        }
 
         domains = NetCache.getInstance().getIdms();
 
@@ -112,35 +78,17 @@ public class IdmsActivity extends Activity {
 
         Log.d(TAG, "Creating Domain Selection Activity...");
 
-        exception = null;
-        if (NetCache.getInstance().getIdms() == null) {
-            Log.d(TAG, "Domains is null...");
-            if (!AutobahnClient.getInstance().hasAuthenticate()) {
-                Log.d(TAG, "Not Authorized!!!");
-                Intent logInIntent = new Intent();
-                logInIntent.setClass(getApplicationContext(), LoginActivity.class);
-                logInIntent.putExtra(LoginActivity.BACK, true);
-                startActivityForResult(logInIntent, LoginActivity.LOGIN_AND_GO_BACK);
-
-            } else {
-                Log.d(TAG, "Creating async task...");
-                IdmTask async = new IdmTask();
-                async.execute();
-            }
-        } else {
-            showData();
-        }
-
-
+        getData(Call.DOMAINS,null);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        Log.d(TAG, " " + resultCode + " " + RESULT_OK);
-        if (LoginActivity.LOGIN_AND_GO_BACK == requestCode && resultCode == RESULT_OK) {
-            IdmTask async = new IdmTask();
-            async.execute();
-        }
+    protected synchronized void showData(Object data,Call c,String param) {
+        showData();
     }
+
+    @Override
+    protected synchronized void showError(AutobahnClientException e,Call c,String param) {
+      //TODO add a permanent error
+    }
+
 }

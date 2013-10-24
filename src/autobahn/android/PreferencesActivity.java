@@ -61,6 +61,8 @@ public class PreferencesActivity extends Activity {
 		 */
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+			/*TODO use source 7 whatever that means
 			switch (key) {
 				case USERNAME_PREFERENCE_KEY:
 					findPreference(USERNAME_PREFERENCE_KEY).setSummary(sharedPreferences.getString(USERNAME_PREFERENCE_KEY, ""));
@@ -72,11 +74,23 @@ public class PreferencesActivity extends Activity {
 					findPreference(HOST_PREFERENCE_KEY).setSummary(sharedPreferences.getString(HOST_PREFERENCE_KEY, ""));
 					break;
 			}
+			 */
+
+            if(key.equals(USERNAME_PREFERENCE_KEY))  {
+                findPreference(USERNAME_PREFERENCE_KEY).setSummary(sharedPreferences.getString(USERNAME_PREFERENCE_KEY, ""));
+            }
+            else if(key.equals(PASSWORD_PREFERENCE_KEY))  {
+                findPreference(PASSWORD_PREFERENCE_KEY).setSummary(maskPassword(sharedPreferences.getString(PASSWORD_PREFERENCE_KEY, "")));
+            }
+            else if(key.equals(HOST_PREFERENCE_KEY)) {
+                findPreference(HOST_PREFERENCE_KEY).setSummary(sharedPreferences.getString(HOST_PREFERENCE_KEY, ""));
+            }
+
+
 		}
 
 		private StringBuilder maskPassword(String password) {
 			StringBuilder maskedPassword = new StringBuilder();
-			;
 			if (!password.isEmpty()) {
 				for (int i = 0; i < password.length(); i++) {
 					maskedPassword.append("*");

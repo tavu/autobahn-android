@@ -12,7 +12,8 @@
 		android:label="@string/app_name"
 		android:theme="@style/AutobahnTheme">
 		<activity
-			android:name="autobahn.android.MainMenu">
+			android:name="autobahn.android.MainMenu"
+            android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -36,7 +37,8 @@
 			android:label="@string/titlePrefs"/>
 		<activity android:name="autobahn.android.SingleCircuitActivity"/>
 		<activity
-			android:name="autobahn.android.RequestActivity">
+			android:name="autobahn.android.RequestActivity"
+            android:configChanges="keyboardHidden">
         </activity>
 
 

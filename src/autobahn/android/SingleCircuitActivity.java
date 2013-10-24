@@ -1,12 +1,8 @@
 package autobahn.android;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.example.autobahn.R;
 import net.geant.autobahn.android.ReservationInfo;
 
@@ -17,35 +13,10 @@ import net.geant.autobahn.android.ReservationInfo;
  * Time: 5:43 μμ
  * To change this template use File | Settings | File Templates.
  */
-public class SingleCircuitActivity extends Activity {
+public class SingleCircuitActivity extends BasicActiviy {
 
-    private final String TAG = "DEBUG";
     private ReservationInfo reservationInfo;
     private String serviceID;
-    private AutobahnClientException exception;
-
-    private class CircuitTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... type) {
-            try{
-                AutobahnClient.getInstance().fetchReservationInfo(serviceID);
-            } catch (AutobahnClientException e) {
-                exception=e;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... progress) {
-            super.onProgressUpdate(progress);
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            showReservationInfo();
-        }
-    };
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,47 +24,17 @@ public class SingleCircuitActivity extends Activity {
         Bundle bundle = getIntent().getExtras();
         serviceID = bundle.getString("SERVICE_ID");
 
+        getData(Call.RES_IFO,serviceID);
 
-        exception=null;
-        if(NetCache.getInstance().getTrackCircuits(serviceID)==null) {
-            if(!AutobahnClient.getInstance().hasAuthenticate()) {
-                Intent logInIntent = new Intent();
-                logInIntent.setClass(getApplicationContext(), LoginActivity.class);
-                logInIntent.putExtra(LoginActivity.BACK, true);
-                startActivityForResult(logInIntent,LoginActivity.LOGIN_AND_GO_BACK);
-            } else {
-                CircuitTask async=new CircuitTask();
-                async.execute();
-            }
-        } else {
-            showReservationInfo();
-        }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if(LoginActivity.LOGIN_AND_GO_BACK==requestCode && resultCode==RESULT_OK) {
-            CircuitTask async=new CircuitTask();
-            async.execute();
-        }
+    protected synchronized void showData(Object data,Call c,String param) {
+        showReservationInfo();
     }
 
     public void showReservationInfo(){
 
         TextView textView;
-
-        if (exception != null) {
-
-            Toast toast = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
-            toast.show();
-            return;
-        }
 
         reservationInfo = NetCache.getInstance().getLastReservation(serviceID);
         if(reservationInfo==null) {

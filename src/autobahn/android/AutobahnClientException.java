@@ -33,8 +33,9 @@ public class AutobahnClientException extends Exception {
 
     public String getVisibleMsg(Context context) {
         //TODO return a visible string for toast message
-        return null;
+        return new String();
 
     }
+
 
 }

@@ -53,11 +53,13 @@ public class AutobahnClient {
 	private String password;
 	private HttpContext localContext;
 	private Context context = null;
-	private String TAG = "Autobahn";
+	private String TAG = "Autobahn2";
 
 	public AutobahnClient() {
 		httpclient = new DefaultHttpClient();
 		scheme = "http";
+        host="62.217.125.174";
+        port=8080;
 
 	}
 
@@ -109,6 +111,11 @@ public class AutobahnClient {
 		}
 		return false;
 	}
+
+    public synchronized void logOut() throws AutobahnClientException {
+        CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
+        cookieStore.clear();
+    }
 
 	public synchronized void logIn() throws AutobahnClientException {
 
@@ -191,10 +198,13 @@ public class AutobahnClient {
 		response = null;
 		try {
 			response = httpclient.execute(httpget, localContext);
+
 		} catch (ClientProtocolException e) {
 			String error = context.getString(R.string.net_error);
+            Log.d(TAG, e.getMessage());
 			throw new AutobahnClientException(error);
 		} catch (IOException e) {
+            Log.d(TAG, e.getMessage());
 			String error = context.getString(R.string.net_error);
 			throw new AutobahnClientException(error);
 		}
@@ -205,6 +215,7 @@ public class AutobahnClient {
 			try {
 				json = EntityUtils.toString(response.getEntity());
 			} catch (IOException e) {
+                Log.d(TAG, e.getMessage());
 				String errorStr = context.getString(R.string.net_error);
 				throw new AutobahnClientException(errorStr);
 			}
@@ -269,6 +280,7 @@ public class AutobahnClient {
 		try {
 			url = new URI(scheme, null, host, port, DOMAIN_URL, null, null);
 		} catch (URISyntaxException e) {
+            Log.d(TAG,e.getMessage());
 			String error = context.getString(R.string.net_error);
 			throw new AutobahnClientException(error);
 		}

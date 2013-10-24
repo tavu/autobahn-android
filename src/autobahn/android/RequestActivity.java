@@ -1,11 +1,9 @@
 package autobahn.android;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
@@ -28,29 +26,81 @@ import java.util.*;
  * Time: 2:26 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RequestActivity extends Activity implements View.OnFocusChangeListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-	private final String TAG = "Autobahn";
+public class RequestActivity extends BasicActiviy implements View.OnFocusChangeListener,
+                DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener,
+                AdapterView.OnItemSelectedListener {
+
+
     private View lastClickedView;
 	private AutobahnClientException exception = null;
 
-    static private  final int LOG_IN_FOR_IDMS=2;
-    static private  final int LOG_IN_FOR_PORTS=3;
 
-	protected void setDomains() {
-		if (exception == null) {
+    @Override
+    protected void showData(Object data,Call c,String param) {
+        Log.d(TAG,data.toString()+" "+c.toString());
+
+        if(c==Call.DOMAINS) {
+            List<String> l=(List<String>)data;
+            if( !l.isEmpty() ) {
+                getData(Call.PORTS,l.get(0));
+            }else {
+                //TODO there is no domain show error
+            }
+
+              //setDomains((List<String>)data);
+          } else if(c==Call.PORTS){
+              Spinner sp = (Spinner) findViewById(R.id.startDomain);
+              if(sp.getAdapter()==null)
+                  setDomains(NetCache.getInstance().getIdms());
+
+              setPorts( (List<String>)data ,param);
+          }
+    }
+
+    protected void setPorts(List<String> data,String domain) {
+        Spinner sp = (Spinner) findViewById(R.id.endDomain);
+
+        int pos=sp.getSelectedItemPosition();
+        if(pos != AdapterView.INVALID_POSITION) {
+            String s=(String)sp.getItemAtPosition(pos);
+            if( s!=null && s.equals(domain) ) {
+                sp = (Spinner) findViewById(R.id.endPort);
+                ArrayAdapter<String> adapter =(ArrayAdapter<String>) sp.getAdapter();
+                adapter.clear();
+                adapter.addAll(data);
+            }
+        }
+
+        sp = (Spinner) findViewById(R.id.startDomain);
+
+        pos=sp.getSelectedItemPosition();
+        if(pos != AdapterView.INVALID_POSITION) {
+            String s=(String)sp.getItemAtPosition(pos);
+            if( s!=null && s.equals(domain) ) {
+                sp = (Spinner) findViewById(R.id.startPort);
+                ArrayAdapter<String> adapter =(ArrayAdapter<String>) sp.getAdapter();
+                adapter.clear();
+                adapter.addAll(data);
+            }
+        }
+
+
+    }
+
+    protected void setDomains(List<String> data) {
 			Log.d(TAG, NetCache.getInstance().getIdms().toString());
-			ArrayList<String> a1 = new ArrayList<String>(NetCache.getInstance().getIdms());
+
+			ArrayList<String> a1 = new ArrayList<String>(data);
 			ArrayAdapter<String> startDomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, a1);
 			Spinner sp1 = (Spinner) findViewById(R.id.startDomain);
 			startDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			sp1.setAdapter(startDomAdapter);
 
-			ArrayList<String> a2 = new ArrayList<String>(NetCache.getInstance().getIdms());
+			ArrayList<String> a2 = new ArrayList<String>(data);
 			ArrayAdapter<String> endDomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, a2);
 			Spinner sp2 = (Spinner) findViewById(R.id.endDomain);
 			endDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			sp2.setAdapter(endDomAdapter);
-		}
 	}
 
 	@Override
@@ -67,16 +117,25 @@ public class RequestActivity extends Activity implements View.OnFocusChangeListe
 		findViewById(R.id.endDate).setOnFocusChangeListener(this);
 		findViewById(R.id.startTime).setOnFocusChangeListener(this);
 		findViewById(R.id.endTime).setOnFocusChangeListener(this);
+
+
+        Spinner sp=(Spinner) findViewById(R.id.startDomain);
+        sp.setOnItemSelectedListener(this);
+        sp=(Spinner) findViewById(R.id.endDomain);
+        sp.setOnItemSelectedListener(this);
+        getData(Call.DOMAINS,null);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        sp = (Spinner) findViewById(R.id.startPort);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp.setAdapter(adapter);
+
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        sp = (Spinner) findViewById(R.id.endPort);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp.setAdapter(adapter);
 	}
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if(LOG_IN_FOR_IDMS==requestCode && resultCode==RESULT_OK) {
-            DomainAsyncTask async=new DomainAsyncTask();
-            async.execute();
-        }
-    }
 
 	@Override
 	public void onFocusChange(View view, boolean hasFocus) {
@@ -152,10 +211,13 @@ public class RequestActivity extends Activity implements View.OnFocusChangeListe
 
 		SimpleDateFormat sdf = new SimpleDateFormat("kk:mm");
 		Date time = null;
+
 		try {
 			time = sdf.parse(hourOfDay + ":" + minute);
 		} catch (ParseException ignored) {
 		}
+
+
 		DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
 		timeDisplay.setText(timeFormat.format(time));
 	}
@@ -187,32 +249,22 @@ public class RequestActivity extends Activity implements View.OnFocusChangeListe
 		// TODO: Submit request to autobahn
 	}
 
-	private class DomainAsyncTask extends AsyncTask<Void, Void, Void> {
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        if(parent.getId()==R.id.endDomain ||
+                parent.getId()==R.id.startDomain) {
 
-		@Override
-		protected Void doInBackground(Void... type) {
-			try {
-				AutobahnClient.getInstance().fetchIdms();
-                List<String> idms=NetCache.getInstance().getIdms();
-                if(idms!=null && idms.size()>0 ) {
-                    List<String> ports=NetCache.getInstance().getPorts(idms.get(0));
-                    if(ports==null)
-                        AutobahnClient.getInstance().fetchPorts(idms.get(0));
-                }
-			} catch (AutobahnClientException e) {
-				exception = e;
-			}
-			return null;
-		}
+            String s=(String)parent.getItemAtPosition(pos);
+            Log.d(TAG,s);
 
-		@Override
-		protected void onProgressUpdate(Void... progress) {
-			super.onProgressUpdate(progress);
-		}
+            if(s!=null && !s.isEmpty())
+                getData(Call.PORTS,s);
+        }
 
-		@Override
-		protected void onPostExecute(Void result) {
-			setDomains();
-		}
-	}
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
+    }
+
 }

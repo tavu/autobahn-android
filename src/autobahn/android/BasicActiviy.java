@@ -3,6 +3,9 @@ package autobahn.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
+import com.example.autobahn.R;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +19,7 @@ public class BasicActiviy extends Activity {
 
     enum Call {
         DOMAINS,
-        STPS,
+        PORTS,
         RESERV,
         RES_IFO,
         CUSTOM
@@ -24,31 +27,39 @@ public class BasicActiviy extends Activity {
 
     private Call call;
     private String param;
+    public final String TAG = "Autobahn2";
+    AutobahnClientException e=null;
 
+    private int LOG_IN_REQ=9;
 
     public BasicActiviy() {
 
     }
 
 
-    public void showData(Object data,Call c,String param) {
-
+    protected synchronized void showData(Object data,Call c,String param) {
+        Log.d(TAG, data.toString() + " " + c.toString());
     }
 
-    public void showError(AutobahnClientException e,Call c,String param) {
-
+    protected synchronized void showError(AutobahnClientException e,Call c,String param) {
+       // Toast toast = Toast.makeText(getApplicationContext(), e.getVisibleMsg(this), Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
+        toast.show();
+        return;
     }
 
-    public void getData(Call c,String param) {
-
+    public synchronized void getData(Call c,String param) {
+        e=null;
         Object obj=dataFromCache(c,param);
 
         if(obj==null) {
+            this.call=c;
+            this.param=param;
             if(!AutobahnClient.getInstance().hasAuthenticate()) {
                 Intent logInIntent = new Intent();
                 logInIntent.setClass(getApplicationContext(), LoginActivity.class);
-                logInIntent.putExtra(LoginActivity.BACK, true);
-                startActivityForResult(logInIntent,LoginActivity.LOGIN_AND_GO_BACK);
+                logInIntent.putExtra(LoginActivity.MSG, getString(R.string.Log_in_first));
+                startActivityForResult(logInIntent,LOG_IN_REQ);
             }else {
                 BasicAsyncTask async=new BasicAsyncTask();
                 async.execute(param);
@@ -62,12 +73,12 @@ public class BasicActiviy extends Activity {
 
     private Object dataFromCache(Call call,String param) {
 
-        Object obj;
+        Object obj=null;
         switch (call) {
             case DOMAINS:
                 obj=NetCache.getInstance().getIdms();
                 break;
-            case STPS:
+            case PORTS:
                 obj= NetCache.getInstance().getPorts(param);
                 break;
             case RESERV:
@@ -77,7 +88,7 @@ public class BasicActiviy extends Activity {
                 obj=NetCache.getInstance().getLastReservation(param);
                 break;
         }
-        return null;
+        return obj;
     }
 
     @Override
@@ -97,7 +108,7 @@ public class BasicActiviy extends Activity {
 
     private class BasicAsyncTask extends AsyncTask<String, Void, Void> {
 
-        AutobahnClientException e=null;
+
 
         public BasicAsyncTask() {
         }
@@ -111,7 +122,7 @@ public class BasicActiviy extends Activity {
                     case DOMAINS:
                         AutobahnClient.getInstance().fetchIdms();
                         break;
-                    case STPS:
+                    case PORTS:
                         if(type.length==0) {
                             e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM);
                             return null;
@@ -136,8 +147,8 @@ public class BasicActiviy extends Activity {
                         AutobahnClient.getInstance().fetchReservationInfo(type[0]);
                         break;
                 }
-            }catch(AutobahnClientException e) {
-                this.e=e;
+            }catch(AutobahnClientException ex) {
+                e=ex;
             }
             return null;
         }
@@ -150,10 +161,12 @@ public class BasicActiviy extends Activity {
         @Override
         protected void onPostExecute(Void result) {
 
+            Log.d(TAG,"EX ");
             if(e!=null) {
                 showError(e,call,param);
                 return ;
             }
+            Log.d(TAG,"EX2 "+param);
 
             Object obj=dataFromCache(call,param);
             if(obj==null) {
@@ -161,7 +174,7 @@ public class BasicActiviy extends Activity {
                 showError(e,call,param);
                 return;
             }
-
+            Log.d(TAG,"EX3 ");
             showData(obj,call,param);
         }
     }

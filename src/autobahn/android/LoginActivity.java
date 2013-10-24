@@ -20,8 +20,7 @@ import com.example.autobahn.R;
 
 
 public class LoginActivity extends Activity implements View.OnClickListener {
-
-	public static final String BACK = "COME_BACK";
+    public static final String MSG = "";
     public static final int LOGIN_AND_GO_BACK = 1;
     private final TextWatcher watcher = new TextWatcher() {
 		@Override
@@ -54,11 +53,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 			return;
 		}
 
-		if (goBack)
-			setResult(RESULT_OK);
-		else
-            setResult(RESULT_CANCELED);
-
+        setResult(RESULT_OK);
         finish();
     }
 
@@ -85,11 +80,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
 		Bundle bundle = getIntent().getExtras();
 
-		if (bundle != null && bundle.getBoolean(BACK, false)) {
-			goBack = true;
-			Toast toast = Toast.makeText(this, getString(R.string.LogInFirst), Toast.LENGTH_LONG);
-			loginButton.setEnabled(true);
-			toast.show();
+		if (bundle != null ) {
+            String s=bundle.getString(MSG,"");
+			if(!s.isEmpty()) {
+			    Toast toast = Toast.makeText(this, s, Toast.LENGTH_LONG);
+                toast.show();
+            }
 		}
 	}
 

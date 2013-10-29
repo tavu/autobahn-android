@@ -88,7 +88,7 @@
 			android:id="@+id/startVlan"
 			android:layout_width="70dp"
 			android:layout_height="wrap_content"
-			android:layout_below="@+id/startVlanText"/>
+			android:layout_below="@+id/startVlanText" android:numeric="integer"/>
 
 		<CheckBox
 			android:id="@+id/startVlanAuto"
@@ -110,7 +110,7 @@
 			android:id="@+id/endVlan"
 			android:layout_width="70dp"
 			android:layout_height="wrap_content"
-			android:layout_below="@+id/endVlanText"/>
+			android:layout_below="@+id/endVlanText" android:numeric="integer"/>
 
 		<CheckBox
 			android:id="@+id/endVlanAuto"
@@ -207,7 +207,26 @@
 			android:layout_below="@+id/endTimeText"
 			android:onClick="showTimePicker"/>
 
-		<View
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/capacity"
+                android:id="@+id/capacityText" android:layout_below="@+id/endTime"/>
+        <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/capacity" android:layout_below="@+id/capacityText" android:numeric="integer"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/description"
+                android:id="@+id/descriptionText" android:layout_below="@+id/capacity"/>
+        <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/description" android:layout_below="@+id/descriptionText"
+                android:inputType="textMultiLine"/>
+        <View
 			android:id="@+id/seperator3"
 			android:layout_width="fill_parent"
 			android:layout_height="1dp"
@@ -219,7 +238,7 @@
 			android:layout_height="wrap_content"
 			android:text="@string/submitRequest"
 			android:id="@+id/submitButton"
-			android:layout_below="@+id/endTime"
+			android:layout_below="@+id/description"
 			android:layout_centerHorizontal="true"
 			android:enabled="true"
 			android:clickable="true"

@@ -110,9 +110,6 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		setContentView(R.layout.request_reservation_activity);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-		((EditText) findViewById(R.id.startVlan)).setRawInputType(Configuration.KEYBOARD_12KEY);
-		((EditText) findViewById(R.id.endVlan)).setRawInputType(Configuration.KEYBOARD_12KEY);
-
 		findViewById(R.id.startDate).setOnFocusChangeListener(this);
 		findViewById(R.id.endDate).setOnFocusChangeListener(this);
 		findViewById(R.id.startTime).setOnFocusChangeListener(this);
@@ -162,25 +159,25 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		switch (view.getId()) {
 			case R.id.startVlanAuto:
 				if (checked) {
-					findViewById(R.id.startVlan).setFocusable(false);
+					findViewById(R.id.startVlan).setEnabled(false);
 				} else {
-					findViewById(R.id.startVlan).setFocusableInTouchMode(true);
+					findViewById(R.id.startVlan).setEnabled(true);
 				}
 				break;
 			case R.id.endVlanAuto:
 				if (checked) {
-					findViewById(R.id.endVlan).setFocusable(false);
+					findViewById(R.id.endVlan).setEnabled(false);
 				} else {
-					findViewById(R.id.endVlan).setFocusableInTouchMode(true);
+					findViewById(R.id.endVlan).setEnabled(true);
 				}
 				break;
 			case R.id.startNow:
 				if (checked) {
-					findViewById(R.id.startDate).setFocusable(false);
-					findViewById(R.id.startTime).setFocusable(false);
+					findViewById(R.id.startDate).setEnabled(false);
+					findViewById(R.id.startTime).setEnabled(false);
 				} else {
-					findViewById(R.id.startDate).setFocusableInTouchMode(true);
-					findViewById(R.id.startTime).setFocusableInTouchMode(true);
+					findViewById(R.id.startDate).setEnabled(true);
+					findViewById(R.id.startTime).setEnabled(true);
 				}
 		}
 	}

@@ -78,6 +78,7 @@
 	<string name="endVlan">End VLAN</string>
 	<string name="capacity">Capacity[Mbits/s]</string>
 	<string name="mtuSize">MTU size[bytes]</string>
+    <string name="mtuAuto">Automatically set MTU size</string>
 	<string name="vlan_auto">Automatically set vlan</string>
 	<string name="startDomain">Start domain</string>
 	<string name="endDomain">End domain</string>

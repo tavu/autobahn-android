@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import com.example.autobahn.R;
+import net.geant.autobahn.android.ReservationInfo;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -37,7 +38,6 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 
     @Override
     protected void showData(Object data,Call c,String param) {
-        Log.d(TAG,data.toString()+" "+c.toString());
 
         if(c==Call.DOMAINS) {
             List<String> l=(List<String>)data;
@@ -55,6 +55,9 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 
               setPorts( (List<String>)data ,param);
           }
+        else {
+            Log.d(TAG,"EDDDDFAS");
+        }
     }
 
     protected void setPorts(List<String> data,String domain) {
@@ -134,6 +137,9 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
         sp = (Spinner) findViewById(R.id.endPort);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sp.setAdapter(adapter);
+
+
+        findViewById(R.id.endTime).setOnFocusChangeListener(this);
 	}
 
 
@@ -247,7 +253,180 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 
 	public void submitRequest(View view) {
 		// TODO: Submit request to autobahn
+
+        ReservationInfo res=new ReservationInfo();
+
+        String startPort;
+        String endPort;
+
+        try {
+            String s=spinnerData(res,R.id.startDomain);
+            res.setStartNsa(s);
+        } catch (AutobahnClientException e1) {
+            //TODO
+            return;
+        }
+        try {
+            String s=spinnerData(res,R.id.endDomain);
+            res.setEndNsa(s);
+        } catch (AutobahnClientException e1) {
+            //TODO
+            return;
+        }
+        try {
+            startPort=spinnerData(res,R.id.startPort);
+            res.setStartPort(startPort);
+        } catch (AutobahnClientException e1) {
+            //TODO
+            return;
+        }
+        try {
+            endPort=spinnerData(res,R.id.endPort);
+            res.setEndPort(endPort);
+        } catch (AutobahnClientException e1) {
+            //TODO
+            return;
+        }
+
+        if(endPort.equals(startPort)) {
+            //TODO
+        }
+
+        CheckBox checkBox = (CheckBox) findViewById(R.id.startVlanAuto);
+        if(checkBox.isChecked() ) {
+             res.setStartVlan(0);
+        } else {
+            try {
+                int vlan =txtData(res,R.id.startVlan);
+                res.setStartVlan(vlan);
+            } catch (AutobahnClientException e1) {
+                //TODO
+                return ;
+            }
+        }
+
+        checkBox = (CheckBox) findViewById(R.id.endVlanAuto);
+        if(checkBox.isChecked() ) {
+            res.setEndVlan(0);
+        } else {
+            try {
+                int vlan =txtData(res,R.id.startVlan);
+                res.setEndVlan(vlan);
+            } catch (AutobahnClientException e1) {
+                //TODO
+                return ;
+            }
+        }
+
+        try {
+            long d=dateFromStr(R.id.startDate,R.id.startTime);
+            res.setStartTime(d);
+        } catch (AutobahnClientException e) {
+            //TODO
+            return ;
+        }
+
+        try {
+            long d=dateFromStr(R.id.endDate,R.id.endTime);
+            res.setEndTime(d);
+        } catch (AutobahnClientException e) {
+            //TODO
+            return ;
+        }
+
+        res.setId("e");
+        res.setTimeZone("GMT");
+        res.setDescription("DIs");
+        res. setCapacity(789);
+        res.setReservationState("t");
+        res.setProvisionState("sg");
+        res.setLifecycleState("sh");
+        res.setMtu(9);
+        res.setMaxDelay(9);
+        res.setProcessNow(false);
+
+        getData(Call.SUBMIT_RES,res);
 	}
+
+    private long dateFromStr(int dateId,int timeId) throws AutobahnClientException {
+        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this);
+
+        String startDateStr =( (EditText) findViewById(dateId) ).getText().toString();
+        Date startDate;
+        try {
+            startDate = dateFormat.parse(startDateStr);
+        } catch (ParseException e) {
+            //TODO
+            throw new AutobahnClientException(dateId);
+        }
+
+        String startTimeStr =( (EditText) findViewById(timeId) ).getText().toString();
+        Date startTime;
+        try {
+            startTime = dateFormat.parse(startDateStr);
+        } catch (ParseException ignored) {
+            //TODO
+            throw new AutobahnClientException(timeId);
+        }
+
+        startDate.setHours(startTime.getHours());
+        startDate.setMinutes(startTime.getMinutes());
+        return startDate.getTime();
+    }
+
+    private int txtData(ReservationInfo res,int id) throws AutobahnClientException{
+        EditText txt=(EditText) findViewById(id);
+        String s=txt.getText().toString();
+        int vlan=0;
+        try{
+            vlan=Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            throw new AutobahnClientException(id);
+        }
+
+        switch (id) {
+            case R.id.startVlan:
+                res.setStartVlan(vlan);
+                break;
+            case R.id.endVlan:
+                res.setStartVlan(vlan);
+                break;
+            default:
+                throw  new AutobahnClientException();
+        }
+        return vlan;
+
+    }
+
+    private String spinnerData(ReservationInfo res,int id) throws AutobahnClientException{
+        Spinner sp=(Spinner)findViewById(id);
+        int pos=sp.getSelectedItemPosition();
+
+        if(pos == AdapterView.INVALID_POSITION) {
+            throw  new AutobahnClientException(id);
+        }
+
+        String s=(String)sp.getItemAtPosition(pos);
+
+        switch (id) {
+            case R.id.startDomain:
+                res.setStartNsa(s);
+                break;
+            case R.id.startPort:
+                res.setStartPort(s);
+                break;
+            case R.id.endDomain:
+                res.setEndNsa(s);
+                break;
+            case R.id.endPort:
+                res.setEndPort(s);
+                break;
+            default:
+                throw  new AutobahnClientException();
+
+        }
+        return s;
+    }
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
@@ -266,5 +445,6 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
+
 
 }

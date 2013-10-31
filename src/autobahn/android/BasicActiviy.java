@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 import com.example.autobahn.R;
+import net.geant.autobahn.android.ReservationInfo;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,11 +23,12 @@ public class BasicActiviy extends Activity {
         PORTS,
         RESERV,
         RES_IFO,
-        CUSTOM
+        CUSTOM  ,
+        SUBMIT_RES
     }
 
     private Call call;
-    private String param;
+    private Object param;
     public final String TAG = "Autobahn2";
     AutobahnClientException e=null;
 
@@ -47,7 +49,21 @@ public class BasicActiviy extends Activity {
         return;
     }
 
-    public synchronized void getData(Call c,String param) {
+
+    protected synchronized void postSucceeded(Object data,Call c) {
+        Log.d(TAG, data.toString() + " " + c.toString());
+    }
+
+    protected synchronized void postError(Object data,Call c,AutobahnClientException e) {
+        Log.d(TAG, data.toString() + " " + c.toString());
+    }
+
+    public synchronized void postData(Object data,Call c) {
+
+
+    }
+
+    public synchronized void getData(Call c,Object param) {
         e=null;
         Object obj=dataFromCache(c,param);
 
@@ -65,12 +81,12 @@ public class BasicActiviy extends Activity {
             }
         }
         else {
-            showData(obj,c,param);
+            showData(obj,c,(String)param);
         }
     }
 
 
-    private Object dataFromCache(Call call,String param) {
+    private Object dataFromCache(Call call,Object param) {
 
         Object obj=null;
         switch (call) {
@@ -78,13 +94,16 @@ public class BasicActiviy extends Activity {
                 obj=NetCache.getInstance().getIdms();
                 break;
             case PORTS:
-                obj= NetCache.getInstance().getPorts(param);
+                obj= NetCache.getInstance().getPorts((String)param);
                 break;
             case RESERV:
-                obj=NetCache.getInstance().getTrackCircuits(param);
+                obj=NetCache.getInstance().getTrackCircuits((String)param);
                 break;
             case  RES_IFO:
-                obj=NetCache.getInstance().getLastReservation(param);
+                obj=NetCache.getInstance().getLastReservation((String)param);
+                break;
+            case SUBMIT_RES:
+                obj=null;
                 break;
         }
         return obj;
@@ -100,12 +119,12 @@ public class BasicActiviy extends Activity {
         }
         else {
             AutobahnClientException e=new AutobahnClientException(AutobahnClientException.Error.NO_LOG_IN);
-            showError(e,call,param);
+            showError(e,call,(String)param);
         }
     }
 
 
-    private class BasicAsyncTask extends AsyncTask<String, Void, Void> {
+    private class BasicAsyncTask extends AsyncTask<Object, Void, Void> {
 
 
 
@@ -114,7 +133,7 @@ public class BasicActiviy extends Activity {
 
 
         @Override
-        protected Void doInBackground(String... type) {
+        protected Void doInBackground(Object... type) {
 
             try {
                 switch (call) {
@@ -127,7 +146,7 @@ public class BasicActiviy extends Activity {
                             return null;
                         }
                         param=type[0];
-                        AutobahnClient.getInstance().fetchPorts(type[0]);
+                        AutobahnClient.getInstance().fetchPorts((String)type[0]);
                         break;
                     case RESERV:
                         if(type.length==0) {
@@ -135,7 +154,7 @@ public class BasicActiviy extends Activity {
                             return null;
                         }
                         param=type[0];
-                        AutobahnClient.getInstance().fetchTrackCircuit(type[0]);
+                        AutobahnClient.getInstance().fetchTrackCircuit((String)type[0]);
                         break;
                     case  RES_IFO:
                         if(type.length==0) {
@@ -143,8 +162,18 @@ public class BasicActiviy extends Activity {
                             return null;
                         }
                         param=type[0];
-                        AutobahnClient.getInstance().fetchReservationInfo(type[0]);
+                        AutobahnClient.getInstance().fetchReservationInfo((String)type[0]);
                         break;
+                    case SUBMIT_RES:
+                        if(type.length==0) {
+                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM);
+                            return null;
+                        }
+                        Log.d(TAG,"EDDDDFASeSDGSFG");
+                        ReservationInfo res=(ReservationInfo)type[0];
+                        AutobahnClient.getInstance().submitReservation(res);
+                        break;
+
                 }
             }catch(AutobahnClientException ex) {
                 e=ex;
@@ -160,18 +189,35 @@ public class BasicActiviy extends Activity {
         @Override
         protected void onPostExecute(Void result) {
 
+            if(call==Call.SUBMIT_RES) {
+                if(e!=null) {
+                    showError(e,call,null);
+                    Log.d(TAG,e.getMessage());
+                    return ;
+                }
+                else {
+                    showData(null,call,null);
+                    return ;
+                }
+            }
+
             if(e!=null) {
-                showError(e,call,param);
+                showError(e,call,(String)param);
+                return ;
+            }
+
+            if(call==Call.SUBMIT_RES) {
+                showData(null,call,null);
                 return ;
             }
 
             Object obj=dataFromCache(call,param);
             if(obj==null) {
                 e=new AutobahnClientException(AutobahnClientException.Error.UNKNOWN);
-                showError(e,call,param);
+                showError(e,call,(String)param);
                 return;
             }
-            showData(obj,call,param);
+            showData(obj,call,(String)param);
         }
     }
 

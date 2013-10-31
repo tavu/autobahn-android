@@ -43,7 +43,7 @@ public class AutobahnClient {
 	private static final String SERVICES_URL = "/autobahn-gui/portal/secure/android/services";
 	private static final String SERVICE_URL = "/autobahn-gui/portal/secure/android/service";
 	private static final String PORTS_URL = "/autobahn-gui/portal/secure/android/ports";
-    private static final String SUBMIT_URL="";
+    private static final String SUBMIT_URL="/autobahn-gui/portal/secure/android/requestReservation";
 
 	private HttpClient httpclient;
 	private HttpGet httpget;
@@ -376,7 +376,15 @@ public class AutobahnClient {
             httppost = new HttpPost(url);
             Gson gson = new Gson();
             String json=gson.toJson(info);
-            StringEntity se = new StringEntity( json);
+            Log.d(TAG,json);
+
+            //String s=new String( "{\"id\":\"urn:uuid:e9d1ecea-395b-4ea7-ac82-95cd33b732e8\",\"timeZone\":\"GMT\",\"description\":\"sg\",\"startTime\":1382443092654,\"endTime\":1382446560000,\"startNsa\":\"GARR\",\"capacity\":7000000000,\"reservationState\":\"RESERVE_FAILED\",\"provisionState\":\"RELEASED\",\"lifecycleState\":\"CREATED\",\"mtu\":0,\"maxDelay\":0,\"endPort\":\"cl2;;cl2p-2\",\"startVlan\":0,\"endVlan\":0,\"startPort\":\"GARR_GRNET_1\",\"endNsa\":\"GARR\",\"processNow\":false} ");
+            //Log.d(TAG,s);
+            StringEntity se = new StringEntity(json);
+            //ByteArrayEntity se=new ByteArrayEntity(json.getBytes());
+
+            httppost.addHeader("content-type", "application/json");
+
             se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             httppost.setEntity(se);
             response = httpclient.execute(httppost, localContext);

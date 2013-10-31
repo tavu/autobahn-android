@@ -7,13 +7,18 @@ public class AutobahnClientException extends Exception {
     enum Error {
         INVALID_PARAM,
         UNKNOWN,
-        NO_LOG_IN
+        NO_LOG_IN,
+        STATUS_ERR
 
     }
+
+    private Error error=Error.UNKNOWN;
+    private int status;
 
     public AutobahnClientException() {
 		super();
         error=Error.UNKNOWN;
+        status=-1;
 	}
 
 	public AutobahnClientException(String error) {
@@ -25,7 +30,16 @@ public class AutobahnClientException extends Exception {
         error=e;
     }
 
-    private Error error=Error.UNKNOWN;
+    public AutobahnClientException(int status) {
+        super();
+        error=Error.STATUS_ERR;
+        this.status=status;
+    }
+
+    int getStatus() {
+        return status;
+    }
+
 
     public Error getError() {
         return error;
@@ -34,7 +48,6 @@ public class AutobahnClientException extends Exception {
     public String getVisibleMsg(Context context) {
         //TODO return a visible string for toast message
         return new String();
-
     }
 
 

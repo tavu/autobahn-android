@@ -98,6 +98,28 @@
 	<string name="error">Error:</string>
 
 	<string name="Log_in_first">Please log in first.</string>
+    <string name="loading">Loading</string>
+
+
+    <!-- REQUEST RESERVATION ERRORS -->
+    <string name="select_start_dom">Please select start domain</string>
+    <string name="select_end_dom">Please select end domain</string>
+    <string name="select_start_port">Please select start port</string>
+    <string name="select_end_port">Please select end port</string>
+    <string name="port_equals">The start port must be different from end port</string>
+    <string name="invalid_start_time">Invalid start date or time</string>
+    <string name="invalid_end_time">Invalid end date or time</string>
+    <string name="invalid_start_vlan">Invalid start vlan</string>
+    <string name="invalid_end_vlan">Invalid end vlan</string>
+    <string name="invalid_capacity">Invalid capacity</string>
+    <string name="empty_description">Description can not be empty</string>
+    <string name="end_time_past">End date is in the past</string>
+    <string name="start_time_past">End date is in the past</string>
+    <string name="end_before_start">End date is before start date</string>
+
+    <string name="reservation_success">Reservation submitted successfully</string>
+    <string name="reservation_submit_error">Reservation submitted successfully</string>
 
 
 </resources>
+

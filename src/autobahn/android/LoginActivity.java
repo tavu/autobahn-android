@@ -118,6 +118,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		task.execute();
 	}
 
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -160,5 +168,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		protected void onPostExecute(Void result) {
 			afterLogIn();
 		}
+
+
 	}
 }

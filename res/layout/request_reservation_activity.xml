@@ -9,7 +9,7 @@
 	<RelativeLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="match_parent"
-		android:layout_height="1500dp"
+		android:layout_height="wrap_content"
 		android:clickable="false"
 		android:focusable="false"
 		android:focusableInTouchMode="false">
@@ -134,24 +134,12 @@
 			android:layout_below="@+id/endVlan"
 			android:background="@android:color/darker_gray"/>
 
-		<TextView
-			android:id="@+id/timezoneText"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_below="@+id/seperator2"
-			android:text="@string/startDate"/>
-
-		<Spinner
-			android:id="@+id/timezone"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_below="@+id/timezoneText"/>
 
 		<TextView
 			android:id="@+id/startDateText"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_below="@+id/timezone"
+			android:layout_below="@+id/seperator2"
 			android:text="@string/startDate"/>
 
 		<EditText
@@ -239,7 +227,7 @@
 			android:layout_below="@+id/description"
 			android:background="@android:color/darker_gray" android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"/>
-
+          <!--
         <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -268,12 +256,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/mtuAuto"
                 android:id="@+id/mtuAuto" android:layout_toRightOf="@+id/mtuSize" android:layout_below="@+id/mtuText"/>
+
+                 -->
         <Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/submitRequest"
 			android:id="@+id/submitButton"
-			android:layout_below="@+id/mtuSize"
+			android:layout_below="@+id/seperator3"
 			android:layout_centerHorizontal="true"
 			android:enabled="true"
 			android:clickable="true"

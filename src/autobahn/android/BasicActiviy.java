@@ -1,6 +1,7 @@
 package autobahn.android;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -33,13 +34,13 @@ public class BasicActiviy extends Activity {
     AutobahnClientException e=null;
 
     private int LOG_IN_REQ=9;
+    private ProgressDialog progressDialog=null;
 
     public BasicActiviy() {
     }
 
-
     protected synchronized void showData(Object data,Call c,String param) {
-        Log.d(TAG, data.toString() + " " + c.toString());
+
     }
 
     protected synchronized void showError(AutobahnClientException e,Call c,String param) {
@@ -77,6 +78,9 @@ public class BasicActiviy extends Activity {
                 startActivityForResult(logInIntent,LOG_IN_REQ);
             }else {
                 BasicAsyncTask async=new BasicAsyncTask();
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setMessage( getString(R.string.loading) );
+                progressDialog.show();
                 async.execute(param);
             }
         }
@@ -115,6 +119,9 @@ public class BasicActiviy extends Activity {
 
         if(LoginActivity.LOGIN_AND_GO_BACK==requestCode && resultCode==RESULT_OK) {
             BasicAsyncTask async=new BasicAsyncTask();
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage( getString(R.string.loading) );
+            progressDialog.show();
             async.execute(param);
         }
         else {
@@ -169,7 +176,6 @@ public class BasicActiviy extends Activity {
                             e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM);
                             return null;
                         }
-                        Log.d(TAG,"EDDDDFASeSDGSFG");
                         ReservationInfo res=(ReservationInfo)type[0];
                         AutobahnClient.getInstance().submitReservation(res);
                         break;
@@ -189,6 +195,10 @@ public class BasicActiviy extends Activity {
         @Override
         protected void onPostExecute(Void result) {
 
+            if(progressDialog!=null) {
+                progressDialog.dismiss();
+                progressDialog=null;
+            }
             if(call==Call.SUBMIT_RES) {
                 if(e!=null) {
                     showError(e,call,null);

@@ -56,7 +56,8 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
               setPorts( (List<String>)data ,param);
           }
         else {
-            Log.d(TAG,"EDDDDFAS");
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.reservation_success, Toast.LENGTH_LONG);
+            toast.show();
         }
     }
 
@@ -91,7 +92,6 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
     }
 
     protected void setDomains(List<String> data) {
-			Log.d(TAG, NetCache.getInstance().getIdms().toString());
 
 			ArrayList<String> a1 = new ArrayList<String>(data);
 			ArrayAdapter<String> startDomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, a1);
@@ -249,44 +249,41 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 	}
 
 	public void submitRequest(View view) {
-		// TODO: Submit request to autobahn
 
         ReservationInfo res=new ReservationInfo();
-
-        String startPort;
-        String endPort;
 
         try {
             String s=spinnerData(res,R.id.startDomain);
             res.setStartNsa(s);
         } catch (AutobahnClientException e1) {
-            //TODO
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.select_start_dom, Toast.LENGTH_LONG);
+            toast.show();
             return;
         }
+
         try {
             String s=spinnerData(res,R.id.endDomain);
             res.setEndNsa(s);
         } catch (AutobahnClientException e1) {
-            //TODO
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.select_end_dom, Toast.LENGTH_LONG);
+            toast.show();
             return;
         }
         try {
-            startPort=spinnerData(res,R.id.startPort);
+            String startPort=spinnerData(res,R.id.startPort);
             res.setStartPort(startPort);
         } catch (AutobahnClientException e1) {
-            //TODO
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.select_start_port, Toast.LENGTH_LONG);
+            toast.show();
             return;
         }
         try {
-            endPort=spinnerData(res,R.id.endPort);
+            String  endPort=spinnerData(res,R.id.endPort);
             res.setEndPort(endPort);
         } catch (AutobahnClientException e1) {
-            //TODO
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.select_end_port, Toast.LENGTH_LONG);
+            toast.show();
             return;
-        }
-
-        if(endPort.equals(startPort)) {
-            //TODO
         }
 
         CheckBox checkBox = (CheckBox) findViewById(R.id.startVlanAuto);
@@ -297,7 +294,8 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
                 int vlan =txtData(res,R.id.startVlan);
                 res.setStartVlan(vlan);
             } catch (AutobahnClientException e1) {
-                //TODO
+                Toast toast = Toast.makeText(getApplicationContext(), R.string.invalid_start_vlan, Toast.LENGTH_LONG);
+                toast.show();
                 return ;
             }
         }
@@ -310,43 +308,103 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
                 int vlan =txtData(res,R.id.startVlan);
                 res.setEndVlan(vlan);
             } catch (AutobahnClientException e1) {
-                //TODO
+                Toast toast = Toast.makeText(getApplicationContext(), R.string.invalid_end_vlan, Toast.LENGTH_LONG);
+                toast.show();
                 return ;
             }
         }
 
-        try {
-            long d=dateFromStr(R.id.startDate,R.id.startTime);
-            res.setStartTime(d);
-        } catch (AutobahnClientException e) {
-            //TODO
-            return ;
+        checkBox=(CheckBox) findViewById(R.id.startNow);
+        if(checkBox.isChecked() ) {
+            res.setProcessNow(true);
+        } else {
+            try {
+                long d=dateFromStr(R.id.startDate,R.id.startTime);
+                res.setStartTime(d);
+            } catch (AutobahnClientException e) {
+                Toast toast = Toast.makeText(getApplicationContext(), R.string.invalid_start_time, Toast.LENGTH_LONG);
+                toast.show();
+                return ;
+            }
         }
 
         try {
             long d=dateFromStr(R.id.endDate,R.id.endTime);
             res.setEndTime(d);
         } catch (AutobahnClientException e) {
-            //TODO
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.invalid_end_time, Toast.LENGTH_LONG);
+            toast.show();
             return ;
         }
 
-        res.setId("e");
-        res.setTimeZone("GMT");
-        res.setDescription("DIs");
-        res. setCapacity(789);
-        res.setReservationState("t");
-        res.setProvisionState("sg");
-        res.setLifecycleState("sh");
-        res.setMtu(9);
-        res.setMaxDelay(9);
-        res.setProcessNow(false);
+        try {
+            int capacity =txtData(res,R.id.capacity);
+            res.setCapacity((long)capacity);
+        } catch (AutobahnClientException e1) {
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.invalid_capacity, Toast.LENGTH_LONG);
+            toast.show();
+            return;
+        }
 
-        getData(Call.SUBMIT_RES,res);
+        EditText txt=(EditText) findViewById(R.id.description);
+        String s=txt.getText().toString();
+        if(s==null ||s.isEmpty()) {
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.empty_description, Toast.LENGTH_LONG);
+            toast.show();
+            return ;
+        }
+        res.setDescription(s);
+
+        if(checkReservation(res)) {
+            getData(Call.SUBMIT_RES,res);
+        }
+
 	}
+
+    private boolean checkReservation(ReservationInfo res) {
+
+        if(res.getStartNsa().equals(res.getEndNsa())) {
+            if(res.getStartPort().equals(res.getEndPort())) {
+                Toast toast = Toast.makeText(getApplicationContext(), R.string.port_equals, Toast.LENGTH_LONG);
+                toast.show();
+                return false;
+            }
+        }
+
+        Date now=new Date();
+        Date ed=new Date(res.getEndTime());
+        if(ed.before(now)) {
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.end_time_past, Toast.LENGTH_LONG);
+            toast.show();
+            return false;
+        }
+
+        if(!res.getProcessNow()) {
+            Date sd=new Date(res.getStartTime());
+            if(sd.before(now)) {
+                Toast toast = Toast.makeText(getApplicationContext(), R.string.start_time_past, Toast.LENGTH_LONG);
+                toast.show();
+                return false;
+            }
+            if(sd.before(ed)) {
+                Toast toast = Toast.makeText(getApplicationContext(), R.string.end_before_start, Toast.LENGTH_LONG);
+                toast.show();
+                return false;
+            }
+
+        }
+
+        if(res.getCapacity()<=0 ) {
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.invalid_capacity, Toast.LENGTH_LONG);
+            toast.show();
+        }
+
+        return true;
+    }
 
     private long dateFromStr(int dateId,int timeId) throws AutobahnClientException {
         DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this);
+        DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
 
         String startDateStr =( (EditText) findViewById(dateId) ).getText().toString();
         Date startDate;
@@ -360,7 +418,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
         String startTimeStr =( (EditText) findViewById(timeId) ).getText().toString();
         Date startTime;
         try {
-            startTime = dateFormat.parse(startDateStr);
+            startTime = timeFormat.parse(startTimeStr);
         } catch (ParseException ignored) {
             //TODO
             throw new AutobahnClientException(timeId);
@@ -368,30 +426,21 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 
         startDate.setHours(startTime.getHours());
         startDate.setMinutes(startTime.getMinutes());
+
         return startDate.getTime();
     }
 
     private int txtData(ReservationInfo res,int id) throws AutobahnClientException{
         EditText txt=(EditText) findViewById(id);
         String s=txt.getText().toString();
-        int vlan=0;
+        int ret=0;
         try{
-            vlan=Integer.parseInt(s);
+            ret=Integer.parseInt(s);
         } catch (NumberFormatException e) {
             throw new AutobahnClientException(id);
         }
 
-        switch (id) {
-            case R.id.startVlan:
-                res.setStartVlan(vlan);
-                break;
-            case R.id.endVlan:
-                res.setStartVlan(vlan);
-                break;
-            default:
-                throw  new AutobahnClientException();
-        }
-        return vlan;
+        return ret;
 
     }
 
@@ -404,24 +453,6 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
         }
 
         String s=(String)sp.getItemAtPosition(pos);
-
-        switch (id) {
-            case R.id.startDomain:
-                res.setStartNsa(s);
-                break;
-            case R.id.startPort:
-                res.setStartPort(s);
-                break;
-            case R.id.endDomain:
-                res.setEndNsa(s);
-                break;
-            case R.id.endPort:
-                res.setEndPort(s);
-                break;
-            default:
-                throw  new AutobahnClientException();
-
-        }
         return s;
     }
 
@@ -443,5 +474,14 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
         // Another interface callback
     }
 
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setContentView(R.layout.request_reservation_activity);
+    }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
 }

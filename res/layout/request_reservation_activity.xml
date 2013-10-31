@@ -15,12 +15,18 @@
 		android:focusableInTouchMode="false">
 
 
-		<TextView
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/basicParameters"
+                android:layout_alignParentTop="true"
+                android:id="@+id/firstHeader"
+                style="@style/AutobahnHeaderText"/>
+        <TextView
 			android:id="@+id/startDomainText"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_alignLeft="@+id/req_start_port"
-			android:layout_alignParentTop="true"
+            android:layout_below="@+id/firstHeader"
 			android:enabled="true"
 			android:text="@string/startDomain"/>
 
@@ -88,7 +94,7 @@
 			android:id="@+id/startVlan"
 			android:layout_width="70dp"
 			android:layout_height="wrap_content"
-			android:layout_below="@+id/startVlanText"/>
+			android:layout_below="@+id/startVlanText" android:numeric="integer"/>
 
 		<CheckBox
 			android:id="@+id/startVlanAuto"
@@ -110,7 +116,7 @@
 			android:id="@+id/endVlan"
 			android:layout_width="70dp"
 			android:layout_height="wrap_content"
-			android:layout_below="@+id/endVlanText"/>
+			android:layout_below="@+id/endVlanText" android:numeric="integer"/>
 
 		<CheckBox
 			android:id="@+id/endVlanAuto"
@@ -207,23 +213,71 @@
 			android:layout_below="@+id/endTimeText"
 			android:onClick="showTimePicker"/>
 
-		<View
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/capacity"
+                android:id="@+id/capacityText" android:layout_below="@+id/endTime"/>
+        <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/capacity" android:layout_below="@+id/capacityText" android:numeric="integer"/>
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/description"
+                android:id="@+id/descriptionText" android:layout_below="@+id/capacity"/>
+        <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/description" android:layout_below="@+id/descriptionText"
+                android:inputType="textMultiLine"/>
+        <View
 			android:id="@+id/seperator3"
 			android:layout_width="fill_parent"
 			android:layout_height="1dp"
-			android:layout_below="@+id/endTime"
-			android:background="@android:color/darker_gray"/>
+			android:layout_below="@+id/description"
+			android:background="@android:color/darker_gray" android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"/>
 
-		<Button
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/optionalParameters"
+                android:id="@+id/secondHeader" android:layout_below="@+id/seperator3" style="@style/AutobahnHeaderText"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/delay"
+                android:id="@+id/delayText" android:layout_below="@+id/secondHeader"/>
+        <EditText
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/delay" android:layout_below="@+id/delayText" android:numeric="decimal"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mtuSize"
+                android:id="@+id/mtuText" android:layout_below="@+id/delay"/>
+        <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/mtuSize" android:layout_below="@+id/mtuText" android:numeric="integer"/>
+        <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mtuAuto"
+                android:id="@+id/mtuAuto" android:layout_toRightOf="@+id/mtuSize" android:layout_below="@+id/mtuText"/>
+        <Button
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/submitRequest"
 			android:id="@+id/submitButton"
-			android:layout_below="@+id/endTime"
+			android:layout_below="@+id/mtuSize"
 			android:layout_centerHorizontal="true"
 			android:enabled="true"
 			android:clickable="true"
-			android:onClick="submitRequest"/>
+			android:onClick="submitRequest" style="@style/AutobahnButton"/>
 
 
 	</RelativeLayout>

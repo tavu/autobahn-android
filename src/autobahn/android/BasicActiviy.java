@@ -34,7 +34,7 @@ public class BasicActiviy extends Activity {
     public final String TAG = "Autobahn2";
     AutobahnClientException e=null;
 
-    private int LOG_IN_REQ=9;
+    protected int LOG_IN_REQ=9;
     private ProgressDialog progressDialog=null;
 
     public BasicActiviy() {
@@ -105,7 +105,7 @@ public class BasicActiviy extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode,resultCode,data);
 
-        if(LoginActivity.LOGIN_AND_GO_BACK==requestCode && resultCode==RESULT_OK) {
+        if(LOG_IN_REQ==requestCode && resultCode==RESULT_OK) {
             BasicAsyncTask async=new BasicAsyncTask();
             progressDialog = new ProgressDialog(this);
             progressDialog.setMessage( getString(R.string.loading) );

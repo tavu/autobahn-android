@@ -123,9 +123,6 @@ public class AutobahnClient {
         CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
         cookieStore.clear();
 
-        for (Cookie c : cookieStore.getCookies()) {
-            Log.d(TAG,c.getName());
-        }
 
         NetCache.getInstance().clear();
 

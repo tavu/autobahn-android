@@ -88,6 +88,7 @@ public class IdmsActivity extends BasicActiviy {
 
     @Override
     protected synchronized void showError(AutobahnClientException e,Call c,String param) {
+        super.showError(e,c,param);
       //TODO add a permanent error
     }
 

@@ -8,6 +8,7 @@ import com.example.autobahn.R;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.loopj.android.http.PersistentCookieStore;
+import net.geant.autobahn.android.ErrorType;
 import net.geant.autobahn.android.ReservationInfo;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -27,6 +28,8 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URI;
@@ -171,7 +174,7 @@ public class AutobahnClient {
 			String error = context.getString(R.string.error_404);
 			throw new AutobahnClientException(error);
 		} else if (status == 500) {
-			String error = context.getString(R.string.error_404);
+			String error = context.getString(R.string.error_500);
 			throw new AutobahnClientException(error);
 		} else {
 			String error = context.getString(R.string.error);
@@ -196,8 +199,7 @@ public class AutobahnClient {
 
 		httpget = new HttpGet(url);
         Log.d(TAG,url.toString());
-		HttpResponse response;
-		response = null;
+		HttpResponse response =null;
 		try {
 			response = httpclient.execute(httpget, localContext);
 
@@ -211,38 +213,66 @@ public class AutobahnClient {
 			throw new AutobahnClientException(error);
 		}
 
-		String json = null;
+		String responceStr = null;
+        String data=null;
 		int status = response.getStatusLine().getStatusCode();
+        Log.d(TAG,"HTTP STATUS:"+status);
 		if (status == 200) {
 			try {
-				json = EntityUtils.toString(response.getEntity());
+                responceStr = EntityUtils.toString(response.getEntity());
 			} catch (IOException e) {
                 Log.d(TAG, e.getMessage());
-				String errorStr = context.getString(R.string.net_error);
+				String errorStr = context.getString(R.string.response_error);
 				throw new AutobahnClientException(errorStr);
 			}
 
-			Log.d(TAG, json);
+			Log.d(TAG, responceStr);
 
-			if (json == null) {
-				String errorStr = context.getString(R.string.net_error);
+			if (responceStr == null) {
+				String errorStr = context.getString(R.string.response_error);
 				throw new AutobahnClientException(errorStr);
 			}
 
-			return json;
+            JSONObject json= null;
+            int err=0;
+            try {
+                json = new JSONObject(responceStr);
+                err=json.getInt("error");
+            } catch (JSONException e) {
+                String errorStr = context.getString(R.string.response_error);
+                throw new AutobahnClientException(errorStr);
+            }
+
+            if(err ==  ErrorType.OK ) {
+                try {
+                    data=json.getString("data");
+                    Log.d(TAG, data);
+                } catch (JSONException e) {
+                    String errorStr = context.getString(R.string.response_error);
+                    throw new AutobahnClientException(errorStr);
+                }
+            } else if(err == ErrorType.NO_DATA ) {
+                return new String("");
+            }else {
+                try {
+                    data=json.getString("message");
+                    Log.d(TAG, data);
+                } catch (JSONException e) {
+                    String errorStr = context.getString(R.string.response_error);
+                    throw new AutobahnClientException(errorStr);
+                }
+                throw new AutobahnClientException(data);
+            }
 
 		} else if (status == 404) {
-			String error = context.getString(R.string.error_404);
-			throw new AutobahnClientException(error);
+			throw new AutobahnClientException(context.getString(R.string.error_404) );
 		} else if (status == 500) {
-			String error = context.getString(R.string.error_404);
-			throw new AutobahnClientException(error);
+			throw new AutobahnClientException(context.getString(R.string.error_500) );
 		} else {
-			String error = context.getString(R.string.error);
-			throw new AutobahnClientException(error + status);
+			throw new AutobahnClientException(context.getString(R.string.http_error) );
 		}
 
-
+         return data;
 	}
 
 	public synchronized void fetchTrackCircuit(String domain) throws AutobahnClientException {

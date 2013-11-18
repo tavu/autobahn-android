@@ -25,8 +25,6 @@ public class IdmsActivity extends BasicActiviy {
 
     private void showData() {
 
-        TextView header;
-
         domains = NetCache.getInstance().getIdms();
 
         if (domains == null) {
@@ -37,8 +35,8 @@ public class IdmsActivity extends BasicActiviy {
         if (domains.isEmpty()) {
             Log.d(TAG, "Domains is Empty");
             setContentView(R.layout.no_data);
-            header = (TextView) findViewById(R.id.header);
-            header.setText(R.string.no_domains);
+            ((TextView) findViewById(R.id.header)).setText(R.string.no_domains);
+
             Button menuButton = (Button) findViewById(R.id.menuButton);
             menuButton.setText(R.string.back_to_menu);
             menuButton.setOnClickListener(new View.OnClickListener() {
@@ -52,8 +50,7 @@ public class IdmsActivity extends BasicActiviy {
             });
         } else {
             setContentView(R.layout.domain_reservation_list);
-            header = (TextView) findViewById(R.id.header);
-            header.setText(R.string.idm_title);
+           ((TextView) findViewById(R.id.header)).setText(R.string.idm_title);;
 
             domainList = (ListView) findViewById(R.id.listView);
             adapter = new ArrayAdapter<String>(this, R.layout.list_item, domains);

@@ -25,12 +25,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private final TextWatcher watcher = new TextWatcher() {
 		@Override
 		public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-			//To change body of implemented methods use File | Settings | File Templates.
 		}
 
 		@Override
 		public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-			//To change body of implemented methods use File | Settings | File Templates.
 		}
 
 		@Override
@@ -41,7 +39,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private Button loginButton;
     private EditText usernameField;
     private EditText passwordField;
-    private boolean goBack = false;
     private AutobahnClientException exception = null;
 
 	private void afterLogIn() {

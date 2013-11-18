@@ -25,7 +25,8 @@ public class BasicActiviy extends Activity {
         RESERV,
         RES_IFO,
         CUSTOM  ,
-        SUBMIT_RES
+        SUBMIT_RES ,
+        LOG_OUT
     }
 
     private Call call;
@@ -51,19 +52,6 @@ public class BasicActiviy extends Activity {
     }
 
 
-    protected synchronized void postSucceeded(Object data,Call c) {
-        Log.d(TAG, data.toString() + " " + c.toString());
-    }
-
-    protected synchronized void postError(Object data,Call c,AutobahnClientException e) {
-        Log.d(TAG, data.toString() + " " + c.toString());
-    }
-
-    public synchronized void postData(Object data,Call c) {
-
-
-    }
-
     public synchronized void getData(Call c,Object param) {
         e=null;
         Object obj=dataFromCache(c,param);
@@ -71,7 +59,7 @@ public class BasicActiviy extends Activity {
         if(obj==null) {
             this.call=c;
             this.param=param;
-            if(!AutobahnClient.getInstance().hasAuthenticate()) {
+            if( !AutobahnClient.getInstance().hasAuthenticate() ) {
                 Intent logInIntent = new Intent();
                 logInIntent.setClass(getApplicationContext(), LoginActivity.class);
                 logInIntent.putExtra(LoginActivity.MSG, getString(R.string.Log_in_first));
@@ -178,6 +166,9 @@ public class BasicActiviy extends Activity {
                         }
                         ReservationInfo res=(ReservationInfo)type[0];
                         AutobahnClient.getInstance().submitReservation(res);
+                        break;
+                    case LOG_OUT:
+                        AutobahnClient.getInstance().logOut();
                         break;
 
                 }

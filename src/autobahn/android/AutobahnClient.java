@@ -47,6 +47,7 @@ public class AutobahnClient {
 	private static final String SERVICE_URL = "/autobahn-gui/portal/secure/android/service";
 	private static final String PORTS_URL = "/autobahn-gui/portal/secure/android/ports";
     private static final String SUBMIT_URL="/autobahn-gui/portal/secure/android/requestReservation";
+    private static final String LOGOUT_URL = "/autobahn-gui/j_spring_security_logout";
 
 	private HttpClient httpclient;
 	private HttpGet httpget;
@@ -120,6 +121,24 @@ public class AutobahnClient {
     public synchronized void logOut() throws AutobahnClientException {
         CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
         cookieStore.clear();
+
+        NetCache.getInstance().clear();
+
+        URI url;
+        HttpPost httppost;
+
+        try {
+            url = new URI(scheme, null, host, port, LOGOUT_URL, null, null);
+            httppost = new HttpPost(url);
+
+        } catch (URISyntaxException e) {
+            String error = e.getMessage();
+            Log.d(TAG, error);
+            throw new AutobahnClientException(error);
+        }
+
+        handlePostRequest(httppost);
+
     }
 
 	public synchronized void logIn() throws AutobahnClientException {
@@ -137,49 +156,26 @@ public class AutobahnClient {
 		params.add(new BasicNameValuePair("_spring_security_remember_me", "true"));
 		String query = URLEncodedUtils.format(params, "utf-8");
 
-		//String query = "j_username=" + userName + "&j_password=" + password + "&_spring_security_remember_me=true";
 		URI url;
 		HttpPost httppost;
 		HttpResponse response;
 		try {
 			url = new URI(scheme, null, host, port, LOGIN_URL, query, null);
 			httppost = new HttpPost(url);
-			response = httpclient.execute(httppost, localContext);
 
 		} catch (URISyntaxException e) {
 			String error = e.getMessage();
 			Log.d(TAG, error);
 			throw new AutobahnClientException(error);
-		} catch (ClientProtocolException e) {
-			String error = e.getMessage();
-			Log.d(TAG, error);
-			throw new AutobahnClientException(error);
-		} catch (IOException e) {
-			String error = e.getMessage();
-			Log.d(TAG, error);
-			throw new AutobahnClientException(error);
 		}
+        handlePostRequest(httppost);
 
-		int status = response.getStatusLine().getStatusCode();
 
+        if (!hasAuthenticate()) {
+            String error = context.getString(R.string.login_failed);
+            throw new AutobahnClientException(error);
+        }
 
-		if (status == 200) {
-
-			if (!hasAuthenticate()) {
-				String error = context.getString(R.string.login_failed);
-				throw new AutobahnClientException(error);
-			}
-
-		} else if (status == 404) {
-			String error = context.getString(R.string.error_404);
-			throw new AutobahnClientException(error);
-		} else if (status == 500) {
-			String error = context.getString(R.string.error_500);
-			throw new AutobahnClientException(error);
-		} else {
-			String error = context.getString(R.string.error);
-			throw new AutobahnClientException(error + status);
-		}
 	}
 
 	/**
@@ -194,6 +190,38 @@ public class AutobahnClient {
 		userName = sharedPref.getString(PreferencesActivity.USERNAME_PREFERENCE_KEY, "");
 		password = sharedPref.getString(PreferencesActivity.PASSWORD_PREFERENCE_KEY, "");
 	}
+
+    private void handlePostRequest(HttpPost httppost) throws AutobahnClientException {
+
+        HttpResponse response;
+        try {
+            response = httpclient.execute(httppost, localContext);
+        } catch (ClientProtocolException e) {
+            String error = e.getMessage();
+            Log.d(TAG, error);
+            throw new AutobahnClientException(error);
+        } catch (IOException e) {
+            String error = e.getMessage();
+            Log.d(TAG, error);
+            throw new AutobahnClientException(error);
+        }
+
+        int status = response.getStatusLine().getStatusCode();
+
+
+        if (status == 200) {
+            return ;
+        } else if (status == 404) {
+            String error = context.getString(R.string.error_404);
+            throw new AutobahnClientException(error);
+        } else if (status == 500) {
+            String error = context.getString(R.string.error_500);
+            throw new AutobahnClientException(error);
+        } else {
+            String error = context.getString(R.string.error);
+            throw new AutobahnClientException(error + status);
+        }
+    }
 
 	private String handleGetRequest(URI url) throws AutobahnClientException {
 
@@ -407,23 +435,14 @@ public class AutobahnClient {
             Gson gson = new Gson();
             String json=gson.toJson(info);
             Log.d(TAG,json);
-
-            //String s=new String( "{\"id\":\"urn:uuid:e9d1ecea-395b-4ea7-ac82-95cd33b732e8\",\"timeZone\":\"GMT\",\"description\":\"sg\",\"startTime\":1382443092654,\"endTime\":1382446560000,\"startNsa\":\"GARR\",\"capacity\":7000000000,\"reservationState\":\"RESERVE_FAILED\",\"provisionState\":\"RELEASED\",\"lifecycleState\":\"CREATED\",\"mtu\":0,\"maxDelay\":0,\"endPort\":\"cl2;;cl2p-2\",\"startVlan\":0,\"endVlan\":0,\"startPort\":\"GARR_GRNET_1\",\"endNsa\":\"GARR\",\"processNow\":false} ");
-            //Log.d(TAG,s);
             StringEntity se = new StringEntity(json);
-            //ByteArrayEntity se=new ByteArrayEntity(json.getBytes());
 
             httppost.addHeader("content-type", "application/json");
 
             se.setContentEncoding(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             httppost.setEntity(se);
-            response = httpclient.execute(httppost, localContext);
 
         } catch (URISyntaxException e) {
-            String error = e.getMessage();
-            Log.d(TAG, error);
-            throw new AutobahnClientException(error);
-        } catch (ClientProtocolException e) {
             String error = e.getMessage();
             Log.d(TAG, error);
             throw new AutobahnClientException(error);
@@ -433,20 +452,6 @@ public class AutobahnClient {
             throw new AutobahnClientException(error);
         }
 
-        int status = response.getStatusLine().getStatusCode();
-
-
-        if (status == 200) {
-            return;
-        } else if (status == 404) {
-            String error = context.getString(R.string.error_404);
-            throw new AutobahnClientException(error);
-        } else if (status == 500) {
-            String error = context.getString(R.string.error_404);
-            throw new AutobahnClientException(error);
-        } else {
-            String error = context.getString(R.string.error);
-            throw new AutobahnClientException(error + status);
-        }
+        handlePostRequest(httppost);
     }
 }

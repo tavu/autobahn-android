@@ -1,6 +1,5 @@
 package autobahn.android;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -11,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import com.example.autobahn.R;
 
-public class MainMenu extends Activity {
+public class MainMenu extends BasicActiviy {
 	/**
 	 * Called when the activity is first created.
 	**/
@@ -66,18 +65,15 @@ public class MainMenu extends Activity {
 			}
 		});
 
+        getData(Call.LOG_OUT,null);
+
         button = (Button) findViewById(R.id.logOut);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String msg=getString( R.string.log_out_msg );
-                try {
-                    //TODO perfome the actual logOut at the  AutobahnClient and create a thread
-                    AutobahnClient.getInstance().logOut();
-                } catch (AutobahnClientException e) {
-                    msg=e.getMessage();
-                }
+
 
                 Intent logInActivity = new Intent();
                 logInActivity.putExtra(LoginActivity.MSG,msg);

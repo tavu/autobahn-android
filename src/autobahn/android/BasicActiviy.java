@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.example.autobahn.R;
 import net.geant.autobahn.android.ReservationInfo;
 

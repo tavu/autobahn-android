@@ -6,9 +6,7 @@ import android.widget.TextView;
 import com.example.autobahn.R;
 import net.geant.autobahn.android.ReservationInfo;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created with IntelliJ IDEA.

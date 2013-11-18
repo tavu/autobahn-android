@@ -224,7 +224,7 @@ public class AutobahnClient {
         }
     }
 
-	private String handleGetRequest(URI url) throws AutobahnClientException {
+	private String handleGetRequest(URI url) throws AutobahnClientException,NoDataException  {
 
 		httpget = new HttpGet(url);
         Log.d(TAG,url.toString());
@@ -281,7 +281,7 @@ public class AutobahnClient {
                     throw new AutobahnClientException(errorStr);
                 }
             } else if(err == ErrorType.NO_DATA ) {
-                return new String("");
+                throw new NoDataException();
             }else {
                 try {
                     data=json.getString("message");
@@ -321,16 +321,20 @@ public class AutobahnClient {
 			throw new AutobahnClientException(error);
 		}
 
-		String json = handleGetRequest(url);
+
 
 		Gson gson = new Gson();
 		try {
+            String json = handleGetRequest(url);
 			circuits = gson.fromJson(json, circuits.getClass());
 		} catch (JsonParseException e) {
 			String error = context.getString(R.string.net_error);
 			throw new AutobahnClientException(error);
-		}
-		NetCache.getInstance().setReservations(circuits, domain);
+		}  catch ( NoDataException e) {
+            //Do nothing
+        }
+
+        NetCache.getInstance().setReservations(circuits, domain);
 	}
 
 	public synchronized void fetchIdms() throws AutobahnClientException {
@@ -346,15 +350,17 @@ public class AutobahnClient {
 			throw new AutobahnClientException(error);
 		}
 
-		String json = handleGetRequest(url);
         Gson gson = new Gson();
 		ArrayList<String> l = new ArrayList<String>();
 		try {
+            String json = handleGetRequest(url);
 			l = gson.fromJson(json, l.getClass());
 		} catch (JsonParseException e) {
 			String error = context.getString(R.string.net_error);
 			throw new AutobahnClientException(error);
-		}
+		} catch ( NoDataException e) {
+            //Do nothing
+        }
 
 		NetCache.getInstance().setIdms(l);
 	}
@@ -374,15 +380,18 @@ public class AutobahnClient {
 			throw new AutobahnClientException(error);
 		}
 
-		String json = handleGetRequest(url);
+
 		Gson gson = new Gson();
 		ArrayList<String> ports = new ArrayList<String>();
 		try {
+            String json = handleGetRequest(url);
 			ports = gson.fromJson(json, ports.getClass());
 		} catch (JsonParseException e) {
 			String error = context.getString(R.string.net_error);
 			throw new AutobahnClientException(error);
-		}
+		} catch ( NoDataException e) {
+            //Do nothing
+        }
 
 		if (ports == null) {
 			Log.d(TAG, "received null ports");
@@ -408,14 +417,17 @@ public class AutobahnClient {
 			String error = context.getString(R.string.net_error);
 			throw new AutobahnClientException(error);
 		}
-		String json = handleGetRequest(url);
+
 		Gson gson = new Gson();
 		try {
+            String json = handleGetRequest(url);
 			reservationInfo = gson.fromJson(json, reservationInfo.getClass());
 		} catch (JsonParseException e) {
 			String error = context.getString(R.string.net_error);
 			throw new AutobahnClientException(error);
-		}
+		} catch ( NoDataException e) {
+            //Do nothing
+        }
 
 		if (reservationInfo == null) {
 			String error = context.getString(R.string.net_error);
@@ -454,5 +466,9 @@ public class AutobahnClient {
         }
 
         handlePostRequest(httppost);
+    }
+
+    class NoDataException extends Exception {
+
     }
 }

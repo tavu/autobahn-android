@@ -11,11 +11,11 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:clickable="false"
-		android:focusable="false"
-		android:focusableInTouchMode="false">
+		android:focusable="true"
+		android:focusableInTouchMode="true">
 
 
-        <TextView
+		<TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/basicParameters"
@@ -98,6 +98,7 @@
 
 		<CheckBox
 			android:id="@+id/startVlanAuto"
+			android:checked="true"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/startVlanText"
@@ -120,6 +121,7 @@
 
 		<CheckBox
 			android:id="@+id/endVlanAuto"
+			android:checked="true"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/endVlanText"

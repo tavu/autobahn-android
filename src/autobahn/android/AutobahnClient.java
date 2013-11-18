@@ -54,7 +54,6 @@ public class AutobahnClient {
 	private String scheme;
 	private String host;
 	private int port;
-	//boolean isLogIn;
 	private String userName;
 	private String password;
 	private HttpContext localContext;

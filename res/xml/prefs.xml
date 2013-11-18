@@ -2,7 +2,7 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<EditTextPreference
-		android:defaultValue="62.217.124.241"
+		android:defaultValue="62.217.125.174"
 		android:key="url"
 		android:summary="@string/summaryUrl"
 		android:title="@string/url">

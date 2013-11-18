@@ -77,11 +77,4 @@ public class IdmsActivity extends BasicActiviy {
     protected synchronized void showData(Object data,Call c,String param) {
         showData();
     }
-
-    @Override
-    protected synchronized void showError(AutobahnClientException e,Call c,String param) {
-        setContentView(R.layout.error_layout);
-        ((TextView)findViewById(R.id.errorText)).setText(e.getMessage());
-    }
-
 }

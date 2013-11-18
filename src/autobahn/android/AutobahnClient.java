@@ -58,6 +58,7 @@ public class AutobahnClient {
 	private String password;
 	private HttpContext localContext;
 	private Context context = null;
+    CookieStore cookieStore;
 	private String TAG = "Autobahn2";
 
 	public AutobahnClient() {
@@ -77,7 +78,7 @@ public class AutobahnClient {
 
 	public void setContext(Context context) {
 		this.context = context;
-		CookieStore cookieStore = new PersistentCookieStore(context);
+		cookieStore = new PersistentCookieStore(context);
 
 		localContext = new BasicHttpContext();
 		localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
@@ -120,6 +121,7 @@ public class AutobahnClient {
     public synchronized void logOut() throws AutobahnClientException {
         CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
         cookieStore.clear();
+
 
         NetCache.getInstance().clear();
 

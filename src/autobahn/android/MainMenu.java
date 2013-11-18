@@ -1,7 +1,9 @@
 package autobahn.android;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import com.example.autobahn.R;
 
-public class MainMenu extends BasicActiviy {
+public class MainMenu extends Activity {
 	/**
 	 * Called when the activity is first created.
 	**/
@@ -65,7 +67,6 @@ public class MainMenu extends BasicActiviy {
 			}
 		});
 
-        getData(Call.LOG_OUT,null);
 
         button = (Button) findViewById(R.id.logOut);
 
@@ -74,13 +75,8 @@ public class MainMenu extends BasicActiviy {
             public void onClick(View view) {
                 String msg=getString( R.string.log_out_msg );
 
-
-                Intent logInActivity = new Intent();
-                logInActivity.putExtra(LoginActivity.MSG,msg);
-                logInActivity.setClass(getApplicationContext(),LoginActivity.class);
-                startActivityForResult(logInActivity, LoginActivity.LOGIN_AND_GO_BACK);
-
-
+                LogOutTask task=new LogOutTask();
+                task.execute();
             }
         });
 
@@ -121,7 +117,7 @@ public class MainMenu extends BasicActiviy {
         if(!AutobahnClient.getInstance().hasAuthenticate()){
             Intent logInActivity = new Intent();
             logInActivity.setClass(getApplicationContext(),LoginActivity.class);
-            //startActivityForResult(logInActivity,LoginActivity.LOGIN_AND_GO_BACK);
+            startActivityForResult(logInActivity,LoginActivity.LOGIN_AND_GO_BACK);
         }
 
     }
@@ -137,6 +133,35 @@ public class MainMenu extends BasicActiviy {
     {
         if (resultCode == RESULT_CANCELED)
             finish();
+    }
+
+
+    private class LogOutTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... type) {
+            exception = null;
+            try {
+                AutobahnClient.getInstance().logOut();
+            } catch (AutobahnClientException e) {
+                exception = e;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... progress) {
+            super.onProgressUpdate(progress);
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Intent logInActivity = new Intent();
+            logInActivity.setClass(getApplicationContext(),LoginActivity.class);
+            startActivityForResult(logInActivity, LoginActivity.LOGIN_AND_GO_BACK);
+        }
+
+
     }
 
 }

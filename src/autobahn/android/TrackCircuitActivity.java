@@ -52,9 +52,6 @@ public class TrackCircuitActivity extends BasicActiviy {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent prevActivity = new Intent();
-                    prevActivity.setClass(getApplicationContext(), IdmsActivity.class);
-                    startActivity(prevActivity);
                     finish();
                 }
             });

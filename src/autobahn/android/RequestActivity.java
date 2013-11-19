@@ -11,14 +11,27 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
 import com.example.autobahn.R;
+
 import net.geant.autobahn.android.ReservationInfo;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -67,9 +80,9 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 			String s = (String) sp.getItemAtPosition(pos);
 			if (s != null && s.equals(domain)) {
 				sp = (Spinner) findViewById(R.id.endPort);
-				ArrayAdapter<String> adapter = (ArrayAdapter<String>) sp.getAdapter();
-				adapter.clear();
-				adapter.addAll(data);
+				ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
+				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				sp.setAdapter(adapter);
 			}
 		}
 
@@ -80,9 +93,9 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 			String s = (String) sp.getItemAtPosition(pos);
 			if (s != null && s.equals(domain)) {
 				sp = (Spinner) findViewById(R.id.startPort);
-				ArrayAdapter<String> adapter = (ArrayAdapter<String>) sp.getAdapter();
-				adapter.clear();
-				adapter.addAll(data);
+				ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
+				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				sp.setAdapter(adapter);
 			}
 		}
 
@@ -91,14 +104,14 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 
 	protected void setDomains(List<String> data) {
 
-		ArrayList<String> a1 = new ArrayList<String>(data);
-		ArrayAdapter<String> startDomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, a1);
+		ArrayList<String> a1 = new ArrayList<>(data);
+		ArrayAdapter<String> startDomAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, a1);
 		Spinner sp1 = (Spinner) findViewById(R.id.startDomain);
 		startDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp1.setAdapter(startDomAdapter);
 
-		ArrayList<String> a2 = new ArrayList<String>(data);
-		ArrayAdapter<String> endDomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, a2);
+		ArrayList<String> a2 = new ArrayList<>(data);
+		ArrayAdapter<String> endDomAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, a2);
 		Spinner sp2 = (Spinner) findViewById(R.id.endDomain);
 		endDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp2.setAdapter(endDomAdapter);
@@ -116,25 +129,22 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		findViewById(R.id.startTime).setOnFocusChangeListener(this);
 		findViewById(R.id.endTime).setOnFocusChangeListener(this);
 
-
 		Spinner sp = (Spinner) findViewById(R.id.startDomain);
 		sp.setOnItemSelectedListener(this);
 		sp = (Spinner) findViewById(R.id.endDomain);
 		sp.setOnItemSelectedListener(this);
+
 		getData(Call.DOMAINS, null);
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
 		sp = (Spinner) findViewById(R.id.startPort);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(adapter);
 
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+		adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
 		sp = (Spinner) findViewById(R.id.endPort);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(adapter);
-
-
-		findViewById(R.id.endTime).setOnFocusChangeListener(this);
 	}
 
 	@Override
@@ -453,8 +463,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		return s;
 	}
 
-	public void onItemSelected(AdapterView<?> parent, View view,
-	                           int pos, long id) {
+	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		if (parent.getId() == R.id.endDomain ||
 				parent.getId() == R.id.startDomain) {
 

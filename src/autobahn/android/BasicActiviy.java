@@ -26,13 +26,15 @@ public class BasicActiviy extends Activity {
         RES_IFO,
         CUSTOM  ,
         SUBMIT_RES ,
-        LOG_OUT
+        LOG_OUT ,
+        PROVISION
     }
 
     private Call call;
     private Object param;
     public final String TAG = "Autobahn2";
     AutobahnClientException e=null;
+    Boolean onPost=false;
 
     protected int LOG_IN_REQ=9;
     private ProgressDialog progressDialog=null;
@@ -40,17 +42,38 @@ public class BasicActiviy extends Activity {
     public BasicActiviy() {
     }
 
-    protected synchronized void showData(Object data,Call c,String param) {
+    protected synchronized void postSucceed(Call c,Object param) {
 
     }
 
-    protected synchronized void showError(AutobahnClientException e,Call c,String param) {
+    protected synchronized void showData(Object data,Call c,Object param) {
+
+    }
+
+    protected synchronized void showError(AutobahnClientException e,Call c,Object param) {
        // Toast toast = Toast.makeText(getApplicationContext(), e.getVisibleMsg(this), Toast.LENGTH_LONG);
         Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
         toast.show();
         return;
     }
 
+    public synchronized void postData(Call c,Object param) {
+        this.call=c;
+        this.param=param;
+        this.onPost=true;
+        if( !AutobahnClient.getInstance().hasAuthenticate() ) {
+            Intent logInIntent = new Intent();
+            logInIntent.setClass(getApplicationContext(), LoginActivity.class);
+            logInIntent.putExtra(LoginActivity.MSG, getString(R.string.Log_in_first));
+            startActivityForResult(logInIntent,LOG_IN_REQ);
+        }else {
+            BasicAsyncTask async=new BasicAsyncTask();
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage( getString(R.string.loading) );
+            progressDialog.show();
+            async.execute(param);
+        }
+    }
 
     public synchronized void getData(Call c,Object param) {
         e=null;
@@ -170,6 +193,13 @@ public class BasicActiviy extends Activity {
                     case LOG_OUT:
                         AutobahnClient.getInstance().logOut();
                         break;
+                    case PROVISION:
+                        if(type.length!=2) {
+                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM);
+                            return null;
+                        }
+                        AutobahnClient.getInstance().provision((String)type[0],(String)type[1]);
+                        break;
 
                 }
             }catch(AutobahnClientException ex) {
@@ -190,6 +220,25 @@ public class BasicActiviy extends Activity {
                 progressDialog.dismiss();
                 progressDialog=null;
             }
+
+            if(e!=null) {
+                Log.d(TAG,e.getMessage());
+                showError(e,call,null);
+                return ;
+            }
+
+            if(onPost) {
+              postSucceed(call,param);
+            } else {
+                Object obj=dataFromCache(call,param);
+                if(obj==null) {
+                    e=new AutobahnClientException(AutobahnClientException.Error.UNKNOWN);
+                    showError(e,call,param);
+                    return;
+                }
+                showData(obj,call,(String)param);
+            }
+
             if(call==Call.SUBMIT_RES) {
                 if(e!=null) {
                     showError(e,call,null);

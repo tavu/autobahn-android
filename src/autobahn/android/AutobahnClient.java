@@ -48,6 +48,7 @@ public class AutobahnClient {
 	private static final String PORTS_URL = "/autobahn-gui/portal/secure/android/ports";
     private static final String SUBMIT_URL="/autobahn-gui/portal/secure/android/requestReservation";
     private static final String LOGOUT_URL = "/autobahn-gui/j_spring_security_logout";
+    private static final String PROVISION_URL="/autobahn-gui/portal/secure/android/provision";
 
 	private HttpClient httpclient;
 	private HttpGet httpget;
@@ -122,7 +123,6 @@ public class AutobahnClient {
         CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
         cookieStore.clear();
 
-
         NetCache.getInstance().clear();
 
         URI url;
@@ -192,7 +192,68 @@ public class AutobahnClient {
 		password = sharedPref.getString(PreferencesActivity.PASSWORD_PREFERENCE_KEY, "");
 	}
 
-    private void handlePostRequest(HttpPost httppost) throws AutobahnClientException {
+    private void checkStatus(HttpResponse response) throws AutobahnClientException {
+        int status = response.getStatusLine().getStatusCode();
+
+        if (status == 200) {
+            return ;
+        } else if (status == 404) {
+            String error = context.getString(R.string.error_404);
+            throw new AutobahnClientException(error);
+        } else if (status == 500) {
+            String error = context.getString(R.string.error_500);
+            throw new AutobahnClientException(error);
+        } else {
+            String error = context.getString(R.string.error);
+            throw new AutobahnClientException(error + status);
+        }
+    }
+
+    private void checkAnswer(HttpResponse response) throws AutobahnClientException,NoDataException {
+        String responceStr=null;
+        try {
+            responceStr = EntityUtils.toString(response.getEntity());
+        } catch (IOException e) {
+            Log.d(TAG, e.getMessage());
+            String errorStr = context.getString(R.string.response_error);
+            throw new AutobahnClientException(errorStr);
+        }
+
+        Log.d(TAG, responceStr);
+
+        if (responceStr == null) {
+            String errorStr = context.getString(R.string.response_error);
+            throw new AutobahnClientException(errorStr);
+        }
+
+        JSONObject json= null;
+        int err=0;
+        try {
+            json = new JSONObject(responceStr);
+            err=json.getInt("error");
+        } catch (JSONException e) {
+            String errorStr = context.getString(R.string.response_error);
+            throw new AutobahnClientException(errorStr);
+        }
+
+        String msg=null;
+        if(err ==  ErrorType.OK ) {
+            return ;
+        } else if(err == ErrorType.NO_DATA ) {
+            throw new NoDataException();
+        } else {
+            try {
+                msg=json.getString("message");
+                Log.d(TAG,"ERROR:"+err+" " + msg);
+            } catch (JSONException e) {
+                String errorStr = context.getString(R.string.response_error);
+                throw new AutobahnClientException(errorStr);
+            }
+            throw new AutobahnClientException(msg);
+        }
+    }
+
+    private HttpResponse handlePostRequest(HttpPost httppost) throws AutobahnClientException {
 
         HttpResponse response;
         try {
@@ -207,21 +268,8 @@ public class AutobahnClient {
             throw new AutobahnClientException(error);
         }
 
-        int status = response.getStatusLine().getStatusCode();
-
-
-        if (status == 200) {
-            return ;
-        } else if (status == 404) {
-            String error = context.getString(R.string.error_404);
-            throw new AutobahnClientException(error);
-        } else if (status == 500) {
-            String error = context.getString(R.string.error_500);
-            throw new AutobahnClientException(error);
-        } else {
-            String error = context.getString(R.string.error);
-            throw new AutobahnClientException(error + status);
-        }
+        checkStatus(response);//if the http status code is different from 200 this function will throw.
+        return response;
     }
 
 	private String handleGetRequest(URI url) throws AutobahnClientException,NoDataException  {
@@ -242,64 +290,17 @@ public class AutobahnClient {
 			throw new AutobahnClientException(error);
 		}
 
-		String responceStr = null;
+        checkStatus(response);//if the http status code is different from 200 this function will throw.
+        checkAnswer(response);//if the server anser with an error this function will throw.
         String data=null;
-		int status = response.getStatusLine().getStatusCode();
-        Log.d(TAG,"HTTP STATUS:"+status);
-		if (status == 200) {
-			try {
-                responceStr = EntityUtils.toString(response.getEntity());
-			} catch (IOException e) {
-                Log.d(TAG, e.getMessage());
-				String errorStr = context.getString(R.string.response_error);
-				throw new AutobahnClientException(errorStr);
-			}
-
-			Log.d(TAG, responceStr);
-
-			if (responceStr == null) {
-				String errorStr = context.getString(R.string.response_error);
-				throw new AutobahnClientException(errorStr);
-			}
-
-            JSONObject json= null;
-            int err=0;
-            try {
-                json = new JSONObject(responceStr);
-                err=json.getInt("error");
-            } catch (JSONException e) {
-                String errorStr = context.getString(R.string.response_error);
-                throw new AutobahnClientException(errorStr);
-            }
-
-            if(err ==  ErrorType.OK ) {
-                try {
-                    data=json.getString("data");
-                    Log.d(TAG, data);
-                } catch (JSONException e) {
-                    String errorStr = context.getString(R.string.response_error);
-                    throw new AutobahnClientException(errorStr);
-                }
-            } else if(err == ErrorType.NO_DATA ) {
-                throw new NoDataException();
-            }else {
-                try {
-                    data=json.getString("message");
-                    Log.d(TAG, data);
-                } catch (JSONException e) {
-                    String errorStr = context.getString(R.string.response_error);
-                    throw new AutobahnClientException(errorStr);
-                }
-                throw new AutobahnClientException(data);
-            }
-
-		} else if (status == 404) {
-			throw new AutobahnClientException(context.getString(R.string.error_404) );
-		} else if (status == 500) {
-			throw new AutobahnClientException(context.getString(R.string.error_500) );
-		} else {
-			throw new AutobahnClientException(context.getString(R.string.http_error) );
-		}
+        JSONObject json= null;
+        try {
+            data=json.getString("data");
+            Log.d(TAG, data);
+        } catch (JSONException e) {
+            String errorStr = context.getString(R.string.response_error);
+            throw new AutobahnClientException(errorStr);
+        }
 
          return data;
 	}
@@ -339,6 +340,8 @@ public class AutobahnClient {
 
 	public synchronized void fetchIdms() throws AutobahnClientException {
 
+        CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
+        cookieStore.clear();
         Log.d(TAG, "Fetching Domains...");
         URI url;
 		url = null;
@@ -441,7 +444,6 @@ public class AutobahnClient {
 
         URI url;
         HttpPost httppost;
-        HttpResponse response;
         try {
             url = new URI(scheme, null, host, port, SUBMIT_URL, null, null);
             httppost = new HttpPost(url);
@@ -465,7 +467,39 @@ public class AutobahnClient {
             throw new AutobahnClientException(error);
         }
 
-        handlePostRequest(httppost);
+        HttpResponse response = handlePostRequest(httppost);
+
+        try {
+            checkAnswer(response);
+        }catch (NoDataException e) {
+            //do nothing
+        }
+    }
+
+    public synchronized void provision(String idm,String serviceId) throws AutobahnClientException {
+        URI url;
+        HttpPost httppost;
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("currentIdm", idm));
+        params.add(new BasicNameValuePair("serviceId", serviceId));
+        String query = URLEncodedUtils.format(params, "utf-8");
+
+        try {
+            url = new URI(scheme, null, host, port, PROVISION_URL, query, null);
+            httppost = new HttpPost(url);
+        } catch (URISyntaxException e) {
+            String error = e.getMessage();
+            Log.d(TAG, error);
+            throw new AutobahnClientException(error);
+        }
+
+        HttpResponse response = handlePostRequest(httppost);
+
+        try {
+            checkAnswer(response);
+        }catch (NoDataException e) {
+            //do nothing
+        }
     }
 
     class NoDataException extends Exception {

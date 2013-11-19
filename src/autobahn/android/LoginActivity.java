@@ -58,7 +58,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.login);
+        NetCache.getInstance().clear();
+        setContentView(R.layout.login);
 
 		loginButton = (Button) findViewById(R.id.loginButton);
 		usernameField = (EditText) findViewById(R.id.username);

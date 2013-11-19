@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-
 import com.example.autobahn.R;
 
 public class PreferencesActivity extends Activity {

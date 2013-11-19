@@ -42,9 +42,6 @@ public class IdmsActivity extends BasicActiviy {
             menuButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent menu = new Intent();
-                    menu.setClass(getApplicationContext(), MainMenu.class);
-                    startActivity(menu);
                     finish();
                 }
             });
@@ -77,15 +74,7 @@ public class IdmsActivity extends BasicActiviy {
     }
 
     @Override
-    protected synchronized void showData(Object data,Call c,String param) {
+    protected synchronized void showData(Object data,Call c,Object param) {
         showData();
     }
-
-    @Override
-    protected synchronized void showError(AutobahnClientException e,Call c,String param) {
-        super.showError(e,c,param);
-        setContentView(R.layout.error_layout);
-        ((TextView)findViewById(R.id.errorText)).setText(e.getVisibleMsg(this));
-    }
-
 }

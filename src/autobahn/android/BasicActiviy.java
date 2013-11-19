@@ -5,7 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
+import android.widget.TextView;
 import com.example.autobahn.R;
 import net.geant.autobahn.android.ReservationInfo;
 
@@ -46,15 +46,13 @@ public class BasicActiviy extends Activity {
 
     }
 
-    protected synchronized void showData(Object data,Call c,Object param) {
-
+    protected synchronized void showError(AutobahnClientException e,Call c,Object param) {
+        setContentView(R.layout.error_layout);
+        ((TextView)findViewById(R.id.errorText)).setText(e.getMessage());
+        return;
     }
 
-    protected synchronized void showError(AutobahnClientException e,Call c,Object param) {
-       // Toast toast = Toast.makeText(getApplicationContext(), e.getVisibleMsg(this), Toast.LENGTH_LONG);
-        Toast toast = Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG);
-        toast.show();
-        return;
+    protected synchronized void showData(Object data,Call c,Object param) {
     }
 
     public synchronized void postData(Call c,Object param) {
@@ -77,6 +75,7 @@ public class BasicActiviy extends Activity {
 
     public synchronized void getData(Call c,Object param) {
         e=null;
+        onPost=false;
         Object obj=dataFromCache(c,param);
 
         if(obj==null) {
@@ -96,7 +95,7 @@ public class BasicActiviy extends Activity {
             }
         }
         else {
-            showData(obj,c,(String)param);
+            showData(obj,c,param);
         }
     }
 

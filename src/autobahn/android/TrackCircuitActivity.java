@@ -35,34 +35,29 @@ public class TrackCircuitActivity extends BasicActiviy {
         showReservations(NetCache.getInstance().getTrackCircuits(domainName));
     }
 
-    protected synchronized void showData(Object data,Call c,String param) {
+    @Override
+    protected synchronized void showData(Object data,Call c,Object param) {
         showReservations((List<String>)data );
     }
 
     public void showReservations(List<String> reservationID) {
 
-        TextView header;
-
         if (reservationID.isEmpty()) {
             setContentView(R.layout.no_data);
-            header = (TextView) findViewById(R.id.header);
-            header.setText(R.string.noReservations);
+            ((TextView)findViewById(R.id.header)).setText(R.string.noReservations);
+
             Button button = (Button) findViewById(R.id.menuButton);
             button.setText(R.string.backToDomains);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent prevActivity = new Intent();
-                    prevActivity.setClass(getApplicationContext(), IdmsActivity.class);
-                    startActivity(prevActivity);
                     finish();
                 }
             });
         } else {
             setContentView(R.layout.domain_reservation_list);
 
-            header = (TextView) findViewById(R.id.header);
-            header.setText("Past reservations for domain " + domainName);
+            ((TextView) findViewById(R.id.header)).setText("Past reservations for domain " + domainName);
 
             reservationList = (ListView) findViewById(R.id.listView);
             adapter = new ArrayAdapter<String>(this, R.layout.list_item, reservationID);

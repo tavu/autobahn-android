@@ -49,7 +49,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 	private AutobahnClientException exception = null;
 
 	@Override
-	protected void showData(Object data, Call c, String param) {
+	protected void showData(Object data, Call c, Object param) {
 
 		if (c == Call.DOMAINS) {
 			List<String> l = (List<String>) data;
@@ -65,7 +65,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 			if (sp.getAdapter() == null)
 				setDomains(NetCache.getInstance().getIdms());
 
-			setPorts((List<String>) data, param);
+			setPorts((List<String>) data, (String)param);
 		} else {
 			Toast toast = Toast.makeText(getApplicationContext(), R.string.reservation_success, Toast.LENGTH_LONG);
 			toast.show();
@@ -80,9 +80,9 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 			String s = (String) sp.getItemAtPosition(pos);
 			if (s != null && s.equals(domain)) {
 				sp = (Spinner) findViewById(R.id.endPort);
-				ArrayAdapter<String> adapter = (ArrayAdapter<String>) sp.getAdapter();
-				adapter.clear();
-				adapter.addAll(data);
+				ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
+				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				sp.setAdapter(adapter);
 			}
 		}
 
@@ -93,9 +93,9 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 			String s = (String) sp.getItemAtPosition(pos);
 			if (s != null && s.equals(domain)) {
 				sp = (Spinner) findViewById(R.id.startPort);
-				ArrayAdapter<String> adapter = (ArrayAdapter<String>) sp.getAdapter();
-				adapter.clear();
-				adapter.addAll(data);
+				ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, data);
+				adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				sp.setAdapter(adapter);
 			}
 		}
 
@@ -104,14 +104,14 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 
 	protected void setDomains(List<String> data) {
 
-		ArrayList<String> a1 = new ArrayList<String>(data);
-		ArrayAdapter<String> startDomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, a1);
+		ArrayList<String> a1 = new ArrayList<>(data);
+		ArrayAdapter<String> startDomAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, a1);
 		Spinner sp1 = (Spinner) findViewById(R.id.startDomain);
 		startDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp1.setAdapter(startDomAdapter);
 
-		ArrayList<String> a2 = new ArrayList<String>(data);
-		ArrayAdapter<String> endDomAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, a2);
+		ArrayList<String> a2 = new ArrayList<>(data);
+		ArrayAdapter<String> endDomAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, a2);
 		Spinner sp2 = (Spinner) findViewById(R.id.endDomain);
 		endDomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp2.setAdapter(endDomAdapter);
@@ -129,11 +129,11 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		findViewById(R.id.startTime).setOnFocusChangeListener(this);
 		findViewById(R.id.endTime).setOnFocusChangeListener(this);
 
-
 		Spinner sp = (Spinner) findViewById(R.id.startDomain);
 		sp.setOnItemSelectedListener(this);
 		sp = (Spinner) findViewById(R.id.endDomain);
 		sp.setOnItemSelectedListener(this);
+
 		getData(Call.DOMAINS, null);
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
@@ -145,9 +145,6 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		sp = (Spinner) findViewById(R.id.endPort);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(adapter);
-
-
-		findViewById(R.id.endTime).setOnFocusChangeListener(this);
 	}
 
 	@Override
@@ -366,7 +363,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		res.setDescription(s);
 
 		if (checkReservation(res)) {
-			getData(Call.SUBMIT_RES, res);
+			postData(Call.SUBMIT_RES, res);
 		}
 
 	}
@@ -466,8 +463,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		return s;
 	}
 
-	public void onItemSelected(AdapterView<?> parent, View view,
-	                           int pos, long id) {
+	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		if (parent.getId() == R.id.endDomain ||
 				parent.getId() == R.id.startDomain) {
 

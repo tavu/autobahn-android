@@ -9,6 +9,9 @@ import android.widget.TextView;
 import com.example.autobahn.R;
 import net.geant.autobahn.android.ReservationInfo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: tavu
@@ -59,6 +62,7 @@ public class BasicActiviy extends Activity {
         this.call=c;
         this.param=param;
         this.onPost=true;
+        e=null;
         if( !AutobahnClient.getInstance().hasAuthenticate() ) {
             Intent logInIntent = new Intent();
             logInIntent.setClass(getApplicationContext(), LoginActivity.class);
@@ -136,14 +140,12 @@ public class BasicActiviy extends Activity {
         }
         else {
             AutobahnClientException e=new AutobahnClientException(AutobahnClientException.Error.NO_LOG_IN);
-            showError(e,call,(String)param);
+            showError(e,call,param);
         }
     }
 
 
     private class BasicAsyncTask extends AsyncTask<Object, Void, Void> {
-
-
 
         public BasicAsyncTask() {
         }
@@ -193,11 +195,12 @@ public class BasicActiviy extends Activity {
                         AutobahnClient.getInstance().logOut();
                         break;
                     case PROVISION:
-                        if(type.length!=2) {
+                        if(type.length==0) {
                             e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM);
                             return null;
                         }
-                        AutobahnClient.getInstance().provision((String)type[0],(String)type[1]);
+                        List<String> l =(ArrayList<String>)type[0];
+                        AutobahnClient.getInstance().provision(l.get(0),l.get(1));
                         break;
 
                 }
@@ -221,8 +224,8 @@ public class BasicActiviy extends Activity {
             }
 
             if(e!=null) {
-                Log.d(TAG,e.getMessage());
-                showError(e,call,null);
+               Log.d(TAG,e.getCause().toString());
+              //  showError(e,call,null);
                 return ;
             }
 
@@ -238,35 +241,7 @@ public class BasicActiviy extends Activity {
                 showData(obj,call,(String)param);
             }
 
-            if(call==Call.SUBMIT_RES) {
-                if(e!=null) {
-                    showError(e,call,null);
-                    Log.d(TAG,e.getMessage());
-                    return ;
-                }
-                else {
-                    showData(null,call,null);
-                    return ;
-                }
-            }
 
-            if(e!=null) {
-                showError(e,call,(String)param);
-                return ;
-            }
-
-            if(call==Call.SUBMIT_RES) {
-                showData(null,call,null);
-                return ;
-            }
-
-            Object obj=dataFromCache(call,param);
-            if(obj==null) {
-                e=new AutobahnClientException(AutobahnClientException.Error.UNKNOWN);
-                showError(e,call,(String)param);
-                return;
-            }
-            showData(obj,call,(String)param);
         }
     }
 

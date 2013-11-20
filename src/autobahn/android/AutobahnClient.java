@@ -149,7 +149,7 @@ public class AutobahnClient {
 			return;
 		}
 
-		retrieveLoginInfo();
+		//retrieveLoginInfo();
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("j_username", userName));
@@ -169,6 +169,7 @@ public class AutobahnClient {
 			Log.d(TAG, error);
 			throw new AutobahnClientException(error);
 		}
+        Log.d(TAG,url.toString());
         handlePostRequest(httppost);
 
 
@@ -209,19 +210,19 @@ public class AutobahnClient {
         }
     }
 
-    private void checkAnswer(HttpResponse response) throws AutobahnClientException,NoDataException {
-        String responceStr=null;
+    private String checkAnswer(HttpResponse response) throws AutobahnClientException,NoDataException {
+        String responseStr=null;
         try {
-            responceStr = EntityUtils.toString(response.getEntity());
+            responseStr = EntityUtils.toString(response.getEntity());
         } catch (IOException e) {
             Log.d(TAG, e.getMessage());
             String errorStr = context.getString(R.string.response_error);
             throw new AutobahnClientException(errorStr);
         }
 
-        Log.d(TAG, responceStr);
+        Log.d(TAG, responseStr);
 
-        if (responceStr == null) {
+        if (responseStr == null) {
             String errorStr = context.getString(R.string.response_error);
             throw new AutobahnClientException(errorStr);
         }
@@ -229,7 +230,7 @@ public class AutobahnClient {
         JSONObject json= null;
         int err=0;
         try {
-            json = new JSONObject(responceStr);
+            json = new JSONObject(responseStr);
             err=json.getInt("error");
         } catch (JSONException e) {
             String errorStr = context.getString(R.string.response_error);
@@ -238,7 +239,7 @@ public class AutobahnClient {
 
         String msg=null;
         if(err ==  ErrorType.OK ) {
-            return ;
+            return responseStr;
         } else if(err == ErrorType.NO_DATA ) {
             throw new NoDataException();
         } else {
@@ -253,19 +254,17 @@ public class AutobahnClient {
         }
     }
 
-    private HttpResponse handlePostRequest(HttpPost httppost) throws AutobahnClientException {
+    private synchronized HttpResponse handlePostRequest(HttpPost httppost) throws AutobahnClientException {
 
-        HttpResponse response;
+        HttpResponse response=null;
         try {
             response = httpclient.execute(httppost, localContext);
         } catch (ClientProtocolException e) {
-            String error = e.getMessage();
-            Log.d(TAG, error);
-            throw new AutobahnClientException(error);
+            Log.d(TAG, "ClientProtocolException");
+            throw new AutobahnClientException("1 ekatomirio diaforetika ");
         } catch (IOException e) {
-            String error = e.getMessage();
-            Log.d(TAG, error);
-            throw new AutobahnClientException(error);
+            Log.d(TAG, "IOException");
+            throw new AutobahnClientException("malakia");
         }
 
         checkStatus(response);//if the http status code is different from 200 this function will throw.
@@ -279,7 +278,6 @@ public class AutobahnClient {
 		HttpResponse response =null;
 		try {
 			response = httpclient.execute(httpget, localContext);
-
 		} catch (ClientProtocolException e) {
 			String error = context.getString(R.string.net_error);
             Log.d(TAG, e.getMessage());
@@ -291,18 +289,19 @@ public class AutobahnClient {
 		}
 
         checkStatus(response);//if the http status code is different from 200 this function will throw.
-        checkAnswer(response);//if the server anser with an error this function will throw.
+        String responseStr=checkAnswer(response);//if the server anser with an error this function will throw.
+
         String data=null;
         JSONObject json= null;
         try {
+            json=new JSONObject(responseStr);
             data=json.getString("data");
             Log.d(TAG, data);
         } catch (JSONException e) {
             String errorStr = context.getString(R.string.response_error);
             throw new AutobahnClientException(errorStr);
         }
-
-         return data;
+        return data;
 	}
 
 	public synchronized void fetchTrackCircuit(String domain) throws AutobahnClientException {
@@ -340,8 +339,6 @@ public class AutobahnClient {
 
 	public synchronized void fetchIdms() throws AutobahnClientException {
 
-        CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
-        cookieStore.clear();
         Log.d(TAG, "Fetching Domains...");
         URI url;
 		url = null;

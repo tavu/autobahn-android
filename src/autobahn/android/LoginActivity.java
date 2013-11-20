@@ -1,6 +1,7 @@
 package autobahn.android;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -21,6 +22,7 @@ import com.example.autobahn.R;
 public class LoginActivity extends Activity implements View.OnClickListener {
     public static final String MSG = "";
     public static final int LOGIN_AND_GO_BACK = 1;
+    private ProgressDialog progressDialog=null;
     private final TextWatcher watcher = new TextWatcher() {
 		@Override
 		public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -41,6 +43,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private AutobahnClientException exception = null;
 
 	private void afterLogIn() {
+
+        if(progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog=null;
+        }
 
 		if (exception != null) {
 			Toast toast = Toast.makeText(this, exception.getMessage(), Toast.LENGTH_LONG);
@@ -110,6 +117,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 //		client.setPassword(password);
 		AutobahnClient.getInstance().setUserName(username);
         AutobahnClient.getInstance().setPassword(password);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage( getString(R.string.loading) );
+        progressDialog.show();
 
 		LoginTask task = new LoginTask();
 		task.execute();

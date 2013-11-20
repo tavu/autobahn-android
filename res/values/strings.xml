@@ -87,12 +87,13 @@
 	<string name="provisionState">Provision State</string>
 	<string name="lifecycleState">Lifecycle State</string>
 	<string name="submitRequest">Submit Request</string>
+    <string name="provision">Provision service</string>
 
 
 	<!-- ERRORS -->
 	<string name="login_failed">"Log in failed. Please check username and password"</string>
 	<string name="net_error">"Network error."</string>
-    <string name="response_error">"The wrong server response."</string>
+    <string name="response_error">"Server response error."</string>
 	<string name="failure_reason">Failure Reason</string>
 	<string name="error_404">Page not found!</string>
 	<string name="error_500">Internal server error!</string>
@@ -121,6 +122,8 @@
 
     <string name="reservation_success">Reservation submitted successfully</string>
     <string name="reservation_submit_error">Reservation submitted successfully</string>
+
+    <string name="provision_succeeded">Reservation provisioned successfully</string>
 
 
 </resources>

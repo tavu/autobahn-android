@@ -1,6 +1,7 @@
 package autobahn.android;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -12,14 +13,14 @@ import android.view.View;
 import android.widget.Button;
 import com.example.autobahn.R;
 
-public class MainMenu extends Activity {
+public class MainMenu extends Activity implements  View.OnClickListener {
 	/**
 	 * Called when the activity is first created.
 	**/
 
     private AutobahnClient client;
     private AutobahnClientException exception = null;
-
+    private ProgressDialog progressDialog=null;
 
     @Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -70,15 +71,7 @@ public class MainMenu extends Activity {
 
         button = (Button) findViewById(R.id.logOut);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String msg=getString( R.string.log_out_msg );
-
-                LogOutTask task=new LogOutTask();
-                task.execute();
-            }
-        });
+        button.setOnClickListener(this);
 
 	}
 
@@ -122,6 +115,18 @@ public class MainMenu extends Activity {
 
     }
 
+
+    public void onClick(View view) {
+        if(view==findViewById(R.id.logOut))
+        {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage( getString(R.string.loading) );
+            progressDialog.show();
+            LogOutTask task=new LogOutTask();
+            task.execute();
+        }
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -156,12 +161,17 @@ public class MainMenu extends Activity {
 
         @Override
         protected void onPostExecute(Void result) {
+
+            if(progressDialog!=null) {
+                progressDialog.dismiss();
+                progressDialog=null;
+            }
+
             Intent logInActivity = new Intent();
             logInActivity.setClass(getApplicationContext(),LoginActivity.class);
+            logInActivity.putExtra(LoginActivity.MSG, getString(R.string.log_out_msg));
             startActivityForResult(logInActivity, LoginActivity.LOGIN_AND_GO_BACK);
         }
-
-
     }
 
 }

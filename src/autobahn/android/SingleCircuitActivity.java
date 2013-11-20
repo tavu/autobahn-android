@@ -2,10 +2,13 @@ package autobahn.android;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.example.autobahn.R;
 import net.geant.autobahn.android.ReservationInfo;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -19,12 +22,14 @@ public class SingleCircuitActivity extends BasicActiviy {
 
     private ReservationInfo reservationInfo;
     private String serviceID;
+    private String domainName;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_reservation_activity);
         Bundle bundle = getIntent().getExtras();
         serviceID = bundle.getString("SERVICE_ID");
+        domainName = bundle.getString("DOMAIN_NAME");
 
         getData(Call.RES_IFO,serviceID);
 
@@ -33,6 +38,12 @@ public class SingleCircuitActivity extends BasicActiviy {
     @Override
     protected synchronized void showData(Object data,Call c,Object param) {
         showReservationInfo();
+    }
+
+    @Override
+    protected void showError(AutobahnClientException e,Call c,Object param) {
+        Toast toast = Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
+        toast.show();
     }
 
     public void showReservationInfo(){
@@ -54,6 +65,21 @@ public class SingleCircuitActivity extends BasicActiviy {
         ((TextView)findViewById(R.id.endVlan)).setText(String.valueOf(reservationInfo.getEndVlan()));
         ((TextView)findViewById(R.id.capacity)).setText(String.valueOf(reservationInfo.getCapacity()));
         ((TextView)findViewById(R.id.mtuSize)).setText(String.valueOf(reservationInfo.getMtu()));
+    }
 
+    public void provision(View v) {
+        String serviceId=((TextView)findViewById(R.id.service)).getText().toString();
+        ArrayList<String> l=new ArrayList<>();
+        l.add(domainName);
+        l.add(serviceId);
+        postData(Call.PROVISION, l);
+    }
+
+    @Override
+    protected synchronized void postSucceed(Call c,Object param) {
+        if(c==Call.PROVISION) {
+            Toast toast = Toast.makeText(this, getString( R.string.provision_succeeded), Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 }

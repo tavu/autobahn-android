@@ -35,7 +35,8 @@ import java.util.List;
  */
 public class RequestActivity extends BasicActiviy implements View.OnFocusChangeListener,
 		DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener,
-		AdapterView.OnItemSelectedListener {
+		AdapterView.OnItemSelectedListener,
+        CompoundButton.OnCheckedChangeListener  {
 
 
 	private View lastClickedView;
@@ -115,38 +116,51 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.request_reservation_activity);
+        CheckBox ch = (CheckBox)findViewById(R.id.endVlanAuto);
+        ch.setOnCheckedChangeListener(this);
+        ch = (CheckBox)findViewById(R.id.startVlanAuto);
+        ch.setOnCheckedChangeListener(this);
+        ch = (CheckBox)findViewById(R.id.startNow);
+        ch.setOnCheckedChangeListener(this);
+
         Bundle bundle =  getIntent().getExtras();
-        if(bundle.containsKey("RESUBMIT_SERVICE")) {
+        if(bundle!=null && bundle.containsKey("RESUBMIT_SERVICE")) {
             ReservationInfo resubmissionInfo = (ReservationInfo)bundle.get("RESUBMIT_SERVICE");
             insertResubmissionData(resubmissionInfo);
         }
         else {
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+            ((CheckBox)findViewById(R.id.startVlanAuto)).setChecked(true);
+            ((CheckBox)findViewById(R.id.endVlanAuto)).setChecked(true);
+
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+
+            Spinner sp = (Spinner) findViewById(R.id.startDomain);
+            sp.setOnItemSelectedListener(this);
+            sp = (Spinner) findViewById(R.id.endDomain);
+            sp.setOnItemSelectedListener(this);
 
 
-		Spinner sp = (Spinner) findViewById(R.id.startDomain);
-		sp.setOnItemSelectedListener(this);
-		sp = (Spinner) findViewById(R.id.endDomain);
-		sp.setOnItemSelectedListener(this);
+            getData(Call.DOMAINS, null);
 
-		getData(Call.DOMAINS, null);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+            sp = (Spinner) findViewById(R.id.startPort);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sp.setAdapter(adapter);
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-		sp = (Spinner) findViewById(R.id.startPort);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		sp.setAdapter(adapter);
-
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-		sp = (Spinner) findViewById(R.id.endPort);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		sp.setAdapter(adapter);
+            adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+            sp = (Spinner) findViewById(R.id.endPort);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            sp.setAdapter(adapter);
         }
+
         findViewById(R.id.startDate).setOnFocusChangeListener(this);
         findViewById(R.id.endDate).setOnFocusChangeListener(this);
         findViewById(R.id.startTime).setOnFocusChangeListener(this);
         findViewById(R.id.endTime).setOnFocusChangeListener(this);
 
     }
+
+
 
     public void insertResubmissionData(ReservationInfo resubmissionInfo) {
         ArrayList<String> optionsList = new ArrayList<>();
@@ -229,33 +243,32 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		}
 	}
 
-	public void disableCheckboxForms(View view) {
-		boolean checked = ((CheckBox) view).isChecked();
-		switch (view.getId()) {
-			case R.id.startVlanAuto:
-				if (checked) {
-					findViewById(R.id.startVlan).setEnabled(false);
-				} else {
-					findViewById(R.id.startVlan).setEnabled(true);
-				}
-				break;
-			case R.id.endVlanAuto:
-				if (checked) {
-					findViewById(R.id.endVlan).setEnabled(false);
-				} else {
-					findViewById(R.id.endVlan).setEnabled(true);
-				}
-				break;
-			case R.id.startNow:
-				if (checked) {
-					findViewById(R.id.startDate).setEnabled(false);
-					findViewById(R.id.startTime).setEnabled(false);
-				} else {
-					findViewById(R.id.startDate).setEnabled(true);
-					findViewById(R.id.startTime).setEnabled(true);
-				}
-		}
-	}
+    public void disableCheckboxForms2(CompoundButton view, boolean checked) {
+        switch (view.getId()) {
+            case R.id.startVlanAuto:
+                if (checked) {
+                    findViewById(R.id.startVlan).setEnabled(false);
+                } else {
+                    findViewById(R.id.startVlan).setEnabled(true);
+                }
+                break;
+            case R.id.endVlanAuto:
+                if (checked) {
+                    findViewById(R.id.endVlan).setEnabled(false);
+                } else {
+                    findViewById(R.id.endVlan).setEnabled(true);
+                }
+                break;
+            case R.id.startNow:
+                if (checked) {
+                    findViewById(R.id.startDate).setEnabled(false);
+                    findViewById(R.id.startTime).setEnabled(false);
+                } else {
+                    findViewById(R.id.startDate).setEnabled(true);
+                    findViewById(R.id.startTime).setEnabled(true);
+                }
+        }
+    }
 
 	public void showDatePicker(View view) {
 		DatePickerDialog dialog = new DatePickerDialog(this, this, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
@@ -559,4 +572,34 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		super.onBackPressed();
 		this.finish();
 	}
+
+    @Override
+    public void onCheckedChanged(CompoundButton view, boolean checked) {
+        Log.d(TAG,"EDO");
+        Log.d(TAG,view.toString());
+        switch (view.getId()) {
+            case R.id.startVlanAuto:
+                if (checked) {
+                    findViewById(R.id.startVlan).setEnabled(false);
+                } else {
+                    findViewById(R.id.startVlan).setEnabled(true);
+                }
+                break;
+            case R.id.endVlanAuto:
+                if (checked) {
+                    findViewById(R.id.endVlan).setEnabled(false);
+                } else {
+                    findViewById(R.id.endVlan).setEnabled(true);
+                }
+                break;
+            case R.id.startNow:
+                if (checked) {
+                    findViewById(R.id.startDate).setEnabled(false);
+                    findViewById(R.id.startTime).setEnabled(false);
+                } else {
+                    findViewById(R.id.startDate).setEnabled(true);
+                    findViewById(R.id.startTime).setEnabled(true);
+                }
+        }
+    }
 }

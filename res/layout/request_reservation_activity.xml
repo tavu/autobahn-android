@@ -98,13 +98,11 @@
 
 		<CheckBox
 			android:id="@+id/startVlanAuto"
-			android:checked="true"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/startVlanText"
 			android:layout_toRightOf="@+id/startVlan"
-			android:onClick="disableCheckboxForms"
-			android:text="@string/vlan_auto"/>
+			android:text="@string/vlan_auto" />
 
 		<TextView
 			android:id="@+id/endVlanText"
@@ -121,12 +119,10 @@
 
 		<CheckBox
 			android:id="@+id/endVlanAuto"
-			android:checked="true"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/endVlanText"
 			android:layout_toRightOf="@+id/endVlan"
-			android:onClick="disableCheckboxForms"
 			android:text="@string/vlan_auto"/>
 
 		<View
@@ -157,8 +153,7 @@
 			android:layout_height="wrap_content"
 			android:layout_below="@+id/startDateText"
 			android:layout_toRightOf="@+id/startDate"
-			android:text="@string/startNow"
-			android:onClick="disableCheckboxForms"/>
+			android:text="@string/startNow" />
 
 		<TextView
 			android:id="@+id/startTimeText"

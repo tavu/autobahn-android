@@ -88,6 +88,7 @@
 	<string name="lifecycleState">Lifecycle State</string>
 	<string name="submitRequest">Submit Request</string>
     <string name="provision">Provision service</string>
+    <string name="cancel_service">Cancel service</string>
     <string name="resubmitService">Resubmit Service</string>
 
 
@@ -126,7 +127,11 @@
     <string name="reservation_submit_error">Reservation submitted successfully</string>
 
     <string name="provision_succeeded">Reservation provisioned successfully</string>
+    <string name="cancel_succeeded">Reservation canceled.</string>
+    <string name="cancel_question">Are you sure you want to cancel this service?</string>
 
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
 </resources>
 

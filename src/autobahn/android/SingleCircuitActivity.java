@@ -1,5 +1,7 @@
 package autobahn.android;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -88,6 +90,35 @@ public class SingleCircuitActivity extends BasicActiviy {
         if(c==Call.PROVISION) {
             Toast toast = Toast.makeText(this, getString( R.string.provision_succeeded), Toast.LENGTH_LONG);
             toast.show();
+        } else if(c==Call.CANCEL_REQ) {
+            Toast toast = Toast.makeText(this, getString( R.string.cancel_succeeded), Toast.LENGTH_LONG);
+            toast.show();
         }
+    }
+
+    public void cancelService(View v) {
+        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
+        myAlertDialog.setTitle( getString( R.string.cancel_service));
+        myAlertDialog.setMessage(getString( R.string.cancel_question));
+
+        myAlertDialog.setNegativeButton(getString( R.string.no), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                //do nothing
+            }
+        });
+
+        myAlertDialog.setPositiveButton(getString( R.string.yes), new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface arg0, int arg1) {
+                String serviceId=((TextView)findViewById(R.id.service)).getText().toString();
+                ArrayList<String> l=new ArrayList<>();
+                l.add(domainName);
+                l.add(serviceId);
+                postData(Call.CANCEL_REQ, l);
+            }
+        });
+
+        myAlertDialog.show();
     }
 }

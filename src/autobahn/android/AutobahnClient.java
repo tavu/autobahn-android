@@ -49,6 +49,7 @@ public class AutobahnClient {
     private static final String SUBMIT_URL="/autobahn-gui/portal/secure/android/requestReservation";
     private static final String LOGOUT_URL = "/autobahn-gui/j_spring_security_logout";
     private static final String PROVISION_URL="/autobahn-gui/portal/secure/android/provision";
+    private static final String CANCEL_URL="/autobahn-gui/portal/secure/android/cancel";
 
 	private HttpClient httpclient;
 	private HttpGet httpget;
@@ -482,6 +483,32 @@ public class AutobahnClient {
 
         try {
             url = new URI(scheme, null, host, port, PROVISION_URL, query, null);
+            httppost = new HttpPost(url);
+        } catch (URISyntaxException e) {
+            String error = e.getMessage();
+            Log.d(TAG, error);
+            throw new AutobahnClientException(error);
+        }
+
+        HttpResponse response = handlePostRequest(httppost);
+
+        try {
+            checkAnswer(response);
+        }catch (NoDataException e) {
+            //do nothing
+        }
+    }
+
+    public synchronized void cancelRequest(String idm,String serviceId) throws AutobahnClientException {
+        URI url;
+        HttpPost httppost;
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("currentIdm", idm));
+        params.add(new BasicNameValuePair("serviceId", serviceId));
+        String query = URLEncodedUtils.format(params, "utf-8");
+
+        try {
+            url = new URI(scheme, null, host, port, CANCEL_URL, query, null);
             httppost = new HttpPost(url);
         } catch (URISyntaxException e) {
             String error = e.getMessage();

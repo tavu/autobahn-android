@@ -181,6 +181,14 @@
                 android:id="@+id/resubmitButton"
                 android:onClick="resubmitService"
                 style="@style/AutobahnButton"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel_service"
+                android:id="@+id/resubmitButton"
+                android:onClick="cancelService"
+                style="@style/AutobahnButton"/>
+
 
     </LinearLayout>
 </LinearLayout>

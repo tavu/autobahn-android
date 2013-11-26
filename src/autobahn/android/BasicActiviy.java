@@ -30,7 +30,8 @@ public class BasicActiviy extends Activity {
         CUSTOM  ,
         SUBMIT_RES ,
         LOG_OUT ,
-        PROVISION
+        PROVISION,
+        CANCEL_REQ
     }
 
     private Call call;
@@ -153,7 +154,7 @@ public class BasicActiviy extends Activity {
 
         @Override
         protected Void doInBackground(Object... type) {
-
+            List<String> l;
             try {
                 switch (call) {
                     case DOMAINS:
@@ -199,8 +200,16 @@ public class BasicActiviy extends Activity {
                             e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM);
                             return null;
                         }
-                        List<String> l =(ArrayList<String>)type[0];
+                        l =(ArrayList<String>)type[0];
                         AutobahnClient.getInstance().provision(l.get(0),l.get(1));
+                        break;
+                    case CANCEL_REQ:
+                        if(type.length==0) {
+                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM);
+                            return null;
+                        }
+                        l =(ArrayList<String>)type[0];
+                        AutobahnClient.getInstance().cancelRequest(l.get(0),l.get(1));
                         break;
 
                 }

@@ -224,8 +224,8 @@ public class BasicActiviy extends Activity {
             }
 
             if(e!=null) {
-               Log.d(TAG,e.getCause().toString());
-              //  showError(e,call,null);
+                Log.d(TAG,e.getMessage());
+                showError(e,call,param);
                 return ;
             }
 
@@ -240,8 +240,6 @@ public class BasicActiviy extends Activity {
                 }
                 showData(obj,call,(String)param);
             }
-
-
         }
     }
 

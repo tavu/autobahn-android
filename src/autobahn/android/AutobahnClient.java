@@ -264,7 +264,8 @@ public class AutobahnClient {
             throw new AutobahnClientException("1 ekatomirio diaforetika ");
         } catch (IOException e) {
             Log.d(TAG, "IOException");
-            throw new AutobahnClientException("malakia");
+            String errorStr = context.getString(R.string.no_internet);
+            throw new AutobahnClientException(errorStr);
         }
 
         checkStatus(response);//if the http status code is different from 200 this function will throw.
@@ -320,8 +321,6 @@ public class AutobahnClient {
 			String error = context.getString(R.string.net_error);
 			throw new AutobahnClientException(error);
 		}
-
-
 
 		Gson gson = new Gson();
 		try {

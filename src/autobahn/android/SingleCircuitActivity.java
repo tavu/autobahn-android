@@ -1,5 +1,6 @@
 package autobahn.android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -63,8 +64,15 @@ public class SingleCircuitActivity extends BasicActiviy {
         ((TextView)findViewById(R.id.startPort)).setText(reservationInfo.getStartPort());
         ((TextView)findViewById(R.id.startVlan)).setText(String.valueOf(reservationInfo.getStartVlan()));
         ((TextView)findViewById(R.id.endVlan)).setText(String.valueOf(reservationInfo.getEndVlan()));
-        ((TextView)findViewById(R.id.capacity)).setText(String.valueOf(reservationInfo.getCapacity()));
+        ((TextView)findViewById(R.id.capacity)).setText(String.valueOf(reservationInfo.getCapacity()/1000000));
         ((TextView)findViewById(R.id.mtuSize)).setText(String.valueOf(reservationInfo.getMtu()));
+    }
+
+    public void resubmitService(View v){
+        Intent resubmitServiceIntent = new Intent();
+        resubmitServiceIntent.setClass(getApplicationContext(),RequestActivity.class);
+        resubmitServiceIntent.putExtra("RESUBMIT_SERVICE",reservationInfo);
+        startActivity(resubmitServiceIntent);
     }
 
     public void provision(View v) {

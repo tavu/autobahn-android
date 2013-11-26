@@ -172,12 +172,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/provision"
                 android:id="@+id/provision"
-                android:layout_below="@+id/mtuSize"
-                android:layout_centerHorizontal="true"
-                android:enabled="true"
-                android:clickable="true"
-                android:onClick="provision" style="@style/AutobahnButton"/>
+                android:onClick="provision"
+                style="@style/AutobahnButton"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/resubmitService"
+                android:id="@+id/resubmitButton"
+                android:onClick="resubmitService"
+                style="@style/AutobahnButton"/>
 
-	</LinearLayout>
+    </LinearLayout>
 </LinearLayout>
 </ScrollView>

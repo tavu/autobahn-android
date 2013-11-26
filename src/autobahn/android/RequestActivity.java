@@ -11,14 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TimePicker;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.example.autobahn.R;
 
@@ -122,12 +115,14 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.request_reservation_activity);
+        Bundle bundle =  getIntent().getExtras();
+        if(bundle.containsKey("RESUBMIT_SERVICE")) {
+            ReservationInfo resubmissionInfo = (ReservationInfo)bundle.get("RESUBMIT_SERVICE");
+            insertResubmissionData(resubmissionInfo);
+        }
+        else {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-		findViewById(R.id.startDate).setOnFocusChangeListener(this);
-		findViewById(R.id.endDate).setOnFocusChangeListener(this);
-		findViewById(R.id.startTime).setOnFocusChangeListener(this);
-		findViewById(R.id.endTime).setOnFocusChangeListener(this);
 
 		Spinner sp = (Spinner) findViewById(R.id.startDomain);
 		sp.setOnItemSelectedListener(this);
@@ -145,9 +140,76 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		sp = (Spinner) findViewById(R.id.endPort);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sp.setAdapter(adapter);
-	}
+        }
+        findViewById(R.id.startDate).setOnFocusChangeListener(this);
+        findViewById(R.id.endDate).setOnFocusChangeListener(this);
+        findViewById(R.id.startTime).setOnFocusChangeListener(this);
+        findViewById(R.id.endTime).setOnFocusChangeListener(this);
 
-	@Override
+    }
+
+    public void insertResubmissionData(ReservationInfo resubmissionInfo) {
+        ArrayList<String> optionsList = new ArrayList<>();
+        Spinner spinner;
+        ArrayAdapter<String> adapter;
+        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this);
+        DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
+        Date date;
+
+        optionsList.add(resubmissionInfo.getStartNsa());
+        spinner = (Spinner) findViewById(R.id.startDomain);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,optionsList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setEnabled(false);
+
+        optionsList = new ArrayList<>();
+        optionsList.add(resubmissionInfo.getStartPort());
+        spinner = (Spinner) findViewById(R.id.startPort);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,optionsList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setEnabled(false);
+
+        optionsList = new ArrayList<>();
+        optionsList.add(resubmissionInfo.getEndNsa());
+        spinner = (Spinner) findViewById(R.id.endDomain);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,optionsList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setEnabled(false);
+
+        optionsList = new ArrayList<>();
+        optionsList.add(resubmissionInfo.getEndPort());
+        spinner = (Spinner) findViewById(R.id.endPort);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,optionsList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setEnabled(false);
+
+        date = new Date(resubmissionInfo.getStartTime());
+        ((TextView)findViewById(R.id.startDate)).setText(dateFormat.format(date));
+        ((TextView)findViewById(R.id.startTime)).setText(timeFormat.format(date));
+        date = new Date(resubmissionInfo.getEndTime());
+        ((TextView)findViewById(R.id.endDate)).setText(dateFormat.format(date));
+        ((TextView)findViewById(R.id.endTime)).setText(timeFormat.format(date));
+
+        if(resubmissionInfo.getStartVlan() == 0)
+            ((CheckBox)findViewById(R.id.startVlanAuto)).setChecked(true);
+        else
+            ((TextView)findViewById(R.id.startVlan)).setText(resubmissionInfo.getStartVlan());
+
+        if(resubmissionInfo.getEndVlan() == 0)
+            ((CheckBox)findViewById(R.id.endVlanAuto)).setChecked(true);
+        else
+            ((TextView)findViewById(R.id.endVlan)).setText(resubmissionInfo.getEndVlan());
+
+        ((TextView)findViewById(R.id.capacity)).setText(String.valueOf(resubmissionInfo.getCapacity()/1000000));
+        ((TextView)findViewById(R.id.description)).setText(resubmissionInfo.getDescription());
+
+    }
+
+    @Override
 	public void onFocusChange(View view, boolean hasFocus) {
 		if (view.hasFocus()) {
 			switch (view.getId()) {
@@ -367,6 +429,13 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		}
 
 	}
+
+    @Override
+    protected synchronized void postSucceed(Call c,Object param) {
+        Toast  toast = Toast.makeText(getApplicationContext(),R.string.reservation_success, Toast.LENGTH_LONG);
+        toast.show();
+        finish();
+    }
 
 	private boolean checkReservation(ReservationInfo res) {
 

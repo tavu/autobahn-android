@@ -167,22 +167,30 @@
 			android:layout_height="wrap_content"
 			android:id="@+id/mtuSize" style="@style/AutobahnPropertyValue"/>
 
+        <View
+                android:id="@+id/seperator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/mtuSize"
+                android:background="@android:color/darker_gray" android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"/>
+
         <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/provision"
                 android:id="@+id/provision"
                 android:onClick="provision"
                 style="@style/AutobahnButton"/>
         <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/resubmitService"
                 android:id="@+id/resubmitButton"
                 android:onClick="resubmitService"
                 style="@style/AutobahnButton"/>
         <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/cancel_service"
                 android:id="@+id/resubmitButton"

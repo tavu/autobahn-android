@@ -22,6 +22,7 @@
                 android:layout_alignParentTop="true"
                 android:id="@+id/firstHeader"
                 style="@style/AutobahnHeaderText"/>
+
         <TextView
 			android:id="@+id/startDomainText"
 			android:layout_width="match_parent"

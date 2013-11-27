@@ -60,9 +60,6 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 				setDomains(NetCache.getInstance().getIdms());
 
 			setPorts((List<String>) data, (String)param);
-		} else {
-			Toast toast = Toast.makeText(getApplicationContext(), R.string.reservation_success, Toast.LENGTH_LONG);
-			toast.show();
 		}
 	}
 
@@ -337,7 +334,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		try {
 			String s = spinnerData(res, R.id.startDomain);
 			res.setStartNsa(s);
-		} catch (AutobahnClientException e1) {
+		} catch (Exception e1) {
 			Toast toast = Toast.makeText(getApplicationContext(), R.string.select_start_dom, Toast.LENGTH_LONG);
 			toast.show();
 			return;
@@ -346,7 +343,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		try {
 			String s = spinnerData(res, R.id.endDomain);
 			res.setEndNsa(s);
-		} catch (AutobahnClientException e1) {
+		} catch (Exception e1) {
 			Toast toast = Toast.makeText(getApplicationContext(), R.string.select_end_dom, Toast.LENGTH_LONG);
 			toast.show();
 			return;
@@ -354,7 +351,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		try {
 			String startPort = spinnerData(res, R.id.startPort);
 			res.setStartPort(startPort);
-		} catch (AutobahnClientException e1) {
+		} catch (Exception e1) {
 			Toast toast = Toast.makeText(getApplicationContext(), R.string.select_start_port, Toast.LENGTH_LONG);
 			toast.show();
 			return;
@@ -362,7 +359,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		try {
 			String endPort = spinnerData(res, R.id.endPort);
 			res.setEndPort(endPort);
-		} catch (AutobahnClientException e1) {
+		} catch (Exception e1) {
 			Toast toast = Toast.makeText(getApplicationContext(), R.string.select_end_port, Toast.LENGTH_LONG);
 			toast.show();
 			return;
@@ -375,7 +372,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 			try {
 				int vlan = txtData(res, R.id.startVlan);
 				res.setStartVlan(vlan);
-			} catch (AutobahnClientException e1) {
+			} catch (Exception e1) {
 				Toast toast = Toast.makeText(getApplicationContext(), R.string.invalid_start_vlan, Toast.LENGTH_LONG);
 				toast.show();
 				return;
@@ -389,7 +386,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 			try {
 				int vlan = txtData(res, R.id.startVlan);
 				res.setEndVlan(vlan);
-			} catch (AutobahnClientException e1) {
+			} catch (Exception e1) {
 				Toast toast = Toast.makeText(getApplicationContext(), R.string.invalid_end_vlan, Toast.LENGTH_LONG);
 				toast.show();
 				return;
@@ -403,7 +400,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 			try {
 				long d = dateFromStr(R.id.startDate, R.id.startTime);
 				res.setStartTime(d);
-			} catch (AutobahnClientException e) {
+			} catch (Exception e) {
 				Toast toast = Toast.makeText(getApplicationContext(), R.string.invalid_start_time, Toast.LENGTH_LONG);
 				toast.show();
 				return;
@@ -413,7 +410,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		try {
 			long d = dateFromStr(R.id.endDate, R.id.endTime);
 			res.setEndTime(d);
-		} catch (AutobahnClientException e) {
+		} catch (Exception e) {
 			Toast toast = Toast.makeText(getApplicationContext(), R.string.invalid_end_time, Toast.LENGTH_LONG);
 			toast.show();
 			return;
@@ -422,7 +419,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		try {
 			int capacity = txtData(res, R.id.capacity);
 			res.setCapacity((long) capacity);
-		} catch (AutobahnClientException e1) {
+		} catch (Exception e1) {
 			Toast toast = Toast.makeText(getApplicationContext(), R.string.invalid_capacity, Toast.LENGTH_LONG);
 			toast.show();
 			return;
@@ -447,7 +444,14 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
     protected synchronized void postSucceed(Call c,Object param) {
         Toast  toast = Toast.makeText(getApplicationContext(),R.string.reservation_success, Toast.LENGTH_LONG);
         toast.show();
-        finish();
+
+        Intent circuitActivity = new Intent();
+        circuitActivity.setClass(getApplicationContext(), SingleCircuitActivity.class);
+
+        ReservationInfo  res=(ReservationInfo) param;
+        circuitActivity.putExtra("SERVICE_ID", NetCache.getInstance().getLastSubmittedId());
+        circuitActivity.putExtra("DOMAIN_NAME", res.getStartNsa());
+        startActivity(circuitActivity);
     }
 
 	private boolean checkReservation(ReservationInfo res) {
@@ -491,27 +495,16 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		return true;
 	}
 
-	private long dateFromStr(int dateId, int timeId) throws AutobahnClientException {
+	private long dateFromStr(int dateId, int timeId) throws Exception {
+
 		DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this);
 		DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
 
 		String startDateStr = ((EditText) findViewById(dateId)).getText().toString();
-		Date startDate;
-		try {
-			startDate = dateFormat.parse(startDateStr);
-		} catch (ParseException e) {
-			//TODO
-			throw new AutobahnClientException(dateId);
-		}
+		Date startDate = dateFormat.parse(startDateStr);
 
 		String startTimeStr = ((EditText) findViewById(timeId)).getText().toString();
-		Date startTime;
-		try {
-			startTime = timeFormat.parse(startTimeStr);
-		} catch (ParseException ignored) {
-			//TODO
-			throw new AutobahnClientException(timeId);
-		}
+		Date startTime = timeFormat.parse(startTimeStr);
 
 		startDate.setHours(startTime.getHours());
 		startDate.setMinutes(startTime.getMinutes());
@@ -519,26 +512,20 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		return startDate.getTime();
 	}
 
-	private int txtData(ReservationInfo res, int id) throws AutobahnClientException {
+	private int txtData(ReservationInfo res, int id) throws Exception {
 		EditText txt = (EditText) findViewById(id);
 		String s = txt.getText().toString();
-		int ret = 0;
-		try {
-			ret = Integer.parseInt(s);
-		} catch (NumberFormatException e) {
-			throw new AutobahnClientException(id);
-		}
-
+        int ret = Integer.parseInt(s);
 		return ret;
 
 	}
 
-	private String spinnerData(ReservationInfo res, int id) throws AutobahnClientException {
+	private String spinnerData(ReservationInfo res, int id) throws Exception {
 		Spinner sp = (Spinner) findViewById(id);
 		int pos = sp.getSelectedItemPosition();
 
 		if (pos == AdapterView.INVALID_POSITION) {
-			throw new AutobahnClientException(id);
+			throw new Exception("data not selected at spinner "+sp.toString());
 		}
 
 		String s = (String) sp.getItemAtPosition(pos);
@@ -575,7 +562,6 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 
     @Override
     public void onCheckedChanged(CompoundButton view, boolean checked) {
-        Log.d(TAG,"EDO");
         Log.d(TAG,view.toString());
         switch (view.getId()) {
             case R.id.startVlanAuto:

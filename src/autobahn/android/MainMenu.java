@@ -63,6 +63,7 @@ public class MainMenu extends Activity implements  View.OnClickListener {
 			public void onClick(View view) {
 				Intent requestActivity = new Intent();
 				requestActivity.setClass(getApplicationContext(), RequestActivity.class);
+                requestActivity.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(requestActivity);
 
 			}

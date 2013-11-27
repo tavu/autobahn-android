@@ -146,7 +146,7 @@ public class AutobahnClient {
 	public synchronized void logIn() throws AutobahnClientException {
 
 		if (hasAuthenticate()) {
-			Log.d(TAG, "Autobahn client has already authenticate");
+			Log.d(TAG, "Autobahn client has already authenticated");
 			return;
 		}
 
@@ -212,7 +212,7 @@ public class AutobahnClient {
     }
 
     private String checkAnswer(HttpResponse response) throws AutobahnClientException,NoDataException {
-        String responseStr=null;
+        String responseStr = null;
         try {
             responseStr = EntityUtils.toString(response.getEntity());
         } catch (IOException e) {
@@ -228,24 +228,26 @@ public class AutobahnClient {
             throw new AutobahnClientException(errorStr);
         }
 
-        JSONObject json= null;
-        int err=0;
+        JSONObject json = null;
+        int err = 0;
         try {
             json = new JSONObject(responseStr);
-            err=json.getInt("error");
+            err = json.getInt("error");
         } catch (JSONException e) {
             String errorStr = context.getString(R.string.response_error);
             throw new AutobahnClientException(errorStr);
         }
 
-        String msg=null;
+        String msg = null;
         if(err ==  ErrorType.OK ) {
             return responseStr;
-        } else if(err == ErrorType.NO_DATA ) {
+        }
+        else if(err == ErrorType.NO_DATA ) {
             throw new NoDataException();
-        } else {
+        }
+        else {
             try {
-                msg=json.getString("message");
+                msg = json.getString("message");
                 Log.d(TAG,"ERROR:"+err+" " + msg);
             } catch (JSONException e) {
                 String errorStr = context.getString(R.string.response_error);
@@ -257,7 +259,7 @@ public class AutobahnClient {
 
     private synchronized HttpResponse handlePostRequest(HttpPost httppost) throws AutobahnClientException {
 
-        HttpResponse response=null;
+        HttpResponse response = null;
         try {
             response = httpclient.execute(httppost, localContext);
         } catch (ClientProtocolException e) {
@@ -291,13 +293,13 @@ public class AutobahnClient {
 		}
 
         checkStatus(response);//if the http status code is different from 200 this function will throw.
-        String responseStr=checkAnswer(response);//if the server anser with an error this function will throw.
+        String responseStr = checkAnswer(response);//if the server answer with an error this function will throw.
 
-        String data=null;
-        JSONObject json= null;
+        String data = null;
+        JSONObject json = null;
         try {
-            json=new JSONObject(responseStr);
-            data=json.getString("data");
+            json = new JSONObject(responseStr);
+            data = json.getString("data");
             Log.d(TAG, data);
         } catch (JSONException e) {
             String errorStr = context.getString(R.string.response_error);
@@ -445,7 +447,7 @@ public class AutobahnClient {
             url = new URI(scheme, null, host, port, SUBMIT_URL, null, null);
             httppost = new HttpPost(url);
             Gson gson = new Gson();
-            String json=gson.toJson(info);
+            String json = gson.toJson(info);
             Log.d(TAG,json);
             StringEntity se = new StringEntity(json);
 

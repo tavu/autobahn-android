@@ -23,6 +23,7 @@ public class NetCache {
 	private String lastResId;
 	private String lastDomRes;
 	private Map<String, ArrayList<String>> ports = new HashMap();
+    private String lastSubmittedId=null;
 
 	private NetCache() {
 		idms = null;
@@ -32,6 +33,14 @@ public class NetCache {
 		lastResInfo = null;
 
 	}
+
+    public void setLastSubmittedId(String id) {
+        lastSubmittedId=id;
+    }
+
+    public String getLastSubmittedId() {
+        return lastSubmittedId;
+    }
 
 	public static NetCache getInstance() {
 		if (instance == null) {

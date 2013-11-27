@@ -121,4 +121,8 @@ public class SingleCircuitActivity extends BasicActiviy {
 
         myAlertDialog.show();
     }
+
+    public void modifyService(View v) {
+       //TODO after server implementation
+    }
 }

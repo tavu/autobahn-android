@@ -42,14 +42,14 @@ public class AutobahnClient {
 
 	static AutobahnClient instance = null;
 	private static final String LOGIN_URL = "/autobahn-gui/j_spring_security_check";
-	private static final String DOMAIN_URL = "/autobahn-gui/portal/secure/android/idms";
-	private static final String SERVICES_URL = "/autobahn-gui/portal/secure/android/services";
-	private static final String SERVICE_URL = "/autobahn-gui/portal/secure/android/service";
-	private static final String PORTS_URL = "/autobahn-gui/portal/secure/android/ports";
-    private static final String SUBMIT_URL="/autobahn-gui/portal/secure/android/requestReservation";
+	private static final String DOMAIN_URL = "/autobahn-gui/portal/secure/rest/idms";
+	private static final String SERVICES_URL = "/autobahn-gui/portal/secure/rest/services";
+	private static final String SERVICE_URL = "/autobahn-gui/portal/secure/rest/service";
+	private static final String PORTS_URL = "/autobahn-gui/portal/secure/rest/ports";
+    private static final String SUBMIT_URL="/autobahn-gui/portal/secure/rest/requestReservation";
     private static final String LOGOUT_URL = "/autobahn-gui/j_spring_security_logout";
-    private static final String PROVISION_URL="/autobahn-gui/portal/secure/android/provision";
-    private static final String CANCEL_URL="/autobahn-gui/portal/secure/android/cancel";
+    private static final String PROVISION_URL="/autobahn-gui/portal/secure/rest/provision";
+    private static final String CANCEL_URL="/autobahn-gui/portal/secure/rest/cancel";
 
 	private HttpClient httpclient;
 	private HttpGet httpget;
@@ -61,7 +61,7 @@ public class AutobahnClient {
 	private HttpContext localContext;
 	private Context context = null;
     CookieStore cookieStore;
-	private String TAG = "Autobahn2";
+	private String TAG = "[Autobahn-client]";
 
 	public AutobahnClient() {
 		httpclient = new DefaultHttpClient();
@@ -467,12 +467,17 @@ public class AutobahnClient {
         }
 
         HttpResponse response = handlePostRequest(httppost);
-
+        String resId;
+        JSONObject json= null;
         try {
-            checkAnswer(response);
-        }catch (NoDataException e) {
-            //do nothing
+            json=new JSONObject( checkAnswer(response) );
+            resId=json.getString("data");
+        }catch (Exception e) {
+            String errorStr = context.getString(R.string.response_error);
+            throw new AutobahnClientException(errorStr);
         }
+
+        NetCache.getInstance().setLastSubmittedId(resId);
     }
 
     public synchronized void provision(String idm,String serviceId) throws AutobahnClientException {

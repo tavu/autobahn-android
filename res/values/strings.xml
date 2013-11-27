@@ -89,7 +89,8 @@
 	<string name="submitRequest">Submit Request</string>
     <string name="provision">Provision service</string>
     <string name="cancel_service">Cancel service</string>
-    <string name="resubmitService">Resubmit Service</string>
+    <string name="modify_service">Modify service</string>
+    <string name="resubmitService">Resubmit</string>
 
 
 	<!-- ERRORS -->

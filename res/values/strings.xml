@@ -101,9 +101,9 @@
 	<string name="failure_reason">Failure Reason</string>
 	<string name="error_404">Page not found!</string>
 	<string name="error_500">Internal server error!</string>
-    <string name="http_error">http error.</string>
     <string name="connection_error">Connection error.\nPlease try again.</string>
 
+	<string name="http_error">HTTP error.</string>
 	<string name="error">Error:</string>
 
 	<string name="Log_in_first">Please log in first.</string>
@@ -125,8 +125,8 @@
     <string name="invalid_capacity">Invalid capacity</string>
     <string name="empty_description">Description can not be empty</string>
     <string name="end_time_past">End date is in the past</string>
-    <string name="start_time_past">End date is in the past</string>
-    <string name="end_before_start">End date is before start date</string>
+	<string name="start_time_past">Start date is in the past</string>
+	<string name="end_before_start">End date is before start date</string>
 
     <string name="reservation_success">Reservation submitted successfully</string>
     <string name="reservation_submit_error">Reservation submitted successfully</string>

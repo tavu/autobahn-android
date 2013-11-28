@@ -1,8 +1,6 @@
 package autobahn.android;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import com.example.autobahn.R;
 import com.google.gson.Gson;
@@ -184,7 +182,7 @@ public class AutobahnClient {
 	/**
 	 * Retrieves username, password and autobahn url
 	 * from local preferences, and sets them to autobahn variables
-	 */
+
 	private void retrieveLoginInfo() {
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 		host = sharedPref.getString(PreferencesActivity.HOST_PREFERENCE_KEY, "");
@@ -193,7 +191,7 @@ public class AutobahnClient {
 		userName = sharedPref.getString(PreferencesActivity.USERNAME_PREFERENCE_KEY, "");
 		password = sharedPref.getString(PreferencesActivity.PASSWORD_PREFERENCE_KEY, "");
 	}
-
+     */
     private void checkStatus(HttpResponse response) throws AutobahnClientException {
         int status = response.getStatusLine().getStatusCode();
 
@@ -262,7 +260,8 @@ public class AutobahnClient {
             response = httpclient.execute(httppost, localContext);
         } catch (ClientProtocolException e) {
             Log.d(TAG, "ClientProtocolException");
-            throw new AutobahnClientException("1 ekatomirio diaforetika ");
+            String errorStr = context.getString(R.string.connection_error);
+            throw new AutobahnClientException(errorStr);
         } catch (IOException e) {
             Log.d(TAG, "IOException");
             String errorStr = context.getString(R.string.no_internet);

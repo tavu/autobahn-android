@@ -21,7 +21,7 @@ import java.util.Date;
  * Time: 5:43 μμ
  * To change this template use File | Settings | File Templates.
  */
-public class SingleCircuitActivity extends BasicActiviy {
+public class SingleCircuitActivity extends BasicActivity {
 
     private ReservationInfo reservationInfo;
     private String serviceID;

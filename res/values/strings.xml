@@ -102,9 +102,13 @@
 	<string name="error_404">Page not found!</string>
 	<string name="error_500">Internal server error!</string>
     <string name="http_error">http error.</string>
+    <string name="connection_error">Connection error.\nPlease try again.</string>
+
 	<string name="error">Error:</string>
 
 	<string name="Log_in_first">Please log in first.</string>
+    <string name="no_log_in">You have not log in.</string>
+    <string name="internal_err">Internal error.</string>
     <string name="loading">Loading</string>
 
 

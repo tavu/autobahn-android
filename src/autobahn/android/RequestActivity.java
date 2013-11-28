@@ -5,26 +5,18 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
-
 import com.example.autobahn.R;
-
 import net.geant.autobahn.android.ReservationInfo;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,7 +25,7 @@ import java.util.List;
  * Time: 2:26 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RequestActivity extends BasicActiviy implements View.OnFocusChangeListener,
+public class RequestActivity extends BasicActivity implements View.OnFocusChangeListener,
 		DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener,
 		AdapterView.OnItemSelectedListener,
         CompoundButton.OnCheckedChangeListener  {
@@ -111,6 +103,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        NetCache.getInstance().setLastSubmittedId(null);
 
 		setContentView(R.layout.request_reservation_activity);
         CheckBox ch = (CheckBox)findViewById(R.id.endVlanAuto);
@@ -313,20 +306,6 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		return true;
 	}
 
-	// Called when an options item is clicked
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.preferences:
-				startActivity(new Intent(this, PreferencesActivity.class));
-				break;
-			case android.R.id.home:
-				NavUtils.navigateUpFromSameTask(this);
-				return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
 	public void submitRequest(View view) {
 
 		ReservationInfo res = new ReservationInfo();
@@ -442,6 +421,13 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 
     @Override
     protected synchronized void postSucceed(Call c,Object param) {
+        String id=NetCache.getInstance().getLastSubmittedId();
+        //probably that will never happen
+        if(id==null) {
+            Toast  toast = Toast.makeText(getApplicationContext(),R.string.response_error, Toast.LENGTH_LONG);
+            toast.show();
+            return ;
+        }
         Toast  toast = Toast.makeText(getApplicationContext(),R.string.reservation_success, Toast.LENGTH_LONG);
         toast.show();
 
@@ -449,7 +435,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
         circuitActivity.setClass(getApplicationContext(), SingleCircuitActivity.class);
 
         ReservationInfo  res=(ReservationInfo) param;
-        circuitActivity.putExtra("SERVICE_ID", NetCache.getInstance().getLastSubmittedId());
+        circuitActivity.putExtra("SERVICE_ID", id);
         circuitActivity.putExtra("DOMAIN_NAME", res.getStartNsa());
         startActivity(circuitActivity);
     }

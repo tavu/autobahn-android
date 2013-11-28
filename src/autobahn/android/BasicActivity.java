@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.TextView;
 import com.example.autobahn.R;
 import net.geant.autobahn.android.ReservationInfo;
@@ -19,7 +21,7 @@ import java.util.List;
  * Time: 4:37 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BasicActiviy extends Activity {
+public class BasicActivity extends Activity {
 
 
     enum Call {
@@ -43,7 +45,7 @@ public class BasicActiviy extends Activity {
     protected int LOG_IN_REQ=9;
     private ProgressDialog progressDialog=null;
 
-    public BasicActiviy() {
+    public BasicActivity() {
     }
 
     protected synchronized void postSucceed(Call c,Object param) {
@@ -140,9 +142,23 @@ public class BasicActiviy extends Activity {
             async.execute(param);
         }
         else {
-            AutobahnClientException e=new AutobahnClientException(AutobahnClientException.Error.NO_LOG_IN);
+            AutobahnClientException e=new AutobahnClientException(getString(R.string.no_log_in) );
             showError(e,call,param);
         }
+    }
+
+    // Called when an options item is clicked
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.preferences:
+                startActivity(new Intent(this, PreferencesActivity.class));
+                break;
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -162,7 +178,7 @@ public class BasicActiviy extends Activity {
                         break;
                     case PORTS:
                         if(type.length==0) {
-                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM);
+                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM,getString(R.string.internal_err));
                             return null;
                         }
                         param=type[0];
@@ -170,7 +186,7 @@ public class BasicActiviy extends Activity {
                         break;
                     case RESERV:
                         if(type.length==0) {
-                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM);
+                           e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM,getString(R.string.internal_err));
                             return null;
                         }
                         param=type[0];
@@ -178,7 +194,7 @@ public class BasicActiviy extends Activity {
                         break;
                     case  RES_IFO:
                         if(type.length==0) {
-                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM);
+                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM,getString(R.string.internal_err));
                             return null;
                         }
                         param=type[0];
@@ -186,7 +202,7 @@ public class BasicActiviy extends Activity {
                         break;
                     case SUBMIT_RES:
                         if(type.length==0) {
-                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM);
+                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM,getString(R.string.internal_err));
                             return null;
                         }
                         ReservationInfo res=(ReservationInfo)type[0];
@@ -197,7 +213,7 @@ public class BasicActiviy extends Activity {
                         break;
                     case PROVISION:
                         if(type.length==0) {
-                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM);
+                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM,getString(R.string.internal_err));
                             return null;
                         }
                         l =(ArrayList<String>)type[0];
@@ -205,7 +221,7 @@ public class BasicActiviy extends Activity {
                         break;
                     case CANCEL_REQ:
                         if(type.length==0) {
-                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM);
+                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM,getString(R.string.internal_err));
                             return null;
                         }
                         l =(ArrayList<String>)type[0];
@@ -243,7 +259,7 @@ public class BasicActiviy extends Activity {
             } else {
                 Object obj=dataFromCache(call,param);
                 if(obj==null) {
-                    e=new AutobahnClientException(AutobahnClientException.Error.UNKNOWN);
+                    e=new AutobahnClientException(AutobahnClientException.Error.UNKNOWN,getString(R.string.internal_err));
                     showError(e,call,param);
                     return;
                 }

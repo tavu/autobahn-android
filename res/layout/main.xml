@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
+              android:background="#ffffff"
               android:gravity="center_horizontal"
-              android:background="#ffffff">
+              android:orientation="vertical">
 
 	<TextView
+		style="@style/AutobahnHeaderText"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/welcome"
-        style="@style/AutobahnHeaderText"/>
+		android:text="@string/welcome"/>
 
 	<Button
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
 		android:id="@+id/request"
-		android:text="@string/request"
-        style="@style/AutobahnButton"/>
-
-	<Button
+		style="@style/AutobahnButton"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/reservations"
+		android:text="@string/request"/>
+
+	<Button
 		android:id="@+id/idms"
-        style="@style/AutobahnButton"/>
-
-	<Button
+		style="@style/AutobahnButton"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/about"
-		android:id="@+id/about"
-        style="@style/AutobahnButton"/>
+		android:text="@string/reservations"/>
 
-    <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/log_out"
-            android:id="@+id/logOut"
-            style="@style/AutobahnButton"/>
+	<Button
+		android:id="@+id/about"
+		style="@style/AutobahnButton"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/about"/>
+
+	<Button
+		android:id="@+id/logOut"
+		style="@style/AutobahnButton"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/log_out"/>
 </LinearLayout>
 

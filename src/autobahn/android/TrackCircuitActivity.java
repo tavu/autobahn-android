@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TrackCircuitActivity extends BasicActiviy {
+public class TrackCircuitActivity extends BasicActivity {
 
     private List<String> reservationID = new ArrayList<String>();
     private ListView reservationList;

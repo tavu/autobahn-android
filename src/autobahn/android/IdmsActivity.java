@@ -11,7 +11,7 @@ import com.example.autobahn.R;
 import java.util.List;
 
 
-public class IdmsActivity extends BasicActiviy {
+public class IdmsActivity extends BasicActivity {
 
     private List<String> domains;
     private ListView domainList;

@@ -5,13 +5,22 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.SimpleExpandableListAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.autobahn.R;
 
@@ -24,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -33,10 +43,10 @@ import java.util.List;
  * Time: 2:26 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RequestActivity extends BasicActiviy implements View.OnFocusChangeListener,
+public class RequestActivity extends BasicActivity implements View.OnFocusChangeListener,
 		DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener,
 		AdapterView.OnItemSelectedListener,
-        CompoundButton.OnCheckedChangeListener  {
+		CompoundButton.OnCheckedChangeListener {
 
 
 	private View lastClickedView;
@@ -59,7 +69,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 			if (sp.getAdapter() == null)
 				setDomains(NetCache.getInstance().getIdms());
 
-			setPorts((List<String>) data, (String)param);
+			setPorts((List<String>) data, (String) param);
 		}
 	}
 
@@ -111,116 +121,149 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		NetCache.getInstance().setLastSubmittedId(null);
 
 		setContentView(R.layout.request_reservation_activity);
-        CheckBox ch = (CheckBox)findViewById(R.id.endVlanAuto);
-        ch.setOnCheckedChangeListener(this);
-        ch = (CheckBox)findViewById(R.id.startVlanAuto);
-        ch.setOnCheckedChangeListener(this);
-        ch = (CheckBox)findViewById(R.id.startNow);
-        ch.setOnCheckedChangeListener(this);
+		CheckBox ch = (CheckBox) findViewById(R.id.endVlanAuto);
+		ch.setOnCheckedChangeListener(this);
+		ch = (CheckBox) findViewById(R.id.startVlanAuto);
+		ch.setOnCheckedChangeListener(this);
+		ch = (CheckBox) findViewById(R.id.startNow);
+		ch.setOnCheckedChangeListener(this);
 
-        Bundle bundle =  getIntent().getExtras();
-        if(bundle!=null && bundle.containsKey("RESUBMIT_SERVICE")) {
-            ReservationInfo resubmissionInfo = (ReservationInfo)bundle.get("RESUBMIT_SERVICE");
-            insertResubmissionData(resubmissionInfo);
-        }
-        else {
-            ((CheckBox)findViewById(R.id.startVlanAuto)).setChecked(true);
-            ((CheckBox)findViewById(R.id.endVlanAuto)).setChecked(true);
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null && bundle.containsKey("RESUBMIT_SERVICE")) {
+			ReservationInfo resubmissionInfo = (ReservationInfo) bundle.get("RESUBMIT_SERVICE");
+			insertResubmissionData(resubmissionInfo);
+		} else {
+			((CheckBox) findViewById(R.id.startVlanAuto)).setChecked(true);
+			((CheckBox) findViewById(R.id.endVlanAuto)).setChecked(true);
 
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+			getActionBar().setDisplayHomeAsUpEnabled(true);
 
-            Spinner sp = (Spinner) findViewById(R.id.startDomain);
-            sp.setOnItemSelectedListener(this);
-            sp = (Spinner) findViewById(R.id.endDomain);
-            sp.setOnItemSelectedListener(this);
-
-
-            getData(Call.DOMAINS, null);
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-            sp = (Spinner) findViewById(R.id.startPort);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sp.setAdapter(adapter);
-
-            adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-            sp = (Spinner) findViewById(R.id.endPort);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            sp.setAdapter(adapter);
-        }
-
-        findViewById(R.id.startDate).setOnFocusChangeListener(this);
-        findViewById(R.id.endDate).setOnFocusChangeListener(this);
-        findViewById(R.id.startTime).setOnFocusChangeListener(this);
-        findViewById(R.id.endTime).setOnFocusChangeListener(this);
-
-    }
+			Spinner sp = (Spinner) findViewById(R.id.startDomain);
+			sp.setOnItemSelectedListener(this);
+			sp = (Spinner) findViewById(R.id.endDomain);
+			sp.setOnItemSelectedListener(this);
 
 
+			getData(Call.DOMAINS, null);
 
-    public void insertResubmissionData(ReservationInfo resubmissionInfo) {
-        ArrayList<String> optionsList = new ArrayList<>();
-        Spinner spinner;
-        ArrayAdapter<String> adapter;
-        DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this);
-        DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
-        Date date;
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+			sp = (Spinner) findViewById(R.id.startPort);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			sp.setAdapter(adapter);
 
-        optionsList.add(resubmissionInfo.getStartNsa());
-        spinner = (Spinner) findViewById(R.id.startDomain);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,optionsList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setEnabled(false);
+			adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+			sp = (Spinner) findViewById(R.id.endPort);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			sp.setAdapter(adapter);
+		}
 
-        optionsList = new ArrayList<>();
-        optionsList.add(resubmissionInfo.getStartPort());
-        spinner = (Spinner) findViewById(R.id.startPort);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,optionsList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setEnabled(false);
+		findViewById(R.id.startDate).setOnFocusChangeListener(this);
+		findViewById(R.id.endDate).setOnFocusChangeListener(this);
+		findViewById(R.id.startTime).setOnFocusChangeListener(this);
+		findViewById(R.id.endTime).setOnFocusChangeListener(this);
 
-        optionsList = new ArrayList<>();
-        optionsList.add(resubmissionInfo.getEndNsa());
-        spinner = (Spinner) findViewById(R.id.endDomain);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,optionsList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setEnabled(false);
+		/* Set ExpandableListView adapter */
+		ArrayList<HashMap<String, String>> result = new ArrayList<>();
+		for (int i = 0; i < 4; ++i) { // 4 groups........
+			HashMap<String, String> m = new HashMap<>();
+			m.put("Group Item", "Group Item " + i); // the key and it's value.
+			result.add(m);
+		}
 
-        optionsList = new ArrayList<>();
-        optionsList.add(resubmissionInfo.getEndPort());
-        spinner = (Spinner) findViewById(R.id.endPort);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,optionsList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setEnabled(false);
+		ArrayList<ArrayList<HashMap<String, String>>> result2 = new ArrayList<>();
+		for (int i = 0; i < 4; ++i) { // this -4 is the number of groups(Here it's fifteen)
+			/* each group need each HashMap-Here for each group we have 3 subgroups */
+			ArrayList<HashMap<String, String>> secList = new ArrayList<>();
+			for (int n = 0; n < 3; n++) {
+				HashMap<String, String> child = new HashMap<>();
+				child.put("Sub Item", "Sub Item " + n);
+				secList.add(child);
+			}
+			result2.add(secList);
+		}
 
-        date = new Date(resubmissionInfo.getStartTime());
-        ((TextView)findViewById(R.id.startDate)).setText(dateFormat.format(date));
-        ((TextView)findViewById(R.id.startTime)).setText(timeFormat.format(date));
-        date = new Date(resubmissionInfo.getEndTime());
-        ((TextView)findViewById(R.id.endDate)).setText(dateFormat.format(date));
-        ((TextView)findViewById(R.id.endTime)).setText(timeFormat.format(date));
+		SimpleExpandableListAdapter expListAdapter =
+				new SimpleExpandableListAdapter(
+						this,
+						result,                         // Creating group List.
+						R.layout.group_row,             // Group item layout XML.
+						new String[]{"Group Item"},     // the key of group item.
+						new int[]{R.id.row_name},       // ID of each group item.-Data under the key goes into this TextView.
+						result2,                        // childData describes second-level entries.
+						R.layout.child_row,             // Layout for sub-level entries(second level).
+						new String[]{"Sub Item"},       // Keys in childData maps to display.
+						new int[]{R.id.grp_child}       // Data under the keys above go into these TextViews.
+				);
+		ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.pathConstraints);
+		expandableListView.setAdapter(expListAdapter);       // setting the adapter in the list.
 
-        if(resubmissionInfo.getStartVlan() == 0)
-            ((CheckBox)findViewById(R.id.startVlanAuto)).setChecked(true);
-        else
-            ((TextView)findViewById(R.id.startVlan)).setText(resubmissionInfo.getStartVlan());
+	}
 
-        if(resubmissionInfo.getEndVlan() == 0)
-            ((CheckBox)findViewById(R.id.endVlanAuto)).setChecked(true);
-        else
-            ((TextView)findViewById(R.id.endVlan)).setText(resubmissionInfo.getEndVlan());
+	public void insertResubmissionData(ReservationInfo resubmissionInfo) {
+		ArrayList<String> optionsList = new ArrayList<>();
+		Spinner spinner;
+		ArrayAdapter<String> adapter;
+		DateFormat dateFormat = android.text.format.DateFormat.getDateFormat(this);
+		DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(this);
+		Date date;
 
-        ((TextView)findViewById(R.id.capacity)).setText(String.valueOf(resubmissionInfo.getCapacity()/1000000));
-        ((TextView)findViewById(R.id.description)).setText(resubmissionInfo.getDescription());
+		optionsList.add(resubmissionInfo.getStartNsa());
+		spinner = (Spinner) findViewById(R.id.startDomain);
+		adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, optionsList);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(adapter);
+		spinner.setEnabled(false);
 
-    }
+		optionsList = new ArrayList<>();
+		optionsList.add(resubmissionInfo.getStartPort());
+		spinner = (Spinner) findViewById(R.id.startPort);
+		adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, optionsList);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(adapter);
+		spinner.setEnabled(false);
 
-    @Override
+		optionsList = new ArrayList<>();
+		optionsList.add(resubmissionInfo.getEndNsa());
+		spinner = (Spinner) findViewById(R.id.endDomain);
+		adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, optionsList);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(adapter);
+		spinner.setEnabled(false);
+
+		optionsList = new ArrayList<>();
+		optionsList.add(resubmissionInfo.getEndPort());
+		spinner = (Spinner) findViewById(R.id.endPort);
+		adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, optionsList);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(adapter);
+		spinner.setEnabled(false);
+
+		date = new Date(resubmissionInfo.getStartTime());
+		((TextView) findViewById(R.id.startDate)).setText(dateFormat.format(date));
+		((TextView) findViewById(R.id.startTime)).setText(timeFormat.format(date));
+		date = new Date(resubmissionInfo.getEndTime());
+		((TextView) findViewById(R.id.endDate)).setText(dateFormat.format(date));
+		((TextView) findViewById(R.id.endTime)).setText(timeFormat.format(date));
+
+		if (resubmissionInfo.getStartVlan() == 0)
+			((CheckBox) findViewById(R.id.startVlanAuto)).setChecked(true);
+		else
+			((TextView) findViewById(R.id.startVlan)).setText(resubmissionInfo.getStartVlan());
+
+		if (resubmissionInfo.getEndVlan() == 0)
+			((CheckBox) findViewById(R.id.endVlanAuto)).setChecked(true);
+		else
+			((TextView) findViewById(R.id.endVlan)).setText(resubmissionInfo.getEndVlan());
+
+		((TextView) findViewById(R.id.capacity)).setText(String.valueOf(resubmissionInfo.getCapacity() / 1000000));
+		((TextView) findViewById(R.id.description)).setText(resubmissionInfo.getDescription());
+
+	}
+
+	@Override
 	public void onFocusChange(View view, boolean hasFocus) {
 		if (view.hasFocus()) {
 			switch (view.getId()) {
@@ -240,32 +283,32 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		}
 	}
 
-    public void disableCheckboxForms2(CompoundButton view, boolean checked) {
-        switch (view.getId()) {
-            case R.id.startVlanAuto:
-                if (checked) {
-                    findViewById(R.id.startVlan).setEnabled(false);
-                } else {
-                    findViewById(R.id.startVlan).setEnabled(true);
-                }
-                break;
-            case R.id.endVlanAuto:
-                if (checked) {
-                    findViewById(R.id.endVlan).setEnabled(false);
-                } else {
-                    findViewById(R.id.endVlan).setEnabled(true);
-                }
-                break;
-            case R.id.startNow:
-                if (checked) {
-                    findViewById(R.id.startDate).setEnabled(false);
-                    findViewById(R.id.startTime).setEnabled(false);
-                } else {
-                    findViewById(R.id.startDate).setEnabled(true);
-                    findViewById(R.id.startTime).setEnabled(true);
-                }
-        }
-    }
+	public void disableCheckboxForms2(CompoundButton view, boolean checked) {
+		switch (view.getId()) {
+			case R.id.startVlanAuto:
+				if (checked) {
+					findViewById(R.id.startVlan).setEnabled(false);
+				} else {
+					findViewById(R.id.startVlan).setEnabled(true);
+				}
+				break;
+			case R.id.endVlanAuto:
+				if (checked) {
+					findViewById(R.id.endVlan).setEnabled(false);
+				} else {
+					findViewById(R.id.endVlan).setEnabled(true);
+				}
+				break;
+			case R.id.startNow:
+				if (checked) {
+					findViewById(R.id.startDate).setEnabled(false);
+					findViewById(R.id.startTime).setEnabled(false);
+				} else {
+					findViewById(R.id.startDate).setEnabled(true);
+					findViewById(R.id.startTime).setEnabled(true);
+				}
+		}
+	}
 
 	public void showDatePicker(View view) {
 		DatePickerDialog dialog = new DatePickerDialog(this, this, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
@@ -311,20 +354,6 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		inflater.inflate(R.menu.action_bar, menu);
 
 		return true;
-	}
-
-	// Called when an options item is clicked
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.preferences:
-				startActivity(new Intent(this, PreferencesActivity.class));
-				break;
-			case android.R.id.home:
-				NavUtils.navigateUpFromSameTask(this);
-				return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	public void submitRequest(View view) {
@@ -440,19 +469,26 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 
 	}
 
-    @Override
-    protected synchronized void postSucceed(Call c,Object param) {
-        Toast  toast = Toast.makeText(getApplicationContext(),R.string.reservation_success, Toast.LENGTH_LONG);
-        toast.show();
+	@Override
+	protected synchronized void postSucceed(Call c, Object param) {
+		String id = NetCache.getInstance().getLastSubmittedId();
+		//probably that will never happen
+		if (id == null) {
+			Toast toast = Toast.makeText(getApplicationContext(), R.string.response_error, Toast.LENGTH_LONG);
+			toast.show();
+			return;
+		}
+		Toast toast = Toast.makeText(getApplicationContext(), R.string.reservation_success, Toast.LENGTH_LONG);
+		toast.show();
 
-        Intent circuitActivity = new Intent();
-        circuitActivity.setClass(getApplicationContext(), SingleCircuitActivity.class);
+		Intent circuitActivity = new Intent();
+		circuitActivity.setClass(getApplicationContext(), SingleCircuitActivity.class);
 
-        ReservationInfo  res=(ReservationInfo) param;
-        circuitActivity.putExtra("SERVICE_ID", NetCache.getInstance().getLastSubmittedId());
-        circuitActivity.putExtra("DOMAIN_NAME", res.getStartNsa());
-        startActivity(circuitActivity);
-    }
+		ReservationInfo res = (ReservationInfo) param;
+		circuitActivity.putExtra("SERVICE_ID", id);
+		circuitActivity.putExtra("DOMAIN_NAME", res.getStartNsa());
+		startActivity(circuitActivity);
+	}
 
 	private boolean checkReservation(ReservationInfo res) {
 
@@ -515,7 +551,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 	private int txtData(ReservationInfo res, int id) throws Exception {
 		EditText txt = (EditText) findViewById(id);
 		String s = txt.getText().toString();
-        int ret = Integer.parseInt(s);
+		int ret = Integer.parseInt(s);
 		return ret;
 
 	}
@@ -525,7 +561,7 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		int pos = sp.getSelectedItemPosition();
 
 		if (pos == AdapterView.INVALID_POSITION) {
-			throw new Exception("data not selected at spinner "+sp.toString());
+			throw new Exception("data not selected at spinner " + sp.toString());
 		}
 
 		String s = (String) sp.getItemAtPosition(pos);
@@ -560,32 +596,32 @@ public class RequestActivity extends BasicActiviy implements View.OnFocusChangeL
 		this.finish();
 	}
 
-    @Override
-    public void onCheckedChanged(CompoundButton view, boolean checked) {
-        Log.d(TAG,view.toString());
-        switch (view.getId()) {
-            case R.id.startVlanAuto:
-                if (checked) {
-                    findViewById(R.id.startVlan).setEnabled(false);
-                } else {
-                    findViewById(R.id.startVlan).setEnabled(true);
-                }
-                break;
-            case R.id.endVlanAuto:
-                if (checked) {
-                    findViewById(R.id.endVlan).setEnabled(false);
-                } else {
-                    findViewById(R.id.endVlan).setEnabled(true);
-                }
-                break;
-            case R.id.startNow:
-                if (checked) {
-                    findViewById(R.id.startDate).setEnabled(false);
-                    findViewById(R.id.startTime).setEnabled(false);
-                } else {
-                    findViewById(R.id.startDate).setEnabled(true);
-                    findViewById(R.id.startTime).setEnabled(true);
-                }
-        }
-    }
+	@Override
+	public void onCheckedChanged(CompoundButton view, boolean checked) {
+		Log.d(TAG, view.toString());
+		switch (view.getId()) {
+			case R.id.startVlanAuto:
+				if (checked) {
+					findViewById(R.id.startVlan).setEnabled(false);
+				} else {
+					findViewById(R.id.startVlan).setEnabled(true);
+				}
+				break;
+			case R.id.endVlanAuto:
+				if (checked) {
+					findViewById(R.id.endVlan).setEnabled(false);
+				} else {
+					findViewById(R.id.endVlan).setEnabled(true);
+				}
+				break;
+			case R.id.startNow:
+				if (checked) {
+					findViewById(R.id.startDate).setEnabled(false);
+					findViewById(R.id.startTime).setEnabled(false);
+				} else {
+					findViewById(R.id.startDate).setEnabled(true);
+					findViewById(R.id.startTime).setEnabled(true);
+				}
+		}
+	}
 }

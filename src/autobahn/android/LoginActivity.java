@@ -19,9 +19,10 @@ import android.widget.Toast;
 import com.example.autobahn.R;
 
 
-public class LoginActivity extends Activity implements View.OnClickListener {
+public class LoginActivity extends Activity implements View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String MSG = "";
     public static final int LOGIN_AND_GO_BACK = 1;
+    public static final int SET_PREFS = 2;
     private ProgressDialog progressDialog=null;
     private final TextWatcher watcher = new TextWatcher() {
 		@Override
@@ -66,6 +67,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
         NetCache.getInstance().clear();
         setContentView(R.layout.login);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences.registerOnSharedPreferenceChangeListener(this);
 
 		loginButton = (Button) findViewById(R.id.loginButton);
 		usernameField = (EditText) findViewById(R.id.username);
@@ -74,13 +77,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		usernameField.addTextChangedListener(watcher);
 		passwordField.addTextChangedListener(watcher);
 
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-		usernameField.getText().append(prefs.getString("username", ""));
-		passwordField.getText().append(prefs.getString("password", ""));
-
-
 		loginButton.setOnClickListener(this);
+
+        setTextFromPrefs();
 
 		Bundle bundle = getIntent().getExtras();
 
@@ -148,13 +147,18 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.preferences:
-				startActivity(new Intent(this, PreferencesActivity.class));
+                startActivity(new Intent(this, PreferencesActivity.class));
 				break;
 		}
 		return true;
 	}
 
-	private class LoginTask extends AsyncTask<Void, Void, Void> {
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        setTextFromPrefs();
+    }
+
+    private class LoginTask extends AsyncTask<Void, Void, Void> {
 
 		@Override
 		protected Void doInBackground(Void... type) {
@@ -176,7 +180,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		protected void onPostExecute(Void result) {
 			afterLogIn();
 		}
-
-
 	}
+
+    private void setTextFromPrefs() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        usernameField.setText(prefs.getString("username", "") );
+        passwordField.setText(prefs.getString("password", ""));
+    }
+
 }

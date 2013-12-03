@@ -1,7 +1,5 @@
 package autobahn.android;
 
-import android.content.Context;
-
 public class AutobahnClientException extends Exception {
 
 	private Error error = Error.UNKNOWN;
@@ -17,29 +15,15 @@ public class AutobahnClientException extends Exception {
 		super(error);
 	}
 
-	public AutobahnClientException(Error e) {
-		super();
+	public AutobahnClientException(Error e,String str) {
+		super(str);
 		error = e;
-	}
-
-	public AutobahnClientException(int status) {
-		super();
-		error = Error.STATUS_ERR;
-		this.status = status;
-	}
-
-	int getStatus() {
-		return status;
 	}
 
 	public Error getError() {
 		return error;
 	}
 
-	public String getVisibleMsg(Context context) {
-		//TODO return a visible string for toast message
-		return new String();
-	}
 
 	enum Error {
 		INVALID_PARAM,

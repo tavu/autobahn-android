@@ -229,18 +229,23 @@
 			android:layout_below="@+id/descriptionText"
 			android:inputType="textMultiLine"/>
 
-		<ExpandableListView
-			android:id="@+id/pathConstraints"
-			android:layout_width="match_parent"
-			android:layout_height="200dp"
-			android:layout_below="@+id/description">
-		</ExpandableListView>
+        <Button
+                android:id="@+id/optionalParams"
+                style="@style/AutobahnButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/description"
+                android:layout_centerHorizontal="true"
+                android:clickable="true"
+                android:enabled="true"
+                android:onClick="goToOptional"
+                android:text="@string/optionalParameters"/>
 
 		<View
 			android:id="@+id/separator3"
 			android:layout_width="fill_parent"
 			android:layout_height="1dp"
-			android:layout_below="@+id/pathConstraints"
+			android:layout_below="@+id/optionalParams"
 			android:layout_marginBottom="5dp"
 			android:layout_marginTop="10dp"
 			android:background="@android:color/darker_gray"/>

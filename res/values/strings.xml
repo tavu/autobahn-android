@@ -92,6 +92,19 @@
     <string name="modify_service">Modify service</string>
     <string name="resubmitService">Resubmit</string>
 
+    <string name="includedStp">Included stps</string>
+    <string name="excludedStp">Excluded stps</string>
+    <string name="includedNetworks">Included networks</string>
+    <string name="excludedNetworks">Excluded networks</string>
+    <string name="includeNetwork">Include a networks</string>
+    <string name="excludeNetwork">Exclude a networks</string>
+    <string name="includeStp">Include an Stp</string>
+    <string name="excludeStp">Exclude an Stp</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+    <string name="stp">Stp:</string>
+
+
 
 	<!-- ERRORS -->
 	<string name="login_failed">"Log in failed. Please check username and password"</string>

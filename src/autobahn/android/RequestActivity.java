@@ -9,32 +9,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ExpandableListView;
-import android.widget.SimpleExpandableListAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.example.autobahn.R;
-
 import net.geant.autobahn.android.ReservationInfo;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -51,6 +33,8 @@ public class RequestActivity extends BasicActivity implements View.OnFocusChange
 
 	private View lastClickedView;
 	private AutobahnClientException exception = null;
+    private Intent optionalIntent=null;
+    private static final int OPTINAL_REQ=10;
 
 	@Override
 	protected void showData(Object data, Call c, Object param) {
@@ -165,40 +149,6 @@ public class RequestActivity extends BasicActivity implements View.OnFocusChange
 		findViewById(R.id.startTime).setOnFocusChangeListener(this);
 		findViewById(R.id.endTime).setOnFocusChangeListener(this);
 
-		/* Set ExpandableListView adapter */
-		ArrayList<HashMap<String, String>> result = new ArrayList<>();
-		for (int i = 0; i < 4; ++i) { // 4 groups........
-			HashMap<String, String> m = new HashMap<>();
-			m.put("Group Item", "Group Item " + i); // the key and it's value.
-			result.add(m);
-		}
-
-		ArrayList<ArrayList<HashMap<String, String>>> result2 = new ArrayList<>();
-		for (int i = 0; i < 4; ++i) { // this -4 is the number of groups(Here it's fifteen)
-			/* each group need each HashMap-Here for each group we have 3 subgroups */
-			ArrayList<HashMap<String, String>> secList = new ArrayList<>();
-			for (int n = 0; n < 3; n++) {
-				HashMap<String, String> child = new HashMap<>();
-				child.put("Sub Item", "Sub Item " + n);
-				secList.add(child);
-			}
-			result2.add(secList);
-		}
-
-		SimpleExpandableListAdapter expListAdapter =
-				new SimpleExpandableListAdapter(
-						this,
-						result,                         // Creating group List.
-						R.layout.group_row,             // Group item layout XML.
-						new String[]{"Group Item"},     // the key of group item.
-						new int[]{R.id.row_name},       // ID of each group item.-Data under the key goes into this TextView.
-						result2,                        // childData describes second-level entries.
-						R.layout.child_row,             // Layout for sub-level entries(second level).
-						new String[]{"Sub Item"},       // Keys in childData maps to display.
-						new int[]{R.id.grp_child}       // Data under the keys above go into these TextViews.
-				);
-		ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.pathConstraints);
-		expandableListView.setAdapter(expListAdapter);       // setting the adapter in the list.
 
 	}
 
@@ -624,4 +574,23 @@ public class RequestActivity extends BasicActivity implements View.OnFocusChange
 				}
 		}
 	}
+
+    public void goToOptional(View v) {
+        if(optionalIntent==null) {
+            optionalIntent = new Intent();
+        }
+        optionalIntent.setClass(getApplicationContext(), RequestOptional.class);
+        startActivityForResult(optionalIntent, OPTINAL_REQ);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+
+        Log.d(TAG,"optional done");
+        if(requestCode==OPTINAL_REQ && resultCode==RESULT_OK) {
+            optionalIntent=data;
+        }
+
+    }
 }

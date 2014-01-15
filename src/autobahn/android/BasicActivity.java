@@ -134,16 +134,18 @@ public class BasicActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode,resultCode,data);
 
-        if(LOG_IN_REQ==requestCode && resultCode==RESULT_OK) {
-            BasicAsyncTask async=new BasicAsyncTask();
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage( getString(R.string.loading) );
-            progressDialog.show();
-            async.execute(param);
-        }
-        else {
-            AutobahnClientException e=new AutobahnClientException(getString(R.string.no_log_in) );
-            showError(e,call,param);
+        if(LOG_IN_REQ==requestCode ){
+            if(resultCode==RESULT_OK) {
+                BasicAsyncTask async=new BasicAsyncTask();
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setMessage( getString(R.string.loading) );
+                progressDialog.show();
+                async.execute(param);
+            }
+            else {
+                AutobahnClientException e=new AutobahnClientException(getString(R.string.no_log_in) );
+                showError(e,call,param);
+            }
         }
     }
 

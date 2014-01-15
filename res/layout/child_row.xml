@@ -7,11 +7,11 @@
 
 	<TextView
 		android:id="@+id/grp_child"
-		android:layout_width="150px"
-		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:layout_height="40dp"
 		android:focusable="false"
 		android:paddingLeft="50px"
-		android:textSize="14px"
+		android:textSize="17dp"
 		android:textStyle="normal"/>
 
 </LinearLayout>

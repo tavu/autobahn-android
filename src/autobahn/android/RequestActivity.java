@@ -31,6 +31,8 @@ public class RequestActivity extends BasicActivity implements View.OnFocusChange
 		CompoundButton.OnCheckedChangeListener {
 
 
+    private final String[] tabStrings = {"Basic Parameters", "Optional Parameters"};
+
 	private View lastClickedView;
 	private AutobahnClientException exception = null;
     private Intent optionalIntent=null;

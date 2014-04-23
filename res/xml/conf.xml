@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Configuration>
+    <Property name="scheme" value="http"></Property>
+    <Property name="host" value="62.217.124.241"></Property>
+    <Property name="port" value="8080"></Property>
+</Configuration>

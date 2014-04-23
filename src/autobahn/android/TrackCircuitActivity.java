@@ -24,7 +24,8 @@ public class TrackCircuitActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         domainName = extras.getString("DOMAIN_NAME");
-
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setTitle("Reservations");
         getData(Call.RESERV,domainName);
 
     }

@@ -47,34 +47,24 @@ public class RequestOptional extends BasicActivity implements ExpandableListView
         groups = new ArrayList<>();
         HashMap<String, String> m;
 
-        m= new HashMap<>();
+        m = new HashMap<>();
         m.put("Group Item",getString(R.string.includedNetworks));
         groups.add(m);
-
-        m= new HashMap<>();
+        m = new HashMap<>();
         m.put("Group Item",getString(R.string.excludedNetworks));
         groups.add(m);
-        m= new HashMap<>();
+        m = new HashMap<>();
         m.put("Group Item",getString(R.string.includedStp));
         groups.add(m);
-        m= new HashMap<>();
+        m = new HashMap<>();
         m.put("Group Item",getString(R.string.excludedStp));
         groups.add(m);
 
-
-      //  ArrayList<ArrayList<HashMap<String, String>>> childrens = new ArrayList<>();
         children = new ArrayList<>();
-        for (int i = 0; i < 4; ++i) { // this -4 is the number of groups(Here it's fifteen)
-			/* each group need each HashMap-Here for each group we have 3 subgroups */
+        for (int i = 0; i < 4; ++i) {
             ArrayList<HashMap<String, String>> secList = new ArrayList<>();
-          /*  for (int n = 0; n < 3; n++) {
-                HashMap<String, String> child = new HashMap<>();
-                child.put("Sub Item", "Sub Item " + n);
-                secList.add(child);
-            }    */
             children.add(secList);
         }
-
         expListAdapter =
                 new SimpleExpandableListAdapter(
                         this,
@@ -82,9 +72,9 @@ public class RequestOptional extends BasicActivity implements ExpandableListView
                         R.layout.group_row,             // Group item layout XML.
                         new String[]{"Group Item"},     // the key of group item.
                         new int[]{R.id.row_name},       // ID of each group item.-Data under the key goes into this TextView.
-                        children,                        // childData describes second-level entries.
+                        children,                       // childData describes second-level entries.
                         R.layout.child_row,             // Layout for sub-level entries(second level).
-                        new String[]{CHILD_KEY},       // Keys in childData maps to display.
+                        new String[]{CHILD_KEY},        // Keys in childData maps to display.
                         new int[]{R.id.grp_child}       // Data under the keys above go into these TextViews.
                 );
 
@@ -119,27 +109,30 @@ public class RequestOptional extends BasicActivity implements ExpandableListView
 
     private List<String> getNetworks() {
 
-        List<String> idms=NetCache.getInstance().getIdms();
-        if(idms==null) {
+        List<String> idms = NetCache.getInstance().getIdms().get("name");
+
+        if(idms == null) {
             return idms;
         }
+
         ArrayList<HashMap<String, String>> secList;
-        if(currentGroup==0 ||currentGroup==2) {
+
+        /*if(currentGroup == 0 || currentGroup == 2) {
             secList = children.get(1);
-        } else if(currentGroup==1 || currentGroup==3) {
+        } else if(currentGroup == 1 || currentGroup == 3) {
             secList = children.get(0);
         } else {
             //TODO show error
-            Log.d(TAG,"wrong current grout "+currentGroup);
+            Log.d(TAG,"Wrong current group " + currentGroup);
             return null;
         }
 
 
         for(HashMap<String, String> map : secList) {
             idms.remove(map.get(CHILD_KEY));
-        }
+        }*/
 
-        if(currentGroup==0 ||currentGroup==1) {
+        if(currentGroup == 0 || currentGroup == 1) {
             secList = children.get(currentGroup);
             for(HashMap<String, String> map : secList) {
                 idms.remove(map.get(CHILD_KEY));
@@ -154,26 +147,26 @@ public class RequestOptional extends BasicActivity implements ExpandableListView
 
         Log.d(TAG, "C " + group + " G " + child);
 
-        currentGroup=group;
-        currentChild=child;
-        if(group<0 ||group>3) {
+        currentGroup = group;
+        currentChild = child;
+        /*if(group < 0 || group >3 ) {
             //TODO show error
             return false;
-        }
-        if( (group>=0 && group<4) && child==0) {
+        }*/
+        if( (group >= 0 && group < 4) && child == 0) {
             getData(Call.DOMAINS, null);
         }
         else {
-            String s=getChildText(group,child);
+            String s = getChildText(group,child);
             String msg;
-            if(group==0) {
-                msg="Do you want to remove "+s+" from "+getString(R.string.includedNetworks) +".";
-            } else if(group==1) {
-                msg="Do you want to remove "+s+" from "+getString(R.string.excludedNetworks) +".";
-            } else if(group==2) {
-                msg="Do you want to remove "+s+" from "+getString(R.string.includedStp) +".";
+            if(group == 0) {
+                msg = "Do you want to remove " + s + " from " + getString(R.string.includedNetworks) + "?";
+            } else if(group == 1) {
+                msg = "Do you want to remove " + s + " from " + getString(R.string.excludedNetworks) + "?";
+            } else if(group == 2) {
+                msg = "Do you want to remove " + s + " from " + getString(R.string.includedStp) + "?";
             } else{
-                msg="Do you want to remove "+s+" from "+getString(R.string.excludedStp) +".";
+                msg = "Do you want to remove " + s + " from " + getString(R.string.excludedStp) + "?";
             }
 
             AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(this);
@@ -204,13 +197,12 @@ public class RequestOptional extends BasicActivity implements ExpandableListView
         if(currentGroup==-1) {
             return ;
         }
-
-        if(c==Call.PORTS) {
+        if(c == Call.PORTS) {
 
             int otherGroup;
-            if(currentGroup==2) {
-                otherGroup=3;
-            } else if(currentGroup==3) {
+            if(currentGroup == 2) {
+                otherGroup = 3;
+            } else if(currentGroup == 3) {
                 otherGroup=2;
             } else {
                 //TODO show error
@@ -235,14 +227,14 @@ public class RequestOptional extends BasicActivity implements ExpandableListView
         }
 
 
-        if(NetCache.getInstance().getIdms()==null) {
-            //TODO show error
+        if(NetCache.getInstance().getIdms() == null) {
+            showError(new AutobahnClientException(getString(R.string.no_domains)),Call.RESERV,new Object());
             currentGroup=-1;
             return;
         }
 
         if(currentGroup==0) {
-            dialog= getNetworkDialog();
+            dialog = getNetworkDialog();
             dialog.setTitle(R.string.includeNetwork);
             dialog.show();
         } else if(currentGroup==1) {
@@ -259,18 +251,18 @@ public class RequestOptional extends BasicActivity implements ExpandableListView
             dialog.setTitle(R.string.excludeStp);
             dialog.show();
         }
-        Log.d(TAG,"edo");
-
     }
 
     private Dialog getNetworkDialog() {
 
-        List<String> idms=getNetworks();
+        List<String> idms = getNetworks();
+
         if(idms.isEmpty() ) {
-            //TODO
+            showError(new AutobahnClientException(getString(R.string.no_domains)), Call.RESERV, new Object() );
+            return null;
         }
 
-        dialog= new Dialog(this);
+        dialog = new Dialog(this);
         dialog.setContentView(R.layout.network_dialog);
         dialog.setTitle(R.string.includeNetwork);
         TextView text = (TextView) dialog.findViewById(R.id.dialogText);
@@ -278,7 +270,6 @@ public class RequestOptional extends BasicActivity implements ExpandableListView
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,idms);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Log.d(TAG,spinner.toString());
         spinner.setAdapter(adapter);
 
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOk);
@@ -322,7 +313,7 @@ public class RequestOptional extends BasicActivity implements ExpandableListView
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event){
         if(keyCode == KeyEvent.KEYCODE_BACK){
-            Log.d(TAG, "back key captured");
+            Log.d(TAG, "Back key pressed");
             Intent returnIntent = new Intent();
             setResult(RESULT_OK, returnIntent);
             finish();
@@ -347,13 +338,14 @@ public class RequestOptional extends BasicActivity implements ExpandableListView
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            List<String> idms=getNetworks();
-            if(idms==null) {
-                idms=new ArrayList<String>();
+            List<String> idms = getNetworks();
+
+            if(idms == null) {
+                idms = new ArrayList<>();
             }
 
             if(idms.isEmpty()) {
-                //TODO show error
+                showError(new AutobahnClientException(getString(R.string.no_domains)), Call.SUBMIT_RES , new Object());
             }
 
             setContentView(R.layout.stp_dialog);

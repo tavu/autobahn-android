@@ -35,7 +35,8 @@ public class AboutActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.about);
-
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setTitle("About BoD");
         link = (TextView) findViewById(R.id.link_1);
 
         link.setOnClickListener(new View.OnClickListener() {

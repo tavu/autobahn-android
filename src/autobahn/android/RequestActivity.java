@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +14,7 @@ import android.widget.*;
 import com.example.autobahn.R;
 import net.geant.autobahn.android.ReservationInfo;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,9 +32,6 @@ public class RequestActivity extends BasicActivity implements View.OnFocusChange
 		AdapterView.OnItemSelectedListener,
 		CompoundButton.OnCheckedChangeListener {
 
-
-    private final String[] tabStrings = {"Basic Parameters", "Optional Parameters"};
-
 	private View lastClickedView;
 	private AutobahnClientException exception = null;
     private Intent optionalIntent=null;
@@ -42,20 +41,20 @@ public class RequestActivity extends BasicActivity implements View.OnFocusChange
 	protected void showData(Object data, Call c, Object param) {
 
 		if (c == Call.DOMAINS) {
-			List<String> l = (List<String>) data;
+			ArrayList<String> l = ((HashMap<String,ArrayList<String>>)data).get("name");
 			if (!l.isEmpty()) {
 				getData(Call.PORTS, l.get(0));
 			} else {
-				//TODO there is no domain show error
+                showError(new AutobahnClientException(getString(R.string.no_domains)),c,param);
 			}
 
 			//setDomains((List<String>)data);
 		} else if (c == Call.PORTS) {
 			Spinner sp = (Spinner) findViewById(R.id.startDomain);
 			if (sp.getAdapter() == null)
-				setDomains(NetCache.getInstance().getIdms());
+				setDomains(NetCache.getInstance().getIdms().get("name"));
 
-			setPorts((List<String>) data, (String) param);
+			setPorts(((HashMap<String,ArrayList<String>>)data).get("name"), (String) param);
 		}
 	}
 
@@ -107,6 +106,7 @@ public class RequestActivity extends BasicActivity implements View.OnFocusChange
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		NetCache.getInstance().setLastSubmittedId(null);
 
 		setContentView(R.layout.request_reservation_activity);
@@ -308,13 +308,26 @@ public class RequestActivity extends BasicActivity implements View.OnFocusChange
 		return true;
 	}
 
+
 	public void submitRequest(View view) {
 
 		ReservationInfo res = new ReservationInfo();
-
-		try {
+        Map<String, ArrayList<String>> domains = NetCache.getInstance().getIdms();
+        Map<String, ArrayList<String>> ports;
+        try {
 			String s = spinnerData(res, R.id.startDomain);
+            //int index = domains.get("name").indexOf(s);
 			res.setStartNsa(s);
+            try {
+                String startPort = spinnerData(res, R.id.startPort);
+                ports = NetCache.getInstance().getPorts(s);
+                int index = ports.get("name").indexOf(startPort);
+                res.setStartPort(ports.get("value").get(index));
+            } catch (Exception e1) {
+                Toast toast = Toast.makeText(getApplicationContext(), R.string.select_start_port, Toast.LENGTH_LONG);
+                toast.show();
+                return;
+            }
 		} catch (Exception e1) {
 			Toast toast = Toast.makeText(getApplicationContext(), R.string.select_start_dom, Toast.LENGTH_LONG);
 			toast.show();
@@ -323,25 +336,20 @@ public class RequestActivity extends BasicActivity implements View.OnFocusChange
 
 		try {
 			String s = spinnerData(res, R.id.endDomain);
+            //int index = domains.get("name").indexOf(s);
 			res.setEndNsa(s);
-		} catch (Exception e1) {
+            try {
+                String endPort = spinnerData(res, R.id.endPort);
+                ports = NetCache.getInstance().getPorts(s);
+                int index = ports.get("name").indexOf(endPort);
+                res.setEndPort(ports.get("value").get(index));
+            } catch (Exception e1) {
+                Toast toast = Toast.makeText(getApplicationContext(), R.string.select_end_port, Toast.LENGTH_LONG);
+                toast.show();
+                return;
+            }
+        } catch (Exception e1) {
 			Toast toast = Toast.makeText(getApplicationContext(), R.string.select_end_dom, Toast.LENGTH_LONG);
-			toast.show();
-			return;
-		}
-		try {
-			String startPort = spinnerData(res, R.id.startPort);
-			res.setStartPort(startPort);
-		} catch (Exception e1) {
-			Toast toast = Toast.makeText(getApplicationContext(), R.string.select_start_port, Toast.LENGTH_LONG);
-			toast.show();
-			return;
-		}
-		try {
-			String endPort = spinnerData(res, R.id.endPort);
-			res.setEndPort(endPort);
-		} catch (Exception e1) {
-			Toast toast = Toast.makeText(getApplicationContext(), R.string.select_end_port, Toast.LENGTH_LONG);
 			toast.show();
 			return;
 		}
@@ -467,7 +475,7 @@ public class RequestActivity extends BasicActivity implements View.OnFocusChange
 				toast.show();
 				return false;
 			}
-			if (sd.before(ed)) {
+			if (sd.after(ed)) {
 				Toast toast = Toast.makeText(getApplicationContext(), R.string.end_before_start, Toast.LENGTH_LONG);
 				toast.show();
 				return false;
@@ -595,4 +603,5 @@ public class RequestActivity extends BasicActivity implements View.OnFocusChange
         }
 
     }
+
 }

@@ -112,10 +112,9 @@ public class LoginActivity extends Activity implements View.OnClickListener, Sha
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 		settings.edit().putString(PreferencesActivity.USERNAME_PREFERENCE_KEY, username).commit();
 		settings.edit().putString(PreferencesActivity.PASSWORD_PREFERENCE_KEY, password).commit();
-//		client.setUserName(username);
-//		client.setPassword(password);
-		AutobahnClient.getInstance().setUserName(username);
-        AutobahnClient.getInstance().setPassword(password);
+
+		AutobahnClient.getInstance(this).setUserName(username);
+        AutobahnClient.getInstance(this).setPassword(password);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage( getString(R.string.loading) );
@@ -164,7 +163,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Sha
 		protected Void doInBackground(Void... type) {
 			exception = null;
 			try {
-				AutobahnClient.getInstance().logIn();
+				AutobahnClient.getInstance(getApplicationContext()).logIn();
 			} catch (AutobahnClientException e) {
 				exception = e;
 			}

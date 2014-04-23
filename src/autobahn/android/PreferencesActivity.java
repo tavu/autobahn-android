@@ -10,7 +10,6 @@ public class PreferencesActivity extends Activity {
 
 	public static final String USERNAME_PREFERENCE_KEY = "username";
 	public static final String PASSWORD_PREFERENCE_KEY = "password";
-	public static final String HOST_PREFERENCE_KEY = "url";
 
 	// TODO: add preferences listener on login info change and redirect to login screen
 
@@ -33,7 +32,6 @@ public class PreferencesActivity extends Activity {
 			addPreferencesFromResource(R.xml.prefs);
 			findPreference(USERNAME_PREFERENCE_KEY).setSummary(getPreferenceManager().getSharedPreferences().getString(USERNAME_PREFERENCE_KEY, ""));
 			findPreference(PASSWORD_PREFERENCE_KEY).setSummary(maskPassword(getPreferenceManager().getSharedPreferences().getString(PASSWORD_PREFERENCE_KEY, "")));
-			findPreference(HOST_PREFERENCE_KEY).setSummary(getPreferenceManager().getSharedPreferences().getString(HOST_PREFERENCE_KEY, ""));
 		}
 
 		@Override
@@ -60,32 +58,12 @@ public class PreferencesActivity extends Activity {
 		 */
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-			/*TODO use source 7 whatever that means
-			switch (key) {
-				case USERNAME_PREFERENCE_KEY:
-					findPreference(USERNAME_PREFERENCE_KEY).setSummary(sharedPreferences.getString(USERNAME_PREFERENCE_KEY, ""));
-					break;
-				case PASSWORD_PREFERENCE_KEY:
-					findPreference(PASSWORD_PREFERENCE_KEY).setSummary(maskPassword(sharedPreferences.getString(PASSWORD_PREFERENCE_KEY, "")));
-					break;
-				case HOST_PREFERENCE_KEY:
-					findPreference(HOST_PREFERENCE_KEY).setSummary(sharedPreferences.getString(HOST_PREFERENCE_KEY, ""));
-					break;
-			}
-			 */
-
             if(key.equals(USERNAME_PREFERENCE_KEY))  {
                 findPreference(USERNAME_PREFERENCE_KEY).setSummary(sharedPreferences.getString(USERNAME_PREFERENCE_KEY, ""));
             }
             else if(key.equals(PASSWORD_PREFERENCE_KEY))  {
                 findPreference(PASSWORD_PREFERENCE_KEY).setSummary(maskPassword(sharedPreferences.getString(PASSWORD_PREFERENCE_KEY, "")));
             }
-            else if(key.equals(HOST_PREFERENCE_KEY)) {
-                findPreference(HOST_PREFERENCE_KEY).setSummary(sharedPreferences.getString(HOST_PREFERENCE_KEY, ""));
-            }
-
-
 		}
 
 		private StringBuilder maskPassword(String password) {

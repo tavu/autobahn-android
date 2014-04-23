@@ -17,12 +17,12 @@ import java.util.Map;
 public class NetCache {
 	static NetCache instance = null;
 	private String TAG = "CACHE";
-	private List<String> idms = new ArrayList();
+	private Map<String,ArrayList<String>> idms = new HashMap<>();
 	private List<String> reservations = new ArrayList();
 	private ReservationInfo lastResInfo;
-	private String lastResId;
+	private ArrayList<String> lastResId = new ArrayList<>();
 	private String lastDomRes;
-	private Map<String, ArrayList<String>> ports = new HashMap();
+	private Map<String, Map<String,ArrayList<String>>> ports = new HashMap();
     private String lastSubmittedId=null;
 
 	private NetCache() {
@@ -60,24 +60,26 @@ public class NetCache {
 		return null;
 	}
 
-	public List<String> getIdms() {
+	public Map<String,ArrayList<String>> getIdms() {
 		if (idms == null) {
 			return null;
 		}
-		return new ArrayList<String>(idms);
+		return idms;
 	}
 
-	public void setIdms(List<String> idms) {
+	public void setIdms(Map<String,ArrayList<String>> idms) {
 		this.idms = idms;
 	}
 
-	public void setLastResInfo(String id, ReservationInfo res) {
+	public void setLastResInfo(String id,String domain, ReservationInfo res) {
 		lastResInfo = res;
-		lastResId = id;
+        lastResId = new ArrayList<>();
+		lastResId.add(id);
+        lastResId.add(domain);
 
 	}
 
-	public ReservationInfo getLastReservation(String lastResId) {
+	public ReservationInfo getLastReservation(ArrayList<String> lastResId) {
 		if (lastResId.equals(this.lastResId)) {
 			return lastResInfo;
 		} else {
@@ -91,9 +93,9 @@ public class NetCache {
 		lastDomRes = domain;
 	}
 
-	public List<String> getPorts(String dom) {
+	public Map<String, ArrayList<String>> getPorts(String dom) {
 		if (ports.containsKey(dom)) {
-			return new ArrayList<String>(ports.get(dom));
+			return new HashMap<>(ports.get(dom));
 		}
 		return null;
 	}
@@ -103,8 +105,16 @@ public class NetCache {
 	}
 
 	public void addPorts(String dom, List<String> ports) {
-		ArrayList<String> array = new ArrayList<String>(ports);
-		this.ports.put(dom, array);
+		ArrayList<String> encodedPorts = new ArrayList<String>(ports);
+        ArrayList<String> array = new ArrayList<>();
+        Map<String,ArrayList<String>> portMap = new HashMap<>();
+        for(int i = 0; i<encodedPorts.size(); i++){
+            String[] tokens = encodedPorts.get(i).split(":");
+            array.add(tokens[6]);
+        }
+        portMap.put("name",array);
+        portMap.put("value",encodedPorts);
+		this.ports.put(dom, portMap);
 	}
 
 	public void clear() {

@@ -1,6 +1,10 @@
 package autobahn.android;
 
+import android.app.Application;
 import android.content.Context;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
+import android.os.Bundle;
 import android.util.Log;
 import com.example.autobahn.R;
 import com.google.gson.Gson;
@@ -28,13 +32,15 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class AutobahnClient {
 
@@ -61,17 +67,48 @@ public class AutobahnClient {
     CookieStore cookieStore;
 	private String TAG = "[Autobahn-client]";
 
-	public AutobahnClient() {
+	public AutobahnClient(Context context) {
 		httpclient = new DefaultHttpClient();
-		scheme = "http";
-        host="62.217.125.174";
-        port=8080;
+        try{
+            initConfigValues(context);
+        }
+        catch (XmlPullParserException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
 	}
 
-	public static AutobahnClient getInstance() {
+    private void initConfigValues(Context context) throws XmlPullParserException,IOException{
+        Resources res = context.getApplicationContext().getResources();
+        XmlResourceParser parser = res.getXml(R.xml.conf);
+        int eventType = parser.getEventType();
+        while(eventType != XmlPullParser.END_DOCUMENT){
+            if (eventType == XmlPullParser.START_TAG && parser.getName().equals("Property")) {
+                String propertyName = parser.getAttributeValue(null, "name");
+                String propertyValue = parser.getAttributeValue(null, "value");
+                switch (propertyName){
+                    case "scheme":
+                        scheme = propertyValue;
+                        break;
+                    case "host":
+                        host = propertyValue;
+                        break;
+                    case "port":
+                        port = Integer.parseInt(propertyValue);
+                        break;
+                }
+            }
+            eventType = parser.next();
+        }
+    }
+
+    public static AutobahnClient getInstance(Context context) {
 		if (instance == null)
-			instance = new AutobahnClient();
+			instance = new AutobahnClient(context);
 
 		return instance;
 	}
@@ -111,7 +148,7 @@ public class AutobahnClient {
 	public boolean hasAuthenticate() {
 		CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
 		for (Cookie c : cookieStore.getCookies()) {
-			if (c.getName().equals("SPRING_SECURITY_REMEMBER_ME_COOKIE") && !c.isExpired(new Date())) {
+			if (c.getName().equals("JSESSIONID") && !c.isExpired(new Date())) {
 				return true;
 			}
 		}
@@ -121,6 +158,7 @@ public class AutobahnClient {
     public synchronized void logOut() throws AutobahnClientException {
         CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
         cookieStore.clear();
+        
 
         NetCache.getInstance().clear();
 
@@ -153,7 +191,6 @@ public class AutobahnClient {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("j_username", userName));
 		params.add(new BasicNameValuePair("j_password", password));
-		params.add(new BasicNameValuePair("_spring_security_remember_me", "true"));
 		String query = URLEncodedUtils.format(params, "utf-8");
 
 		URI url;
@@ -283,10 +320,10 @@ public class AutobahnClient {
 			response = httpclient.execute(httpget, localContext);
 		} catch (ClientProtocolException e) {
 			String error = context.getString(R.string.net_error);
-            Log.d(TAG, e.getMessage());
+            //Log.d(TAG, e.getMessage());
 			throw new AutobahnClientException(error);
 		} catch (IOException e) {
-            Log.d(TAG, e.getMessage());
+            //Log.d(TAG, e.getMessage());
 			String error = context.getString(R.string.net_error);
 			throw new AutobahnClientException(error);
 		}
@@ -352,24 +389,38 @@ public class AutobahnClient {
 		}
 
         Gson gson = new Gson();
+        Map<String,ArrayList<String>> m = new HashMap<>();
 		ArrayList<String> l = new ArrayList<String>();
+        ArrayList<String> k = new ArrayList<>();
 		try {
             String json = handleGetRequest(url);
 			l = gson.fromJson(json, l.getClass());
+            for(int i = 0; i<l.size(); i++){
+                String val = l.get(i);
+                String[] r = val.split(":",5);
+                k.add(r[3]);
+            }
 		} catch (JsonParseException e) {
 			String error = context.getString(R.string.net_error);
 			throw new AutobahnClientException(error);
 		} catch ( NoDataException e) {
             //Do nothing
         }
-
-		NetCache.getInstance().setIdms(l);
+        m.put("name",k);
+        m.put("value",l);
+		NetCache.getInstance().setIdms(m);
 	}
 
 	public synchronized void fetchPorts(String domain) throws AutobahnClientException {
+
+        ArrayList<String> domainNames = NetCache.getInstance().getIdms().get("name");
+        ArrayList<String> domainValues = NetCache.getInstance().getIdms().get("value");
+        int domainIndex = domainNames.indexOf(domain);
+        String encodedDomain = domainValues.get(domainIndex);
+
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 
-		params.add(new BasicNameValuePair("domain", domain));
+		params.add(new BasicNameValuePair("domain", encodedDomain));
 		String query = URLEncodedUtils.format(params, "utf-8");
 
 		URI url;
@@ -405,11 +456,12 @@ public class AutobahnClient {
 		NetCache.getInstance().addPorts(domain, ports);
 	}
 
-	public synchronized void fetchReservationInfo(String serviceID) throws AutobahnClientException {
+	public synchronized void fetchReservationInfo(String serviceID, String domain) throws AutobahnClientException {
 		ReservationInfo reservationInfo = new ReservationInfo();
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("serviceID", serviceID));
+        params.add(new BasicNameValuePair("idm", domain));
 		String query = URLEncodedUtils.format(params, "utf-8");
 		URI url;
 		try {
@@ -435,7 +487,7 @@ public class AutobahnClient {
 			throw new AutobahnClientException(error);
 		}
 
-		NetCache.getInstance().setLastResInfo(serviceID, reservationInfo);
+		NetCache.getInstance().setLastResInfo(serviceID, domain, reservationInfo);
 	}
 
     public synchronized void submitReservation(ReservationInfo info) throws AutobahnClientException {
@@ -469,8 +521,8 @@ public class AutobahnClient {
         String resId;
         JSONObject json= null;
         try {
-            json=new JSONObject( checkAnswer(response) );
-            resId=json.getString("data");
+            json = new JSONObject( checkAnswer(response) );
+            resId = json.getString("data");
         }catch (Exception e) {
             String errorStr = context.getString(R.string.response_error);
             throw new AutobahnClientException(errorStr);

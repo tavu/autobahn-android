@@ -3,17 +3,23 @@ package autobahn.android;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import com.example.autobahn.R;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class IdmsActivity extends BasicActivity {
 
-    private List<String> domains;
+    private Map<String, ArrayList<String>> domains;
     private ListView domainList;
     private ArrayAdapter<String> adapter;
 
@@ -50,7 +56,7 @@ public class IdmsActivity extends BasicActivity {
            ((TextView) findViewById(R.id.header)).setText(R.string.idm_title);;
 
             domainList = (ListView) findViewById(R.id.listView);
-            adapter = new ArrayAdapter<String>(this, R.layout.list_item, domains);
+            adapter = new ArrayAdapter<String>(this, R.layout.list_item, domains.get("name"));
 
             domainList.setAdapter(adapter);
             domainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -70,6 +76,8 @@ public class IdmsActivity extends BasicActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "Creating Domain Selection Activity...");
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setTitle("Domain Selection");
         getData(Call.DOMAINS,null);
     }
 

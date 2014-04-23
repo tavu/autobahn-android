@@ -101,14 +101,14 @@ public class MainMenu extends Activity implements View.OnClickListener {
 		Stores the host and the port in the Autobahn Client Instance
 	 */
 	private void initClient() {
-		client = AutobahnClient.getInstance();
+		client = AutobahnClient.getInstance(this);
 		client.setContext(this);
 
 	}
 
 	private void startupCheck() {
 		initClient();
-		if (!AutobahnClient.getInstance().hasAuthenticate()) {
+		if (!AutobahnClient.getInstance(this).hasAuthenticate()) {
 			Intent logInActivity = new Intent();
 			logInActivity.setClass(getApplicationContext(), LoginActivity.class);
 			startActivityForResult(logInActivity, LoginActivity.LOGIN_AND_GO_BACK);
@@ -144,7 +144,7 @@ public class MainMenu extends Activity implements View.OnClickListener {
 		protected Void doInBackground(Void... type) {
 			exception = null;
 			try {
-				AutobahnClient.getInstance().logOut();
+				AutobahnClient.getInstance(getApplicationContext()).logOut();
 			} catch (AutobahnClientException e) {
 				exception = e;
 			}

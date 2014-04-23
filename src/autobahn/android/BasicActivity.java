@@ -1,9 +1,11 @@
 package autobahn.android;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -38,7 +40,7 @@ public class BasicActivity extends Activity {
 
     private Call call;
     private Object param;
-    public final String TAG = "Autobahn2";
+    public final String TAG = "[Autobahn-client]";
     AutobahnClientException e=null;
     Boolean onPost=false;
 
@@ -66,7 +68,7 @@ public class BasicActivity extends Activity {
         this.param=param;
         this.onPost=true;
         e=null;
-        if( !AutobahnClient.getInstance().hasAuthenticate() ) {
+        if( !AutobahnClient.getInstance(this).hasAuthenticate() ) {
             Intent logInIntent = new Intent();
             logInIntent.setClass(getApplicationContext(), LoginActivity.class);
             logInIntent.putExtra(LoginActivity.MSG, getString(R.string.Log_in_first));
@@ -88,7 +90,7 @@ public class BasicActivity extends Activity {
         if(obj==null) {
             this.call=c;
             this.param=param;
-            if( !AutobahnClient.getInstance().hasAuthenticate() ) {
+            if( !AutobahnClient.getInstance(this).hasAuthenticate() ) {
                 Intent logInIntent = new Intent();
                 logInIntent.setClass(getApplicationContext(), LoginActivity.class);
                 logInIntent.putExtra(LoginActivity.MSG, getString(R.string.Log_in_first));
@@ -121,7 +123,7 @@ public class BasicActivity extends Activity {
                 obj=NetCache.getInstance().getTrackCircuits((String)param);
                 break;
             case  RES_IFO:
-                obj=NetCache.getInstance().getLastReservation((String)param);
+                obj=NetCache.getInstance().getLastReservation((ArrayList<String>)param);
                 break;
             case SUBMIT_RES:
                 obj=null;
@@ -176,7 +178,7 @@ public class BasicActivity extends Activity {
             try {
                 switch (call) {
                     case DOMAINS:
-                        AutobahnClient.getInstance().fetchIdms();
+                        AutobahnClient.getInstance(getApplicationContext()).fetchIdms();
                         break;
                     case PORTS:
                         if(type.length==0) {
@@ -184,7 +186,7 @@ public class BasicActivity extends Activity {
                             return null;
                         }
                         param=type[0];
-                        AutobahnClient.getInstance().fetchPorts((String)type[0]);
+                        AutobahnClient.getInstance(getApplicationContext()).fetchPorts((String)type[0]);
                         break;
                     case RESERV:
                         if(type.length==0) {
@@ -192,7 +194,7 @@ public class BasicActivity extends Activity {
                             return null;
                         }
                         param=type[0];
-                        AutobahnClient.getInstance().fetchTrackCircuit((String)type[0]);
+                        AutobahnClient.getInstance(getApplicationContext()).fetchTrackCircuit((String)type[0]);
                         break;
                     case  RES_IFO:
                         if(type.length==0) {
@@ -200,7 +202,7 @@ public class BasicActivity extends Activity {
                             return null;
                         }
                         param=type[0];
-                        AutobahnClient.getInstance().fetchReservationInfo((String)type[0]);
+                        AutobahnClient.getInstance(getApplicationContext()).fetchReservationInfo(((ArrayList<String>)type[0]).get(0),((ArrayList<String>)type[0]).get(1));
                         break;
                     case SUBMIT_RES:
                         if(type.length==0) {
@@ -208,10 +210,10 @@ public class BasicActivity extends Activity {
                             return null;
                         }
                         ReservationInfo res=(ReservationInfo)type[0];
-                        AutobahnClient.getInstance().submitReservation(res);
+                        AutobahnClient.getInstance(getApplicationContext()).submitReservation(res);
                         break;
                     case LOG_OUT:
-                        AutobahnClient.getInstance().logOut();
+                        AutobahnClient.getInstance(getApplicationContext()).logOut();
                         break;
                     case PROVISION:
                         if(type.length==0) {
@@ -219,7 +221,7 @@ public class BasicActivity extends Activity {
                             return null;
                         }
                         l =(ArrayList<String>)type[0];
-                        AutobahnClient.getInstance().provision(l.get(0),l.get(1));
+                        AutobahnClient.getInstance(getApplicationContext()).provision(l.get(0),l.get(1));
                         break;
                     case CANCEL_REQ:
                         if(type.length==0) {
@@ -227,7 +229,7 @@ public class BasicActivity extends Activity {
                             return null;
                         }
                         l =(ArrayList<String>)type[0];
-                        AutobahnClient.getInstance().cancelRequest(l.get(0),l.get(1));
+                        AutobahnClient.getInstance(getApplicationContext()).cancelRequest(l.get(0),l.get(1));
                         break;
 
                 }
@@ -265,7 +267,7 @@ public class BasicActivity extends Activity {
                     showError(e,call,param);
                     return;
                 }
-                showData(obj,call,(String)param);
+                showData(obj,call,param);
             }
         }
     }

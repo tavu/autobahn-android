@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+<LinearLayout
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
+              android:layout_height="wrap_content"
               android:background="#ffffff"
               android:gravity="center_horizontal"
               android:orientation="vertical">
 
-	<TextView
+    <TextView
 		style="@style/AutobahnHeaderText"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
@@ -17,27 +21,28 @@
 		style="@style/AutobahnButton"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/request"/>
+		android:text="@string/request" android:enabled="true"/>
 
-	<Button
+    <Button
 		android:id="@+id/idms"
 		style="@style/AutobahnButton"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/reservations"/>
+		android:text="@string/reservations" android:enabled="true"/>
 
 	<Button
 		android:id="@+id/about"
 		style="@style/AutobahnButton"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/about"/>
+		android:text="@string/about" android:enabled="true"/>
 
 	<Button
 		android:id="@+id/logOut"
 		style="@style/AutobahnButton"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/log_out"/>
+		android:text="@string/log_out" android:enabled="true"/>
 </LinearLayout>
+</ScrollView>
 

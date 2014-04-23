@@ -2,8 +2,8 @@
 <resources>
 
 	<!--Geneeric strings-->
-	<string name="app_name">Autobahn Application</string>
-	<string name="welcome">Welcome to Autobahn</string>
+	<string name="app_name">AutoBAHN for Android</string>
+	<string name="welcome">Welcome to AutoBAHN</string>
 
 	<!--Main Menu Strings-->
 	<string name="about">About</string>
@@ -38,12 +38,10 @@
 	<string name="password">Password</string>
 	<string name="log_in">Log In</string>
     <string name="log_out">Log out</string>
-    <string name="log_out_msg">successfully logged out</string>
+    <string name="log_out_msg">Successfully logged out</string>
 
 	<!--Preferences Strings-->
 	<string name="titlePrefs">Preferences</string>
-	<string name="url">Autobahn url</string>
-	<string name="summaryUrl">Please enter the url of the Autobahn Portal</string>
 	<string name="summaryPassword">"Please enter your password"</string>
 	<string name="summaryUsername">"Please enter your username"</string>
 
@@ -79,7 +77,7 @@
 	<string name="capacity">Capacity[Mbits/s]</string>
 	<string name="mtuSize">MTU size[bytes]</string>
     <string name="mtuAuto">Automatically set MTU size</string>
-	<string name="vlan_auto">Automatically set vlan</string>
+	<string name="vlan_auto">Automatically set VLAN</string>
 	<string name="startDomain">Start domain</string>
 	<string name="endDomain">End domain</string>
 	<string name="startNow">Start now</string>
@@ -96,8 +94,8 @@
     <string name="excludedStp">Excluded stps</string>
     <string name="includedNetworks">Included networks</string>
     <string name="excludedNetworks">Excluded networks</string>
-    <string name="includeNetwork">Include a networks</string>
-    <string name="excludeNetwork">Exclude a networks</string>
+    <string name="includeNetwork">Include a network</string>
+    <string name="excludeNetwork">Exclude a network</string>
     <string name="includeStp">Include an Stp</string>
     <string name="excludeStp">Exclude an Stp</string>
     <string name="ok">OK</string>

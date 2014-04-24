@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,7 +15,7 @@ import android.widget.Button;
 
 import com.example.autobahn.R;
 
-public class MainMenu extends Activity implements View.OnClickListener {
+public class MainMenu extends FragmentActivity implements View.OnClickListener {
 	/**
 	 * Called when the activity is first created.
 	 */

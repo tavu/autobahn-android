@@ -1,10 +1,8 @@
 package autobahn.android;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
-import android.os.Bundle;
 import android.util.Log;
 import com.example.autobahn.R;
 import com.google.gson.Gson;
@@ -19,6 +17,7 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.cookie.Cookie;
@@ -34,9 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,7 +48,7 @@ public class AutobahnClient {
 	private static final String SERVICE_URL = "/autobahn-gui/portal/secure/rest/service";
 	private static final String PORTS_URL = "/autobahn-gui/portal/secure/rest/ports";
     private static final String SUBMIT_URL="/autobahn-gui/portal/secure/rest/requestReservation";
-    private static final String LOGOUT_URL = "/autobahn-gui/j_spring_security_logout";
+    private static final String LOGOUT_URL = "/autobahn-gui/autobahn-gui/j_spring_security_logout";
     private static final String PROVISION_URL="/autobahn-gui/portal/secure/rest/provision";
     private static final String CANCEL_URL="/autobahn-gui/portal/secure/rest/cancel";
 
@@ -69,6 +66,7 @@ public class AutobahnClient {
 
 	public AutobahnClient(Context context) {
 		httpclient = new DefaultHttpClient();
+        httpclient.getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
         try{
             initConfigValues(context);
         }
@@ -146,7 +144,8 @@ public class AutobahnClient {
 	}
 
 	public boolean hasAuthenticate() {
-		CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
+		cookieStore = (PersistentCookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
+        List<Cookie> cookies =  cookieStore.getCookies();
 		for (Cookie c : cookieStore.getCookies()) {
 			if (c.getName().equals("JSESSIONID") && !c.isExpired(new Date())) {
 				return true;
@@ -156,9 +155,6 @@ public class AutobahnClient {
 	}
 
     public synchronized void logOut() throws AutobahnClientException {
-        CookieStore cookieStore = (CookieStore) localContext.getAttribute(ClientContext.COOKIE_STORE);
-        cookieStore.clear();
-        
 
         NetCache.getInstance().clear();
 
@@ -177,6 +173,11 @@ public class AutobahnClient {
 
         handlePostRequest(httppost);
 
+        cookieStore = (PersistentCookieStore)localContext.getAttribute(ClientContext.COOKIE_STORE);
+        cookieStore.clear();
+
+
+
     }
 
 	public synchronized void logIn() throws AutobahnClientException {
@@ -192,6 +193,7 @@ public class AutobahnClient {
 		params.add(new BasicNameValuePair("j_username", userName));
 		params.add(new BasicNameValuePair("j_password", password));
 		String query = URLEncodedUtils.format(params, "utf-8");
+
 
 		URI url;
 		HttpPost httppost;

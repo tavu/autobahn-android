@@ -1,12 +1,12 @@
 package autobahn.android;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -19,11 +19,14 @@ import android.widget.Toast;
 import com.example.autobahn.R;
 
 
-public class LoginActivity extends Activity implements View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
+public class LoginActivity extends FragmentActivity implements View.OnClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
+
     public static final String MSG = "";
     public static final int LOGIN_AND_GO_BACK = 1;
     public static final int SET_PREFS = 2;
-    private ProgressDialog progressDialog=null;
+
+    private ProgressDialog progressDialog = null;
+
     private final TextWatcher watcher = new TextWatcher() {
 		@Override
 		public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
@@ -47,7 +50,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Sha
 
         if(progressDialog != null) {
             progressDialog.dismiss();
-            progressDialog=null;
+            progressDialog = null;
         }
 
 		if (exception != null) {
@@ -84,7 +87,7 @@ public class LoginActivity extends Activity implements View.OnClickListener, Sha
 		Bundle bundle = getIntent().getExtras();
 
 		if (bundle != null ) {
-            String s=bundle.getString(MSG,"");
+            String s = bundle.getString(MSG,"");
 			if(!s.isEmpty()) {
 			    Toast toast = Toast.makeText(this, s, Toast.LENGTH_LONG);
                 toast.show();

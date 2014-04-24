@@ -23,7 +23,7 @@ import java.util.List;
  * Time: 4:37 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BasicActivity extends Activity {
+public class BasicActivity extends FragmentActivity {
 
 
     enum Call {
@@ -31,21 +31,20 @@ public class BasicActivity extends Activity {
         PORTS,
         RESERV,
         RES_IFO,
-        CUSTOM  ,
         SUBMIT_RES ,
         LOG_OUT ,
         PROVISION,
         CANCEL_REQ
     }
 
+    public final String TAG = "[Autobahn-client]";
+    protected int LOG_IN_REQ = 9;
+
     private Call call;
     private Object param;
-    public final String TAG = "[Autobahn-client]";
-    AutobahnClientException e=null;
-    Boolean onPost=false;
-
-    protected int LOG_IN_REQ=9;
-    private ProgressDialog progressDialog=null;
+    AutobahnClientException e = null;
+    Boolean onPost = false;
+    private ProgressDialog progressDialog = null;
 
     public BasicActivity() {
     }
@@ -60,21 +59,21 @@ public class BasicActivity extends Activity {
         return;
     }
 
-    protected synchronized void showData(Object data,Call c,Object param) {
+    protected synchronized void showData(Object data, Call c, Object param) {
     }
 
-    public synchronized void postData(Call c,Object param) {
-        this.call=c;
-        this.param=param;
-        this.onPost=true;
-        e=null;
+    public synchronized void postData(Call call, Object param) {
+        this.call = call;
+        this.param = param;
+        onPost = true;
+        e = null;
         if( !AutobahnClient.getInstance(this).hasAuthenticate() ) {
             Intent logInIntent = new Intent();
             logInIntent.setClass(getApplicationContext(), LoginActivity.class);
             logInIntent.putExtra(LoginActivity.MSG, getString(R.string.Log_in_first));
-            startActivityForResult(logInIntent,LOG_IN_REQ);
+            startActivityForResult(logInIntent, LOG_IN_REQ);
         }else {
-            BasicAsyncTask async=new BasicAsyncTask();
+            BasicAsyncTask async = new BasicAsyncTask();
             progressDialog = new ProgressDialog(this);
             progressDialog.setMessage( getString(R.string.loading) );
             progressDialog.show();
@@ -82,21 +81,21 @@ public class BasicActivity extends Activity {
         }
     }
 
-    public synchronized void getData(Call c,Object param) {
-        e=null;
-        onPost=false;
-        Object obj=dataFromCache(c,param);
+    public synchronized void getData(Call call,Object param) {
+        e = null;
+        onPost = false;
+        Object obj = dataFromCache(call, param);
 
-        if(obj==null) {
-            this.call=c;
-            this.param=param;
+        if(obj == null) {
+            this.call = call;
+            this.param = param;
             if( !AutobahnClient.getInstance(this).hasAuthenticate() ) {
                 Intent logInIntent = new Intent();
                 logInIntent.setClass(getApplicationContext(), LoginActivity.class);
                 logInIntent.putExtra(LoginActivity.MSG, getString(R.string.Log_in_first));
-                startActivityForResult(logInIntent,LOG_IN_REQ);
+                startActivityForResult(logInIntent, LOG_IN_REQ);
             }else {
-                BasicAsyncTask async=new BasicAsyncTask();
+                BasicAsyncTask async = new BasicAsyncTask();
                 progressDialog = new ProgressDialog(this);
                 progressDialog.setMessage( getString(R.string.loading) );
                 progressDialog.show();
@@ -104,29 +103,29 @@ public class BasicActivity extends Activity {
             }
         }
         else {
-            showData(obj,c,param);
+            showData(obj,call,param);
         }
     }
 
 
     private Object dataFromCache(Call call,Object param) {
 
-        Object obj=null;
+        Object obj = null;
         switch (call) {
             case DOMAINS:
-                obj=NetCache.getInstance().getIdms();
+                obj = NetCache.getInstance().getIdms();
                 break;
             case PORTS:
-                obj= NetCache.getInstance().getPorts((String)param);
+                obj = NetCache.getInstance().getPorts((String)param);
                 break;
             case RESERV:
-                obj=NetCache.getInstance().getTrackCircuits((String)param);
+                obj = NetCache.getInstance().getTrackCircuits((String)param);
                 break;
             case  RES_IFO:
-                obj=NetCache.getInstance().getLastReservation((ArrayList<String>)param);
+                obj = NetCache.getInstance().getLastReservation((ArrayList<String>)param);
                 break;
             case SUBMIT_RES:
-                obj=null;
+                obj = null;
                 break;
         }
         return obj;
@@ -136,16 +135,16 @@ public class BasicActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode,resultCode,data);
 
-        if(LOG_IN_REQ==requestCode ){
-            if(resultCode==RESULT_OK) {
-                BasicAsyncTask async=new BasicAsyncTask();
+        if(requestCode == LOG_IN_REQ ){
+            if(resultCode == RESULT_OK) {
+                BasicAsyncTask async = new BasicAsyncTask();
                 progressDialog = new ProgressDialog(this);
                 progressDialog.setMessage( getString(R.string.loading) );
                 progressDialog.show();
                 async.execute(param);
             }
             else {
-                AutobahnClientException e=new AutobahnClientException(getString(R.string.no_log_in) );
+                AutobahnClientException e = new AutobahnClientException( getString(R.string.no_log_in) );
                 showError(e,call,param);
             }
         }
@@ -181,60 +180,59 @@ public class BasicActivity extends Activity {
                         AutobahnClient.getInstance(getApplicationContext()).fetchIdms();
                         break;
                     case PORTS:
-                        if(type.length==0) {
-                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM,getString(R.string.internal_err));
+                        if (type.length == 0) {
+                            e = new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM, getString(R.string.internal_err));
                             return null;
                         }
-                        param=type[0];
-                        AutobahnClient.getInstance(getApplicationContext()).fetchPorts((String)type[0]);
+                        param = type[0];
+                        AutobahnClient.getInstance(getApplicationContext()).fetchPorts((String) type[0]);
                         break;
                     case RESERV:
-                        if(type.length==0) {
-                           e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM,getString(R.string.internal_err));
+                        if (type.length == 0) {
+                            e = new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM, getString(R.string.internal_err));
                             return null;
                         }
-                        param=type[0];
-                        AutobahnClient.getInstance(getApplicationContext()).fetchTrackCircuit((String)type[0]);
+                        param = type[0];
+                        AutobahnClient.getInstance(getApplicationContext()).fetchTrackCircuit((String) type[0]);
                         break;
-                    case  RES_IFO:
-                        if(type.length==0) {
-                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM,getString(R.string.internal_err));
+                    case RES_IFO:
+                        if (type.length == 0) {
+                            e = new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM, getString(R.string.internal_err));
                             return null;
                         }
-                        param=type[0];
-                        AutobahnClient.getInstance(getApplicationContext()).fetchReservationInfo(((ArrayList<String>)type[0]).get(0),((ArrayList<String>)type[0]).get(1));
+                        param = type[0];
+                        AutobahnClient.getInstance(getApplicationContext()).fetchReservationInfo(((ArrayList<String>) type[0]).get(0), ((ArrayList<String>) type[0]).get(1));
                         break;
                     case SUBMIT_RES:
-                        if(type.length==0) {
-                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM,getString(R.string.internal_err));
+                        if (type.length == 0) {
+                            e = new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM, getString(R.string.internal_err));
                             return null;
                         }
-                        ReservationInfo res=(ReservationInfo)type[0];
+                        ReservationInfo res = (ReservationInfo) type[0];
                         AutobahnClient.getInstance(getApplicationContext()).submitReservation(res);
                         break;
                     case LOG_OUT:
                         AutobahnClient.getInstance(getApplicationContext()).logOut();
                         break;
                     case PROVISION:
-                        if(type.length==0) {
-                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM,getString(R.string.internal_err));
+                        if (type.length == 0) {
+                            e = new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM, getString(R.string.internal_err));
                             return null;
                         }
-                        l =(ArrayList<String>)type[0];
-                        AutobahnClient.getInstance(getApplicationContext()).provision(l.get(0),l.get(1));
+                        l = (ArrayList<String>) type[0];
+                        AutobahnClient.getInstance(getApplicationContext()).provision(l.get(0), l.get(1));
                         break;
                     case CANCEL_REQ:
-                        if(type.length==0) {
-                            e=new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM,getString(R.string.internal_err));
+                        if (type.length == 0) {
+                            e = new AutobahnClientException(AutobahnClientException.Error.INVALID_PARAM, getString(R.string.internal_err));
                             return null;
                         }
-                        l =(ArrayList<String>)type[0];
-                        AutobahnClient.getInstance(getApplicationContext()).cancelRequest(l.get(0),l.get(1));
+                        l = (ArrayList<String>) type[0];
+                        AutobahnClient.getInstance(getApplicationContext()).cancelRequest(l.get(0), l.get(1));
                         break;
-
                 }
-            }catch(AutobahnClientException ex) {
-                e=ex;
+            } catch (AutobahnClientException ex) {
+                e = ex;
             }
             return null;
         }
@@ -247,29 +245,28 @@ public class BasicActivity extends Activity {
         @Override
         protected void onPostExecute(Void result) {
 
-            if(progressDialog!=null) {
+            if (progressDialog != null) {
                 progressDialog.dismiss();
-                progressDialog=null;
+                progressDialog = null;
             }
 
-            if(e!=null) {
-                Log.d(TAG,e.getMessage());
-                showError(e,call,param);
-                return ;
+            if (e != null) {
+                Log.d(TAG, e.getMessage());
+                showError(e, call, param);
+                return;
             }
 
-            if(onPost) {
-              postSucceed(call,param);
+            if (onPost) {
+                postSucceed(call, param);
             } else {
-                Object obj=dataFromCache(call,param);
-                if(obj==null) {
-                    e=new AutobahnClientException(AutobahnClientException.Error.UNKNOWN,getString(R.string.internal_err));
-                    showError(e,call,param);
+                Object obj = dataFromCache(call, param);
+                if (obj == null) {
+                    e = new AutobahnClientException(AutobahnClientException.Error.UNKNOWN, getString(R.string.internal_err));
+                    showError(e, call, param);
                     return;
                 }
-                showData(obj,call,param);
+                showData(obj, call, param);
             }
         }
     }
-
 }

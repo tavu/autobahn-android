@@ -13,19 +13,20 @@ import java.util.List;
 
 public class TrackCircuitActivity extends BasicActivity {
 
-    private List<String> reservationID = new ArrayList<String>();
     private ListView reservationList;
     private ArrayAdapter<String> adapter;
-    private AutobahnClientException exception = null;
     private String domainName;
 
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Bundle extras = getIntent().getExtras();
         domainName = extras.getString("DOMAIN_NAME");
+
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setTitle("Reservations");
+
         getData(Call.RESERV,domainName);
 
     }

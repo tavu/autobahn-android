@@ -29,15 +29,20 @@ public class SingleCircuitActivity extends BasicActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.single_reservation_activity);
+
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setTitle("Reservation Info");
+
         Bundle bundle = getIntent().getExtras();
         serviceID = bundle.getString("SERVICE_ID");
         domainName = bundle.getString("DOMAIN_NAME");
+
         ArrayList<String> parameters = new ArrayList<>();
         parameters.add(serviceID);
         parameters.add(domainName);
+
         getData(Call.RES_IFO,parameters);
 
     }
@@ -59,9 +64,7 @@ public class SingleCircuitActivity extends BasicActivity {
         info.add(serviceID);
         info.add(domainName);
         reservationInfo = NetCache.getInstance().getLastReservation(info);
-        if(reservationInfo==null) {
-            Log.wtf("WARN", "null res info");
-        }
+
         ((TextView)findViewById(R.id.service)).setText(reservationInfo.getId());
         ((TextView)findViewById(R.id.description)).setText(reservationInfo.getDescription());
         ((TextView)findViewById(R.id.reservationState)).setText(reservationInfo.getReservationState());

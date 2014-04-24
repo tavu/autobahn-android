@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +19,7 @@ import com.example.autobahn.R;
  * Time: 3:34 PM
  * To change this template use File | Settings | File Templates.
  */
-public class AboutActivity extends Activity {
+public class AboutActivity extends FragmentActivity {
 
     public final static Uri GEANT_URL = Uri.parse("http://www.geant.net");
     public final static Uri DANTE_URL = Uri.parse("http://www.dante.net");
@@ -113,7 +114,6 @@ public class AboutActivity extends Activity {
 
     }
 
-    // Called when an options item is clicked
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.support.v4.app.FragmentActivity;
 import com.example.autobahn.R;
 
-public class PreferencesActivity extends Activity {
+public class PreferencesActivity extends FragmentActivity {
 
 	public static final String USERNAME_PREFERENCE_KEY = "username";
 	public static final String PASSWORD_PREFERENCE_KEY = "password";

@@ -23,6 +23,15 @@ public class IdmsActivity extends BasicActivity {
     private ListView domainList;
     private ArrayAdapter<String> adapter;
 
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Log.d(TAG, "Creating Domain Selection Activity...");
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setTitle("Domain Selection");
+        getData(Call.DOMAINS,null);
+    }
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -34,12 +43,10 @@ public class IdmsActivity extends BasicActivity {
         domains = NetCache.getInstance().getIdms();
 
         if (domains == null) {
-            Log.d(TAG, "Domains is NULL...");
             return;
         }
 
         if (domains.isEmpty()) {
-            Log.d(TAG, "Domains is Empty");
             setContentView(R.layout.no_data);
             ((TextView) findViewById(R.id.header)).setText(R.string.no_domains);
 
@@ -71,14 +78,6 @@ public class IdmsActivity extends BasicActivity {
                 }
             });
         }
-    }
-
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d(TAG, "Creating Domain Selection Activity...");
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setTitle("Domain Selection");
-        getData(Call.DOMAINS,null);
     }
 
     @Override

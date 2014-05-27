@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
-
-	<TextView
-		android:id="@+id/grp_child"
-		android:layout_width="match_parent"
-		android:layout_height="40dp"
-		android:focusable="false"
-		android:paddingLeft="50px"
-		android:textSize="17dp"
-		android:textStyle="normal"/>
-
-</LinearLayout>
+<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:id="@+id/grp_child"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:focusable="false"
+                 android:paddingLeft="50dp"
+                 android:textSize="16dp"
+                 android:textColor="@color/textColor"
+                 android:gravity="center_vertical"
+                 android:enabled="true"
+                 android:clickable="false" android:checked="false"
+                 android:editable="false"
+                 android:minHeight="40dp"
+                 android:checkMark="?android:attr/listChoiceIndicatorMultiple"/>

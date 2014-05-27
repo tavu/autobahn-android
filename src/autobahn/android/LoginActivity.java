@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import autobahn.android.utils.AutobahnClientException;
 import com.example.autobahn.R;
 
 
@@ -28,106 +29,103 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
     private ProgressDialog progressDialog = null;
 
     private final TextWatcher watcher = new TextWatcher() {
-		@Override
-		public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-		}
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
 
-		@Override
-		public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-		}
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+        }
 
-		@Override
-		public void afterTextChanged(Editable editable) {
-			checkFields();
-		}
-	};
+        @Override
+        public void afterTextChanged(Editable editable) {
+            checkFields();
+        }
+    };
     private Button loginButton;
     private EditText usernameField;
     private EditText passwordField;
     private AutobahnClientException exception = null;
+    private Toast toast;
 
-	private void afterLogIn() {
+    private void afterLogIn() {
 
-        if(progressDialog != null) {
+        if (progressDialog != null) {
             progressDialog.dismiss();
             progressDialog = null;
         }
 
-		if (exception != null) {
-			Toast toast = Toast.makeText(this, exception.getMessage(), Toast.LENGTH_LONG);
-			loginButton.setEnabled(true);
-			toast.show();
-			return;
-		}
+        if (exception != null) {
+            toast = Toast.makeText(this, exception.getMessage(), Toast.LENGTH_LONG);
+            loginButton.setEnabled(true);
+            toast.show();
+            return;
+        }
 
         setResult(RESULT_OK);
         finish();
     }
 
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-        NetCache.getInstance().clear();
         setContentView(R.layout.login);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences.registerOnSharedPreferenceChangeListener(this);
 
-		loginButton = (Button) findViewById(R.id.loginButton);
-		usernameField = (EditText) findViewById(R.id.username);
-		passwordField = (EditText) findViewById(R.id.password);
+        loginButton = (Button) findViewById(R.id.loginButton);
+        usernameField = (EditText) findViewById(R.id.username);
+        passwordField = (EditText) findViewById(R.id.password);
 
-		usernameField.addTextChangedListener(watcher);
-		passwordField.addTextChangedListener(watcher);
+        usernameField.addTextChangedListener(watcher);
+        passwordField.addTextChangedListener(watcher);
 
-		loginButton.setOnClickListener(this);
+        loginButton.setOnClickListener(this);
 
         setTextFromPrefs();
 
-		Bundle bundle = getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras();
 
-		if (bundle != null ) {
-            String s = bundle.getString(MSG,"");
-			if(!s.isEmpty()) {
-			    Toast toast = Toast.makeText(this, s, Toast.LENGTH_LONG);
+        if (bundle != null) {
+            String s = bundle.getString(MSG, "");
+            if (!s.isEmpty()) {
+                Toast toast = Toast.makeText(this, s, Toast.LENGTH_LONG);
                 toast.show();
             }
-		}
-	}
+        }
+    }
 
-	public void checkFields() {
+    public void checkFields() {
 
-		String username = usernameField.getText().toString();
-		String password = passwordField.getText().toString();
+        String username = usernameField.getText().toString();
+        String password = passwordField.getText().toString();
 
-		if (username.equals("") || password.equals(""))
-			loginButton.setEnabled(false);
-		else
-			loginButton.setEnabled(true);
-	}
+        if (username.equals("") || password.equals(""))
+            loginButton.setEnabled(false);
+        else
+            loginButton.setEnabled(true);
+    }
 
-	public void onClick(View view) {
-		loginButton.setEnabled(false);
+    public void onClick(View view) {
+        loginButton.setEnabled(false);
 
-		String username = usernameField.getText().toString();
-		String password = passwordField.getText().toString();
+        String username = usernameField.getText().toString();
+        String password = passwordField.getText().toString();
 
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		settings.edit().putString(PreferencesActivity.USERNAME_PREFERENCE_KEY, username).commit();
-		settings.edit().putString(PreferencesActivity.PASSWORD_PREFERENCE_KEY, password).commit();
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        settings.edit().putString(PreferencesActivity.USERNAME_PREFERENCE_KEY, username).commit();
+        settings.edit().putString(PreferencesActivity.PASSWORD_PREFERENCE_KEY, password).commit();
 
-		AutobahnClient.getInstance(this).setUserName(username);
+        AutobahnClient.getInstance(this).setUserName(username);
         AutobahnClient.getInstance(this).setPassword(password);
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage( getString(R.string.loading) );
+        progressDialog.setMessage(getString(R.string.loading));
         progressDialog.show();
 
-		LoginTask task = new LoginTask();
-		task.execute();
-	}
-
-
+        LoginTask task = new LoginTask();
+        task.execute();
+    }
 
     @Override
     public void onBackPressed() {
@@ -135,25 +133,25 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
         this.finish();
     }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
 
-		inflater.inflate(R.menu.action_bar, menu);
+        inflater.inflate(R.menu.action_bar, menu);
 
-		return true;
-	}
+        return true;
+    }
 
-	// Called when an options item is clicked
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.preferences:
+    // Called when an options item is clicked
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.preferences:
                 startActivity(new Intent(this, PreferencesActivity.class));
-				break;
-		}
-		return true;
-	}
+                break;
+        }
+        return true;
+    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
@@ -162,31 +160,31 @@ public class LoginActivity extends FragmentActivity implements View.OnClickListe
 
     private class LoginTask extends AsyncTask<Void, Void, Void> {
 
-		@Override
-		protected Void doInBackground(Void... type) {
-			exception = null;
-			try {
-				AutobahnClient.getInstance(getApplicationContext()).logIn();
-			} catch (AutobahnClientException e) {
-				exception = e;
-			}
-			return null;
-		}
+        @Override
+        protected Void doInBackground(Void... type) {
+            exception = null;
+            try {
+                AutobahnClient.getInstance(getApplicationContext()).logIn();
+            } catch (AutobahnClientException e) {
+                exception = e;
+            }
+            return null;
+        }
 
-		@Override
-		protected void onProgressUpdate(Void... progress) {
-			super.onProgressUpdate(progress);
-		}
+        @Override
+        protected void onProgressUpdate(Void... progress) {
+            super.onProgressUpdate(progress);
+        }
 
-		@Override
-		protected void onPostExecute(Void result) {
-			afterLogIn();
-		}
-	}
+        @Override
+        protected void onPostExecute(Void result) {
+            afterLogIn();
+        }
+    }
 
     private void setTextFromPrefs() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        usernameField.setText(prefs.getString("username", "") );
+        usernameField.setText(prefs.getString("username", ""));
         passwordField.setText(prefs.getString("password", ""));
     }
 

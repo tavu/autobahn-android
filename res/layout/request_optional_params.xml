@@ -3,20 +3,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
-    <TextView
-            android:id="@+id/optionalHeader"
-            style="@style/AutobahnHeaderText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:text="@string/optionalParameters"/>
+              android:layout_height="match_parent" style="@style/AutobahnTheme" android:clickable="false">
 
     <ExpandableListView
             android:id="@+id/pathConstraints"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="fill_parent" android:clickable="false"
+            android:choiceMode="multipleChoice">
     </ExpandableListView>
 
 </LinearLayout>

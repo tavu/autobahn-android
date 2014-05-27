@@ -1,46 +1,65 @@
 package autobahn.android;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.*;
+import autobahn.android.utils.AutobahnClientException;
+import autobahn.android.utils.AutobahnDataSource;
 import com.example.autobahn.R;
+import net.geant.autobahn.android.Domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
-public class IdmsActivity extends BasicActivity {
+public class IdmsActivity extends FragmentActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    private Map<String, ArrayList<String>> domains;
+    public final String TAG = "[Autobahn-client]";
+    private ProgressDialog progressDialog = null;
+    private List<Domain> domains;
     private ListView domainList;
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<Domain> adapter;
+    private AutobahnDataSource dataSource;
+    private AutobahnClientException exception;
+    private Toast toast;
+    private SwipeRefreshLayout swipeLayout;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, "Creating Domain Selection Activity...");
+        dataSource = new AutobahnDataSource(this);
+        dataSource.open();
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setTitle("Domain Selection");
-        getData(Call.DOMAINS,null);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.show();
+
+        new DomainsAsyncTask().execute();
     }
 
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        showData();
+    @Override
+    protected void onPause() {
+        dataSource.close();
+        super.onPause();
     }
 
-    private void showData() {
+    @Override
+    protected void onResume() {
+        dataSource.open();
+        super.onResume();
+    }
 
-        domains = NetCache.getInstance().getIdms();
+    private synchronized void showData() {
 
         if (domains == null) {
             return;
@@ -48,6 +67,13 @@ public class IdmsActivity extends BasicActivity {
 
         if (domains.isEmpty()) {
             setContentView(R.layout.no_data);
+            swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+            swipeLayout.setOnRefreshListener(this);
+            swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light);
+
             ((TextView) findViewById(R.id.header)).setText(R.string.no_domains);
 
             Button menuButton = (Button) findViewById(R.id.menuButton);
@@ -60,10 +86,16 @@ public class IdmsActivity extends BasicActivity {
             });
         } else {
             setContentView(R.layout.domain_reservation_list);
-           ((TextView) findViewById(R.id.header)).setText(R.string.idm_title);;
+            swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+            swipeLayout.setOnRefreshListener(this);
+            swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light);
 
+            ((TextView) findViewById(R.id.header)).setText(R.string.idm_title);
             domainList = (ListView) findViewById(R.id.listView);
-            adapter = new ArrayAdapter<String>(this, R.layout.list_item, domains.get("name"));
+            adapter = new ArrayAdapter<>(this, R.layout.list_item, domains);
 
             domainList.setAdapter(adapter);
             domainList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -77,11 +109,107 @@ public class IdmsActivity extends BasicActivity {
                     startActivity(domainActivity);
                 }
             });
+
+            domainList.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                }
+
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                    int topRowVerticalPosition =
+                            (domainList == null || domainList.getChildCount() == 0) ?
+                                    0 : domainList.getChildAt(0).getTop();
+                    swipeLayout.setEnabled(topRowVerticalPosition >= 0);
+                }
+            });
+        }
+    }
+
+    private class DomainsAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        public DomainsAsyncTask() {
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            domains = new ArrayList<>();
+            try {
+                domains = dataSource.getDomains();
+            } catch (AutobahnClientException e) {
+                exception = e;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... progress) {
+            super.onProgressUpdate(progress);
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            if (progressDialog != null) {
+                progressDialog.dismiss();
+                progressDialog = null;
+            }
+
+            if (exception != null) {
+                toast = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
+                toast.show();
+                finish();
+            }
+            showData();
+        }
+    }
+
+    private class UpdateTask extends AsyncTask<Void, Void, Void> {
+
+        public UpdateTask() {
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                AutobahnClient.getInstance(getApplicationContext()).updateDomains();
+            } catch (AutobahnClientException e) {
+                exception = e;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... progress) {
+            super.onProgressUpdate(progress);
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            swipeLayout.setRefreshing(false);
+
+            if (exception != null) {
+                toast = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
+                toast.show();
+                return;
+            }
+            new DomainsAsyncTask().execute();
         }
     }
 
     @Override
-    protected synchronized void showData(Object data,Call c,Object param) {
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
         showData();
     }
+
+    @Override
+    public void onRefresh() {
+        new UpdateTask().execute();
+    }
+
+
 }

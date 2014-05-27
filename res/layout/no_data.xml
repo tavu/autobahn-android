@@ -1,22 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:background="@android:color/white">
+<android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="fill_parent"
+                  android:layout_height="fill_parent"
+                  android:background="@android:color/white">
 
-	<TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-        android:id="@+id/header"
-        android:gravity="center"
-        android:textIsSelectable="false"
-        style="@style/AutobahnHeaderText"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:gravity="center">
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView" android:src="@drawable/refresh"
+                    android:contentDescription="@string/refresh"
+                    android:layout_gravity="center"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/refreshMessage"
+                    android:id="@+id/textView" style="@style/AutobahnHeaderText"/>
+        </LinearLayout>
 
-	<Button
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-        android:id="@+id/menuButton"
-        style="@style/AutobahnButton"/>
-</LinearLayout>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/header"
+                android:gravity="center"
+                android:textIsSelectable="false"
+                style="@style/AutobahnHeaderText"/>
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/menuButton"
+                style="@style/AutobahnButton"/>
+    </LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

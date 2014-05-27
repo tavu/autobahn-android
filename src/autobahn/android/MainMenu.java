@@ -1,6 +1,5 @@
 package autobahn.android;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -13,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import android.widget.Toast;
+import autobahn.android.utils.AutobahnClientException;
 import com.example.autobahn.R;
 
 public class MainMenu extends FragmentActivity implements View.OnClickListener {
@@ -23,12 +24,14 @@ public class MainMenu extends FragmentActivity implements View.OnClickListener {
 	private AutobahnClient client;
 	private AutobahnClientException exception = null;
 	private ProgressDialog progressDialog = null;
+    private Toast toast;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		startupCheck();
-		super.onCreate(savedInstanceState);
+
+        super.onCreate(savedInstanceState);
 
 		Button button;
 
@@ -64,8 +67,8 @@ public class MainMenu extends FragmentActivity implements View.OnClickListener {
 			@Override
 			public void onClick(View view) {
 				Intent requestActivity = new Intent();
-				requestActivity.setClass(getApplicationContext(), RequestActivity.class);
-				//requestActivity.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                requestActivity.setClass(getApplicationContext(), RequestReservation.class);
+                //requestActivity.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(requestActivity);
 
 			}
@@ -104,13 +107,12 @@ public class MainMenu extends FragmentActivity implements View.OnClickListener {
 	private void initClient() {
 		client = AutobahnClient.getInstance(this);
 		client.setContext(this);
-
 	}
 
 	private void startupCheck() {
 		initClient();
-		if (!AutobahnClient.getInstance(this).hasAuthenticate()) {
-			Intent logInActivity = new Intent();
+        if (!AutobahnClient.getInstance(this).hasAuthenticated()) {
+            Intent logInActivity = new Intent();
 			logInActivity.setClass(getApplicationContext(), LoginActivity.class);
 			startActivityForResult(logInActivity, LoginActivity.LOGIN_AND_GO_BACK);
 		}
@@ -160,10 +162,17 @@ public class MainMenu extends FragmentActivity implements View.OnClickListener {
 		@Override
 		protected void onPostExecute(Void result) {
 
-			if (progressDialog != null) {
+
+            if (progressDialog != null) {
 				progressDialog.dismiss();
 				progressDialog = null;
 			}
+
+            if (exception != null) {
+                toast = Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG);
+                toast.show();
+                return;
+            }
 
 			Intent logInActivity = new Intent();
 			logInActivity.setClass(getApplicationContext(), LoginActivity.class);

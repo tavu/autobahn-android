@@ -10,8 +10,9 @@
 		android:targetSdkVersion="18"/>
 	<application
 		android:label="@string/app_name"
-		android:theme="@style/AutobahnTheme">
-		<activity
+        android:theme="@style/AutobahnTheme"
+        android:icon="@drawable/icon">
+        <activity
 			android:name="autobahn.android.MainMenu"
 			android:configChanges="keyboardHidden|orientation|screenSize">
 			<intent-filter>
@@ -51,24 +52,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="autobahn.android.TrackCircuitActivity" />
         </activity>
-		<activity
-			android:name="autobahn.android.RequestActivity"
-			android:configChanges="keyboardHidden|screenSize">
-            <meta-data
+        <activity android:name="autobahn.android.RequestReservation"
+                  android:configChanges="keyboardHidden|screenSize">
+        <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
                     android:value="autobahn.android.MainMenu" />
-		</activity>
-        <activity
-                android:name="autobahn.android.RequestOptional"
-                android:configChanges="keyboardHidden|orientation|screenSize">
         </activity>
+    </application>
 
-
-	</application>
-
-	 
+     
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 	 
 	<uses-permission android:name="android.permission.INTERNET"/>
-
-</manifest> 
+</manifest>

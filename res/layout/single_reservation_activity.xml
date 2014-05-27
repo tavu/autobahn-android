@@ -1,203 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+
+<android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:id="@+id/swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+    <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:layout_marginLeft="0dp"
+            >
 
-
-<LinearLayout
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
-    <LinearLayout
-		android:orientation="vertical"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:layout_marginLeft="20px"
-		android:layout_marginTop="20px"
-		android:layout_marginRight="20px">
-		<!--android:showDividers="beginning|middle|end" -->
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/service"
-			android:id="@+id/textView"
-			android:singleLine="false"
-			android:phoneNumber="false"
-			android:password="false" style="@style/AutobahnPropertyName"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/service" style="@style/AutobahnPropertyValue"/>
-
-        <TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/description"
-			android:id="@+id/textView3" style="@style/AutobahnPropertyName" android:singleLine="false"
-                />
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/description" style="@style/AutobahnPropertyValue"/>
-
-        <TextView
-                android:layout_width="wrap_content"
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/reservationState"
-                android:id="@+id/textView2" style="@style/AutobahnPropertyName"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/reservationState" style="@style/AutobahnPropertyValue"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/provisionState"
-                android:id="@+id/textView13" style="@style/AutobahnPropertyName"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/provisionState" style="@style/AutobahnPropertyValue"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/lifecycleState"
-                android:id="@+id/textView15" style="@style/AutobahnPropertyName"/>
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/lifecycleState" style="@style/AutobahnPropertyValue"/>
-        <TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-            android:id="@+id/textView4" style="@style/AutobahnPropertyName" android:singleLine="false"
-            android:text="@string/startTime"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/startTime" style="@style/AutobahnPropertyValue"/>
-		`
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/textView5"
-			android:singleLine="false"
-			android:text="@string/endTime" style="@style/AutobahnPropertyName"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/endTime" style="@style/AutobahnPropertyValue"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/startPort"
-			android:id="@+id/textView6"
-			android:singleLine="false"
-			android:phoneNumber="true" style="@style/AutobahnPropertyName"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/startPort" style="@style/AutobahnPropertyValue"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/startVlan"
-			android:id="@+id/textView7"
-			android:singleLine="true" style="@style/AutobahnPropertyName"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/startVlan" style="@style/AutobahnPropertyValue"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/endPort"
-			android:id="@+id/textView8" style="@style/AutobahnPropertyName"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/endPort" style="@style/AutobahnPropertyValue"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/endVlan"
-			android:id="@+id/textView9"
-			android:singleLine="false" style="@style/AutobahnPropertyName"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/endVlan" style="@style/AutobahnPropertyValue"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/capacity"
-			android:id="@+id/textView10" style="@style/AutobahnPropertyName"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/capacity" style="@style/AutobahnPropertyValue"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/mtuSize"
-			android:id="@+id/textView11" style="@style/AutobahnPropertyName"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:id="@+id/mtuSize" style="@style/AutobahnPropertyValue"/>
-
-        <View
-                android:id="@+id/seperator"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/mtuSize"
-                android:background="@android:color/darker_gray" android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
-
-        <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/provision"
-                android:id="@+id/provision"
-                android:onClick="provision"
-                style="@style/AutobahnButton"/>
-        <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/resubmitService"
-                android:id="@+id/resubmitButton"
-                android:onClick="resubmitService"
-                style="@style/AutobahnButton"/>
-        <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/cancel_service"
-                android:id="@+id/resubmitButton"
-                android:onClick="cancelService"
-                style="@style/AutobahnButton"/>
+                android:gravity="center">
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" android:gravity="center" android:visibility="visible"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="0dp">
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView" android:src="@drawable/refresh"
+                        android:contentDescription="@string/refresh"
+                        android:layout_gravity="center"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/refreshMessage"
+                        android:id="@+id/textView" style="@style/AutobahnHeaderText"/>
+            </LinearLayout>
 
 
-    </LinearLayout>
-</LinearLayout>
-</ScrollView>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginLeft="13dp"
+                        android:layout_marginTop="13dp"
+                        android:layout_marginRight="13dp">
+                    <!--android:showDividers="beginning|middle|end" -->
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/service"
+                            android:id="@+id/textView"
+                            android:singleLine="false"
+                            style="@style/AutobahnPropertyName"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/service" style="@style/AutobahnPropertyValue"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/description"
+                            android:id="@+id/textView3" style="@style/AutobahnPropertyName" android:singleLine="false"
+                            />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/description" style="@style/AutobahnPropertyValue"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/reservationState"
+                            android:id="@+id/textView2" style="@style/AutobahnPropertyName"/>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/reservationState" style="@style/AutobahnPropertyValue"/>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/provisionState"
+                            android:id="@+id/textView13" style="@style/AutobahnPropertyName"/>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/provisionState" style="@style/AutobahnPropertyValue"/>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lifecycleState"
+                            android:id="@+id/textView15" style="@style/AutobahnPropertyName"/>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lifecycleState" style="@style/AutobahnPropertyValue"/>
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView4" style="@style/AutobahnPropertyName" android:singleLine="false"
+                            android:text="@string/startTime"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/startTime" style="@style/AutobahnPropertyValue"/>
+                    `
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textView5"
+                            android:singleLine="false"
+                            android:text="@string/endTime" style="@style/AutobahnPropertyName"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/endTime" style="@style/AutobahnPropertyValue"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/startPort"
+                            android:id="@+id/textView6"
+                            android:singleLine="false"
+                            style="@style/AutobahnPropertyName"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/startPort" style="@style/AutobahnPropertyValue"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/startVlan"
+                            android:id="@+id/textView7"
+                            android:singleLine="true" style="@style/AutobahnPropertyName"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/startVlan" style="@style/AutobahnPropertyValue"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/endPort"
+                            android:id="@+id/textView8" style="@style/AutobahnPropertyName"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/endPort" style="@style/AutobahnPropertyValue"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/endVlan"
+                            android:id="@+id/textView9"
+                            android:singleLine="false" style="@style/AutobahnPropertyName"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/endVlan" style="@style/AutobahnPropertyValue"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/capacity"
+                            android:id="@+id/textView10" style="@style/AutobahnPropertyName"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/capacity" style="@style/AutobahnPropertyValue"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/mtuSize"
+                            android:id="@+id/textView11" style="@style/AutobahnPropertyName"/>
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/mtuSize" style="@style/AutobahnPropertyValue"/>
+
+                    <View
+                            android:id="@+id/seperator"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray" android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"/>
+
+                    <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/provisionService"
+                            android:id="@+id/provision"
+                            android:visibility="gone"
+                            android:onClick="provisionService"
+                            style="@style/AutobahnButton"/>
+                    <Button style="@style/AutobahnButton" android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/release" android:visibility="gone" android:onClick="releaseService"
+                            android:text="@string/releaseService"/>
+                    <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/resubmitService"
+                            android:id="@+id/resubmitButton"
+                            android:onClick="resubmitService"
+                            style="@style/AutobahnButton"/>
+                    <Button
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cancelService"
+                            android:id="@+id/cancel"
+                            android:onClick="cancelService"
+                            style="@style/AutobahnButton"/>
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</android.support.v4.widget.SwipeRefreshLayout>

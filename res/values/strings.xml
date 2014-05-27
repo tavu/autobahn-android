@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<!--Geneeric strings-->
-	<string name="app_name">AutoBAHN for Android</string>
-	<string name="welcome">Welcome to AutoBAHN</string>
+    <!--Geneeric strings-->
+    <string name="app_name">AutoBAHN for Android</string>
+    <string name="welcome">Welcome to AutoBAHN</string>
 
-	<!--Main Menu Strings-->
-	<string name="about">About</string>
-	<string name="request">Reservation Request</string>
-	<string name="reservations">Show Past Reservations</string>
+    <!--Main Menu Strings-->
+    <string name="about">About</string>
+    <string name="request">Reservation Request</string>
+    <string name="reservations">Show Past Reservations</string>
 
-	<!--Autobahn Information Strings-->
-	<string name="aboutTitle">About BoD</string>
-	<string name="info_1">AutoBAHN is developed by the</string>
+    <!--Autobahn Information Strings-->
+    <string name="aboutTitle">About BoD</string>
+    <string name="info_1">AutoBAHN is developed by the</string>
     <string name="link_1"><a href="www.geant.net">GEANT project</a>.
     </string>
     <string name="link_5">
         <a href="ec.europa.eu">European Commission Information Society and Media</a>
     </string>
-	<string name="info_2">If you want to learn more, please visit</string>
+    <string name="info_2">If you want to learn more, please visit</string>
     <string name="link_2">
         <a href="bod.geant.net">bod.geant.net</a>
     </string>
-	<string name="and">and</string>
+    <string name="and">and</string>
     <string name="link_3"><a href="autobahn.geant.net">autobahn.geant.net</a>.
     </string>
     <string name="info_3">If you have an issue contact your NREN or open a ticket to the Multi-Domain Service
@@ -32,63 +32,64 @@
         <a href="https://issues.geant.net/jira/browse/MDSD">https://issues.geant.net/jira/browse/MDSD</a>
     </string>
 
-	<!--Login Strings-->
-	<string name="remember">Remember Me</string>
-	<string name="username">Username</string>
-	<string name="password">Password</string>
-	<string name="log_in">Log In</string>
+    <!--Login Strings-->
+    <string name="remember">Remember Me</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log In</string>
     <string name="log_out">Log out</string>
     <string name="log_out_msg">Successfully logged out</string>
 
-	<!--Preferences Strings-->
-	<string name="titlePrefs">Preferences</string>
-	<string name="summaryPassword">"Please enter your password"</string>
-	<string name="summaryUsername">"Please enter your username"</string>
+    <!--Preferences Strings-->
+    <string name="titlePrefs">Preferences</string>
+    <string name="summaryPassword">"Please enter your password"</string>
+    <string name="summaryUsername">"Please enter your username"</string>
 
-	<!--Domain Selection Activity Strings-->
-	<string name="idm_title">Please select one of the available domains below to view past reservations</string>
-	<string name="no_domains">No domains are registered!</string>
-	<string name="back_to_menu">Back to Main Menu</string>
+    <!--Domain Selection Activity Strings-->
+    <string name="idm_title">Please select one of the available domains below to view past reservations</string>
+    <string name="no_domains">No domains are registered!</string>
+    <string name="back_to_menu">Back to Main Menu</string>
 
     <!--Reservation Selection Activity Strings-->
     <string name="noReservations">No reservations have been made from this domain yet.</string>
     <string name="backToDomains">Back to Domain List</string>
 
 
-	<!--Reservation Information Strings-->
-	<string name="service">Service</string>
-	<string name="homedomain">Home Domain</string>
-	<string name="destinationdomain">Destination Domain</string>
-	<string name="newreservation">Add Reservation</string>
-	<string name="basicParameters">Basic Parameters</string>
-	<string name="optionalParameters">Optional Parameters</string>
-	<string name="pathConstraints">Path Constraints</string>
-	<string name="startPort">Start Port</string>
-	<string name="endPort">End Port</string>
-	<string name="timeZone">Time Zone</string>
-	<string name="startTime">Start Time</string>
-	<string name="startDate">Start Date</string>
-	<string name="endTime">End Time</string>
-	<string name="endDate">End Date</string>
-	<string name="description">Description</string>
-	<string name="delay">Delay [ms]</string>
-	<string name="startVlan">Start VLAN</string>
-	<string name="endVlan">End VLAN</string>
-	<string name="capacity">Capacity[Mbits/s]</string>
-	<string name="mtuSize">MTU size[bytes]</string>
+    <!--Reservation Information Strings-->
+    <string name="service">Service</string>
+    <string name="homedomain">Home Domain</string>
+    <string name="destinationdomain">Destination Domain</string>
+    <string name="newreservation">Add Reservation</string>
+    <string name="basicParameters">Basic Parameters</string>
+    <string name="optionalParameters">Optional Parameters</string>
+    <string name="pathConstraints">Path Constraints</string>
+    <string name="startPort">Start Port</string>
+    <string name="endPort">End Port</string>
+    <string name="timeZone">Time Zone</string>
+    <string name="startTime">Start Time</string>
+    <string name="startDate">Start Date</string>
+    <string name="endTime">End Time</string>
+    <string name="endDate">End Date</string>
+    <string name="description">Description</string>
+    <string name="delay">Delay [ms]</string>
+    <string name="startVlan">Start VLAN</string>
+    <string name="endVlan">End VLAN</string>
+    <string name="capacity">Capacity[Mbits/s]</string>
+    <string name="mtuSize">MTU size[bytes]</string>
     <string name="mtuAuto">Automatically set MTU size</string>
-	<string name="vlan_auto">Automatically set VLAN</string>
-	<string name="startDomain">Start domain</string>
-	<string name="endDomain">End domain</string>
-	<string name="startNow">Start now</string>
-	<string name="reservationState">Reservation State</string>
-	<string name="provisionState">Provision State</string>
-	<string name="lifecycleState">Lifecycle State</string>
-	<string name="submitRequest">Submit Request</string>
-    <string name="provision">Provision service</string>
-    <string name="cancel_service">Cancel service</string>
-    <string name="modify_service">Modify service</string>
-    <string name="resubmitService">Resubmit</string>
+    <string name="vlan_auto">Automatically set VLAN</string>
+    <string name="startDomain">Start domain</string>
+    <string name="endDomain">End domain</string>
+    <string name="startNow">Start now</string>
+    <string name="reservationState">Reservation State</string>
+    <string name="provisionState">Provision State</string>
+    <string name="lifecycleState">Lifecycle State</string>
+    <string name="submitRequest">Submit Request</string>
+    <string name="provisionService">Provision service</string>
+    <string name="cancelService">Cancel service</string>
+    <string name="modifyService">Modify service</string>
+    <string name="resubmitService">Resubmit service</string>
+    <string name="releaseService">Release service</string>
 
     <string name="includedStp">Included stps</string>
     <string name="excludedStp">Excluded stps</string>
@@ -103,27 +104,28 @@
     <string name="stp">Stp:</string>
 
 
-
-	<!-- ERRORS -->
-	<string name="login_failed">"Log in failed. Please check username and password and try again."</string>
-	<string name="net_error">"A network error occured. Please try again."</string>
+    <!-- ERRORS -->
+    <string name="login_failed">"Log in failed. Please check username and password and try again."</string>
+    <string name="net_error">"A network error occured. Please try again."</string>
     <string name="no_internet">"No internet connection."</string>
     <string name="response_error">"Server response error."</string>
-	<string name="failure_reason">Failure Reason</string>
-	<string name="error_404">Page not found!</string>
-	<string name="error_500">Internal server error!</string>
+    <string name="failure_reason">Failure Reason</string>
+    <string name="error_404">Page not found!</string>
+    <string name="error_500">Internal server error!</string>
     <string name="connection_error">Connection error.\nPlease try again.</string>
 
-	<string name="http_error">HTTP error.</string>
-	<string name="error">Error:</string>
+    <string name="http_error">HTTP error.</string>
+    <string name="error">Error:</string>
 
-	<string name="Log_in_first">Please log in first.</string>
+    <string name="Log_in_first">Please log in first.</string>
     <string name="no_log_in">You are not logged in.</string>
     <string name="internal_err">Internal error.</string>
     <string name="loading">Loading</string>
+    <string name="submitting">Submitting</string>
 
 
     <!-- REQUEST RESERVATION ERRORS -->
+    <string name="no_ports">No ports are registered!</string>
     <string name="select_start_dom">Please select start domain</string>
     <string name="select_end_dom">Please select end domain</string>
     <string name="select_start_port">Please select start port</string>
@@ -136,8 +138,10 @@
     <string name="invalid_capacity">Invalid capacity</string>
     <string name="empty_description">Description can not be empty</string>
     <string name="end_time_past">End date is in the past</string>
-	<string name="start_time_past">Start date is in the past</string>
-	<string name="end_before_start">End date is before start date</string>
+    <string name="start_time_past">Start date is in the past</string>
+    <string name="end_before_start">End date is before start date</string>
+    <string name="excluded_domains_error">Start and end domain cannot be excluded</string>
+    <string name="excluded_ports_error">Start and end port cannot be excluded</string>
 
     <string name="reservation_success">Reservation submitted successfully</string>
     <string name="reservation_submit_error">Reservation submitted successfully</string>
@@ -148,6 +152,8 @@
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="refresh">Refresh</string>
+    <string name="refreshMessage">Drag screen down to refresh</string>
 
 </resources>
 

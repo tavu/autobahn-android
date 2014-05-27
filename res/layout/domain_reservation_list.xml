@@ -1,21 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent" android:background="@android:color/white">
+<android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
 
-	<TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-        android:id="@+id/header"
-        android:textIsSelectable="false"
-        style="@style/AutobahnHeaderText"/>
-	<!--    android:id="@+id/textView" android:layout_gravity="center" android:singleLine="false" -->
+    <!-- <ScrollView
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent">-->
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:background="@android:color/white">
 
-	<ListView
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:id="@+id/listView"
-        android:drawSelectorOnTop="false" style="@style/AutobahnList"/>
-</LinearLayout>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:gravity="center" android:baselineAligned="false">
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView" android:src="@drawable/refresh"
+                    android:contentDescription="@string/refresh"
+                    android:layout_gravity="center"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/refreshMessage"
+                    android:id="@+id/textView" style="@style/AutobahnHeaderText"/>
+        </LinearLayout>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/header"
+                android:textIsSelectable="false"
+                style="@style/AutobahnHeaderText" android:focusableInTouchMode="false" android:focusable="false"
+                android:enabled="false"/>
+        <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/listView"
+                android:drawSelectorOnTop="false" style="@style/AutobahnList" android:textFilterEnabled="false"
+                android:fastScrollEnabled="false" android:focusable="false" android:headerDividersEnabled="false"
+                android:focusableInTouchMode="false" android:fastScrollAlwaysVisible="false"/>
+        <!--    android:id="@+id/textView" android:layout_gravity="center" android:singleLine="false" -->
+
+    </LinearLayout>
+    <!--
+        </ScrollView>
+    -->
+</android.support.v4.widget.SwipeRefreshLayout>

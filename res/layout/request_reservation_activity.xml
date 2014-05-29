@@ -1,236 +1,244 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+
+<android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white" style="@style/AutobahnTheme">
-
-    <RelativeLayout
+        android:layout_height="match_parent">
+    <ScrollView
             xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="true"
-            android:focusableInTouchMode="true" android:paddingTop="10dp" style="@style/AutobahnTheme">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/white" style="@style/AutobahnTheme">
 
-
-        <TextView
-                android:id="@+id/startDomainText"
+        <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="true"
-                android:text="@string/startDomain"/>
-
-        <Spinner
-                android:id="@+id/startDomain"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/startDomainText"/>
-
-        <TextView
-                android:id="@+id/startPortText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/startDomain"
-                android:text="@string/startPort"/>
-
-        <Spinner
-                android:id="@+id/startPort"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/startPortText"/>
-
-        <TextView
-                android:id="@+id/endDomainText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/startPort"
-                android:text="@string/endDomain"/>
-
-        <Spinner
-                android:id="@+id/endDomain"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/endDomainText"/>
-
-        <TextView
-                android:id="@+id/endPortText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/endDomain"
-                android:text="@string/endPort"/>
-
-        <Spinner
-                android:id="@+id/endPort"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/endPortText"/>
-
-        <View
-                android:id="@+id/seperator1"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/endPort"
-                android:background="@android:color/darker_gray"/>
+                android:clickable="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true" android:paddingTop="10dp" style="@style/AutobahnTheme">
 
 
-        <TextView
-                android:id="@+id/startVlanText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/seperator1"
-                android:text="@string/startVlan"/>
+            <TextView
+                    android:id="@+id/startDomainText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="true"
+                    android:text="@string/startDomain"/>
 
-        <EditText
-                android:id="@+id/startVlan"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/startVlanText"
-                android:numeric="integer" android:inputType="number"/>
+            <Spinner
+                    android:id="@+id/startDomain"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/startDomainText"/>
 
-        <CheckBox
-                android:id="@+id/startVlanAuto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/startVlanText"
-                android:layout_toRightOf="@+id/startVlan"
-                android:text="@string/vlan_auto"/>
+            <TextView
+                    android:id="@+id/startPortText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/startDomain"
+                    android:text="@string/startPort"/>
 
-        <TextView
-                android:id="@+id/endVlanText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/startVlan"
-                android:text="@string/endVlan"/>
+            <Spinner
+                    android:id="@+id/startPort"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/startPortText"/>
 
-        <EditText
-                android:id="@+id/endVlan"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/endVlanText"
-                android:numeric="integer" android:inputType="number"/>
+            <TextView
+                    android:id="@+id/endDomainText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/startPort"
+                    android:text="@string/endDomain"/>
 
-        <CheckBox
-                android:id="@+id/endVlanAuto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/endVlanText"
-                android:layout_toRightOf="@+id/endVlan"
-                android:text="@string/vlan_auto"/>
+            <Spinner
+                    android:id="@+id/endDomain"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/endDomainText"/>
 
-        <View
-                android:id="@+id/seperator2"
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/endVlan"
-                android:background="@android:color/darker_gray"/>
+            <TextView
+                    android:id="@+id/endPortText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/endDomain"
+                    android:text="@string/endPort"/>
+
+            <Spinner
+                    android:id="@+id/endPort"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/endPortText"/>
+
+            <View
+                    android:id="@+id/seperator1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/endPort"
+                    android:background="@android:color/darker_gray"/>
 
 
-        <TextView
-                android:id="@+id/startDateText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/seperator2"
-                android:text="@string/startDate"/>
+            <TextView
+                    android:id="@+id/startVlanText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/seperator1"
+                    android:text="@string/startVlan"/>
 
-        <EditText
-                android:id="@+id/startDate"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/startDateText"
-                android:inputType="date"/>
+            <EditText
+                    android:id="@+id/startVlan"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/startVlanText"
+                    android:numeric="integer" android:inputType="number"/>
 
-        <CheckBox
-                android:id="@+id/startNow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/startDateText"
-                android:layout_toRightOf="@+id/startDate"
-                android:text="@string/startNow"/>
+            <CheckBox
+                    android:id="@+id/startVlanAuto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/startVlanText"
+                    android:layout_toRightOf="@+id/startVlan"
+                    android:text="@string/vlan_auto"/>
 
-        <TextView
-                android:id="@+id/startTimeText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/startDate"
-                android:text="@string/startTime"/>
+            <TextView
+                    android:id="@+id/endVlanText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/startVlan"
+                    android:text="@string/endVlan"/>
 
-        <EditText
-                android:id="@+id/startTime"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/startTimeText"
-                android:inputType="time"/>
+            <EditText
+                    android:id="@+id/endVlan"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/endVlanText"
+                    android:numeric="integer" android:inputType="number"/>
 
-        <TextView
-                android:id="@+id/endDateText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/startTime"
-                android:text="@string/endDate"/>
+            <CheckBox
+                    android:id="@+id/endVlanAuto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/endVlanText"
+                    android:layout_toRightOf="@+id/endVlan"
+                    android:text="@string/vlan_auto"/>
 
-        <EditText
-                android:id="@+id/endDate"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/endDateText"
-                android:inputType="date"/>
+            <View
+                    android:id="@+id/seperator2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/endVlan"
+                    android:background="@android:color/darker_gray"/>
 
-        <TextView
-                android:id="@+id/endTimeText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/endDate"
-                android:text="@string/endTime"
-                />
 
-        <EditText
-                android:id="@+id/endTime"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/endTimeText"
-                android:inputType="time"/>
+            <TextView
+                    android:id="@+id/startDateText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/seperator2"
+                    android:text="@string/startDate"/>
 
-        <TextView
-                android:id="@+id/capacityText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/endTime"
-                android:text="@string/capacity"/>
+            <EditText
+                    android:id="@+id/startDate"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/startDateText"
+                    android:inputType="date"/>
 
-        <EditText
-                android:id="@+id/capacity"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/capacityText"
-                android:numeric="integer" android:inputType="number"/>
+            <CheckBox
+                    android:id="@+id/startNow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/startDateText"
+                    android:layout_toRightOf="@+id/startDate"
+                    android:text="@string/startNow"/>
 
-        <TextView
-                android:id="@+id/descriptionText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/capacity"
-                android:text="@string/description"/>
+            <TextView
+                    android:id="@+id/startTimeText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/startDate"
+                    android:text="@string/startTime"/>
 
-        <EditText
-                android:id="@+id/description"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/descriptionText"
-                android:inputType="textMultiLine"/>
+            <EditText
+                    android:id="@+id/startTime"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/startTimeText"
+                    android:inputType="time"/>
 
-        <Button
-                android:id="@+id/submitButton"
-                style="@style/AutobahnButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:clickable="true"
-                android:enabled="true"
-                android:text="@string/submitRequest" android:layout_below="@+id/description"
-                android:layout_marginTop="20dp"/>
+            <TextView
+                    android:id="@+id/endDateText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/startTime"
+                    android:text="@string/endDate"/>
 
-    </RelativeLayout>
+            <EditText
+                    android:id="@+id/endDate"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/endDateText"
+                    android:inputType="date"/>
 
-</ScrollView>
+            <TextView
+                    android:id="@+id/endTimeText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/endDate"
+                    android:text="@string/endTime"
+                    />
+
+            <EditText
+                    android:id="@+id/endTime"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/endTimeText"
+                    android:inputType="time"/>
+
+            <TextView
+                    android:id="@+id/capacityText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/endTime"
+                    android:text="@string/capacity"/>
+
+            <EditText
+                    android:id="@+id/capacity"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/capacityText"
+                    android:numeric="integer" android:inputType="number"/>
+
+            <TextView
+                    android:id="@+id/descriptionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/capacity"
+                    android:text="@string/description"/>
+
+            <EditText
+                    android:id="@+id/description"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/descriptionText"
+                    android:inputType="textMultiLine"/>
+
+            <Button
+                    android:id="@+id/submitButton"
+                    style="@style/AutobahnButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:clickable="true"
+                    android:enabled="true"
+                    android:text="@string/submitRequest" android:layout_below="@+id/description"
+                    android:layout_marginTop="20dp"/>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</android.support.v4.widget.SwipeRefreshLayout>

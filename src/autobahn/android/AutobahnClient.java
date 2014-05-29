@@ -126,14 +126,6 @@ public class AutobahnClient {
         localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
     }
 
-    public void setHost(String s) {
-        host = s;
-    }
-
-    public void setPort(int p) {
-        port = p;
-    }
-
     public String getUserName() {
         return username;
     }
@@ -475,7 +467,7 @@ public class AutobahnClient {
 
     }
 
-    public void updateDomains() throws AutobahnClientException {
+    public synchronized void updateDomains() throws AutobahnClientException {
         ResponseEntity<JsonData> response;
         List<Domain> domains = new ArrayList<>();
         List<String> domainsById;
@@ -506,7 +498,7 @@ public class AutobahnClient {
         dataSource.close();
     }
 
-    public void updateReservations(String domain) throws AutobahnClientException {
+    public synchronized void updateReservations(String domain) throws AutobahnClientException {
 
         List<Reservation> reservations;
         ResponseEntity<JsonData> response;
@@ -540,7 +532,7 @@ public class AutobahnClient {
 
     }
 
-    public void updateReservation(String domain, String service) throws AutobahnClientException {
+    public synchronized void updateReservation(String domain, String service) throws AutobahnClientException {
         ReservationInfo reservation;
         ResponseEntity<JsonData> response;
 
@@ -568,6 +560,51 @@ public class AutobahnClient {
         reservation = gson.fromJson(jsonString, t);
         dataSource.open();
         dataSource.updateReservation(reservation);
+        dataSource.close();
+    }
+
+    public synchronized void updatePorts() throws AutobahnClientException {
+        ResponseEntity<JsonData> response;
+        Map<String, ArrayList<String>> ports;
+        String domain;
+        List<Port> domainPorts;
+        String portName;
+
+        requestHeaders = new HttpHeaders();
+        requestHeaders.set("Cookie", getCookie());
+        requestEntity = new HttpEntity<Object>(requestHeaders);
+        restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
+
+        try {
+            response = restTemplate.exchange(getFullHost() + PORTS_URL, HttpMethod.GET, requestEntity, JsonData.class);
+            checkStatus(response);
+            checkResponse(response);
+        } catch (HttpClientErrorException e) {
+            throw new AutobahnClientException(e.getMessage());
+        } catch (ResourceAccessException e) {
+            throw new AutobahnClientException(context.getString(R.string.connection_error));
+        }
+
+        ports = (Map<String, ArrayList<String>>) response.getBody().getData();
+
+
+        if (ports == null) {
+            Log.d(TAG, "Received NULL ports");
+            String error = context.getString(R.string.net_error);
+            throw new AutobahnClientException(error);
+        }
+
+        domainPorts = new ArrayList<>();
+        for (String key : ports.keySet()) {
+            domain = key.split(":", 5)[3];
+            for (String port : ports.get(key)) {
+                portName = port.split(":")[6];
+                domainPorts.add(new Port(portName, port, domain));
+            }
+        }
+        dataSource.open();
+        dataSource.updatePorts(domainPorts);
         dataSource.close();
     }
 
@@ -604,8 +641,6 @@ public class AutobahnClient {
 
  private void retrieveLoginInfo() {
  SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
- host = sharedPref.getString(PreferencesActivity.HOST_PREFERENCE_KEY, "");
- port = 8080;
 
  userName = sharedPref.getString(PreferencesActivity.USERNAME_PREFERENCE_KEY, "");
  password = sharedPref.getString(PreferencesActivity.PASSWORD_PREFERENCE_KEY, "");

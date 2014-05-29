@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
-                 android:id="@+id/grp_child"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:focusable="false"
-                 android:paddingLeft="50dp"
-                 android:textSize="16dp"
-                 android:textColor="@color/textColor"
-                 android:gravity="center_vertical"
-                 android:enabled="true"
-                 android:clickable="false" android:checked="false"
-                 android:editable="false"
-                 android:minHeight="40dp"
-                 android:checkMark="?android:attr/listChoiceIndicatorMultiple"/>
+<LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:id="@+id/grp_chld"
+              android:paddingLeft="50dp"
+              android:textSize="16dp"
+              android:textColor="@color/textColor"
+              android:enabled="true"
+              android:clickable="false"
+              android:editable="false"
+              android:focusable="false"
+              android:minHeight="40dp" android:gravity="left|fill_vertical" android:layout_weight="1"/>
+
+    <CheckBox android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:id="@+id/checkBox"
+              android:enabled="true"
+              android:clickable="false"
+              android:checked="false"
+              android:editable="false"
+              android:focusable="false"
+              android:minHeight="40dp"/>
+
+</LinearLayout>

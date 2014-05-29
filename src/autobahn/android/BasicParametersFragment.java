@@ -6,7 +6,10 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.util.SparseArray;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +35,8 @@ public class BasicParametersFragment extends android.support.v4.app.Fragment imp
         CompoundButton.OnCheckedChangeListener,
         AdapterView.OnItemSelectedListener,
         DatePickerDialog.OnDateSetListener,
-        TimePickerDialog.OnTimeSetListener {
+        TimePickerDialog.OnTimeSetListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     public final String TAG = "[Autobahn-client]";
     private View view;
@@ -44,12 +48,15 @@ public class BasicParametersFragment extends android.support.v4.app.Fragment imp
     private AutobahnDataSource dataSource;
     private ReservationInfo res;
     private String reservationID;
+    private SwipeRefreshLayout swipeLayout;
+    private Toast toast;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.request_reservation_activity, container, false);
+        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
 
         dataSource = new AutobahnDataSource(getActivity().getApplicationContext());
         dataSource.open();
@@ -67,9 +74,17 @@ public class BasicParametersFragment extends android.support.v4.app.Fragment imp
 
         Bundle bundle = getActivity().getIntent().getExtras();
         if (bundle != null && bundle.containsKey("RESUBMIT_SERVICE")) {
+            swipeLayout.setEnabled(false);
             ReservationInfo resubmissionInfo = (ReservationInfo) bundle.getSerializable("RESUBMIT_SERVICE");
             insertResubmissionData(resubmissionInfo);
+
         } else {
+            swipeLayout.setOnRefreshListener(this);
+            swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light);
+
             progressDialog = new ProgressDialog(view.getContext());
             progressDialog.setMessage(getString(R.string.loading));
             progressDialog.show();
@@ -180,6 +195,41 @@ public class BasicParametersFragment extends android.support.v4.app.Fragment imp
                 startActivity(intent);
                 getActivity().finish();
             }
+        }
+    }
+
+    private class UpdateTask extends AsyncTask<Void, Void, Void> {
+
+        public UpdateTask() {
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                AutobahnClient.getInstance(view.getContext()).updatePorts();
+            } catch (AutobahnClientException e) {
+                exception = e;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... progress) {
+            super.onProgressUpdate(progress);
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            swipeLayout.setRefreshing(false);
+
+            if (exception != null) {
+                toast = Toast.makeText(view.getContext(), exception.getMessage(), Toast.LENGTH_LONG);
+                toast.show();
+                return;
+            }
+
+            new PortTask().execute();
         }
     }
 
@@ -487,26 +537,26 @@ public class BasicParametersFragment extends android.support.v4.app.Fragment imp
 
         ExpandableListView optionalList = (ExpandableListView) getActivity().findViewById(R.id.pathConstraints);
         CustomExpandableListAdapter adapter = (CustomExpandableListAdapter) optionalList.getExpandableListAdapter();
-        ArrayList<boolean[]> checkedStates = adapter.getCheckedStates();
+        SparseArray<SparseBooleanArray> checkedStates = adapter.getCheckedPositions();
 
         for (int i = 0; i < adapter.getChildrenCount(0); i++) {
-            if (checkedStates.get(0)[i])
-                includedDomains.add(((HashMap<String, String>) adapter.getChild(0, i)).get("CHILD"));
+            if (checkedStates.get(0).get(i))
+                includedDomains.add(((Domain) adapter.getChild(0, i)).getDomainName());
         }
 
         for (int i = 0; i < adapter.getChildrenCount(1); i++) {
-            if (checkedStates.get(1)[i])
-                includedStps.add(((HashMap<String, String>) adapter.getChild(1, i)).get("CHILD"));
+            if (checkedStates.get(1).get(i))
+                includedStps.add(((Port) adapter.getChild(1, i)).getPortId());
         }
 
         for (int i = 0; i < adapter.getChildrenCount(2); i++) {
-            if (checkedStates.get(2)[i])
-                excludedDomains.add(((HashMap<String, String>) adapter.getChild(2, i)).get("CHILD"));
+            if (checkedStates.get(2).get(i))
+                excludedDomains.add(((Domain) adapter.getChild(2, i)).getDomainName());
         }
 
         for (int i = 0; i < adapter.getChildrenCount(3); i++) {
-            if (checkedStates.get(3)[i])
-                excludedStps.add(((HashMap<String, String>) adapter.getChild(3, i)).get("CHILD"));
+            if (checkedStates.get(3).get(i))
+                excludedStps.add(((Port) adapter.getChild(3, i)).getPortId());
         }
 
 
@@ -614,6 +664,11 @@ public class BasicParametersFragment extends android.support.v4.app.Fragment imp
         }
 
         return true;
+    }
+
+    @Override
+    public void onRefresh() {
+        new UpdateTask().execute();
     }
 
 }

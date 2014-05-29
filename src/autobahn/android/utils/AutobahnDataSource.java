@@ -124,6 +124,13 @@ public class AutobahnDataSource {
         }
     }
 
+    public void updatePorts(List<Port> ports) {
+
+        database.delete(AutobahnDatabaseHelper.PORTS, null, null);
+        insertPort(ports);
+
+    }
+
     public List<Domain> getDomains() throws AutobahnClientException {
         List<Domain> domains = new ArrayList<>();
         String[] columns = {AutobahnDatabaseHelper.DOMAIN_ID, AutobahnDatabaseHelper.DOMAIN_NAME};

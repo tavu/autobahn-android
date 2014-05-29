@@ -12,6 +12,7 @@ import autobahn.android.utils.*;
 import com.example.autobahn.R;
 import net.geant.autobahn.android.Domain;
 import net.geant.autobahn.android.Port;
+import net.geant.autobahn.android.ReservationInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,19 +26,13 @@ import java.util.Map;
 public class OptionalParametersFragment extends android.support.v4.app.Fragment {
 
     private final String TAG = "[Autobahn-client]";
-    private final List<String> groupData = new ArrayList<String>() {{
-        add("Included Domains");
-        add("Included Ports");
-        add("Excluded Domains");
-        add("Excluded Ports");
-    }};
-
     private View view;
     private CustomExpandableListAdapter listAdapter;
     private ExpandableListView listView;
-    private List<List<Map<String, String>>> listDataChild = new ArrayList<>();
+    private List<Category> listDataChild = new ArrayList<>();
     private AutobahnClientException exception;
     private List<Domain> domains;
+    private List ports;
     private Map<Domain, List<Port>> data;
     private ProgressDialog progressDialog;
     private AutobahnDataSource dataSource;
@@ -46,65 +41,104 @@ public class OptionalParametersFragment extends android.support.v4.app.Fragment 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.request_optional_params, container, false);
+        Bundle bundle = getActivity().getIntent().getExtras();
+        if (bundle != null && bundle.containsKey("RESUBMIT_SERVICE")) {
+            ReservationInfo resubmissionInfo = (ReservationInfo) bundle.getSerializable("RESUBMIT_SERVICE");
+            insertResubmissionData(resubmissionInfo);
 
-        dataSource = new AutobahnDataSource(getActivity().getApplicationContext());
-        dataSource.open();
+        } else {
+            dataSource = new AutobahnDataSource(getActivity().getApplicationContext());
+            dataSource.open();
 
-        progressDialog = new ProgressDialog(view.getRootView().getContext());
-        progressDialog.setMessage(getString(R.string.loading));
-        progressDialog.show();
+            progressDialog = new ProgressDialog(view.getRootView().getContext());
+            progressDialog.setMessage(getString(R.string.loading));
+            progressDialog.show();
 
-        new PortTask().execute();
+            new PortTask().execute();
 
+
+        }
         return view;
     }
 
     public synchronized void populateLists() {
-        List<Map<String, String>> domainChildren = new ArrayList<>();
-        List<Map<String, String>> portChildren = new ArrayList<>();
 
-        for (Domain domain : domains) {
-            Map<String, String> entry = new HashMap<>();
-            entry.put("CHILD", domain.getDomainName());
-            domainChildren.add(entry);
-        }
-
+        ports = new ArrayList<>();
         for (Domain domain : data.keySet()) {
-            List<Port> domainPorts = data.get(domain);
-            Map<String, String> subGroupEntry = new HashMap<>();
-            subGroupEntry.put("SUBGROUP", domain.getDomainName());
-            portChildren.add(subGroupEntry);
-            for (Port port : domainPorts) {
-                Map<String, String> entry = new HashMap<>();
-                entry.put("CHILD", port.getPortId());
-                portChildren.add(entry);
-            }
+            ports.add(domain);
+            ports.addAll(data.get(domain));
         }
 
-        listDataChild.add(domainChildren);
-        listDataChild.add(portChildren);
-        listDataChild.add(domainChildren);
-        listDataChild.add(portChildren);
+        listDataChild.add(new Category<>("Included Domains", domains));
+        listDataChild.add(new Category<>("Included Ports", ports));
+        listDataChild.add(new Category<>("Excluded Domains", domains));
+        listDataChild.add(new Category<>("Excluded Ports", ports));
 
         listView = (ExpandableListView) view.findViewById(R.id.pathConstraints);
-
-        listAdapter = new CustomExpandableListAdapter(getActivity(), groupData, listDataChild);
-        listView.setAdapter(listAdapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        listAdapter = new CustomExpandableListAdapter(getActivity(), listDataChild);
+
+        listView.setAdapter(listAdapter);
 
         listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Map<String, String> child = (HashMap<String, String>) listView.getExpandableListAdapter().getChild(groupPosition, childPosition);
-                int position = parent.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition));
-                if (child.containsKey("CHILD")) {
-                    ((CheckedTextView) v).toggle();
-                    ((CustomExpandableListAdapter) listView.getExpandableListAdapter()).toggleCheckedState(groupPosition, childPosition, ((CheckedTextView) v).isChecked());
-                    listView.setItemChecked(position, ((CheckedTextView) v).isChecked());
+                switch (groupPosition) {
+                    case 0:
+                    case 2:
+                        listAdapter.setClicked(groupPosition, childPosition);
+                        ((CheckBox) v.findViewById(R.id.checkBox)).setChecked(listAdapter.getCheckedPositions().get(groupPosition).get(childPosition));
+                        break;
+                    case 1:
+                    case 3:
+                        if (listAdapter.getChild(groupPosition, childPosition) instanceof Port) {
+                            listAdapter.setClicked(groupPosition, childPosition);
+                            ((CheckBox) v.findViewById(R.id.checkBox)).setChecked(listAdapter.getCheckedPositions().get(groupPosition).get(childPosition));
+                        }
+                        break;
                 }
+
                 return false;
             }
         });
+    }
+
+    public synchronized void insertResubmissionData(ReservationInfo reservation) {
+
+        ArrayList<Domain> includedDomains = new ArrayList<>();
+        ArrayList<Domain> excludedDomains = new ArrayList<>();
+        ArrayList<Port> includedPorts = new ArrayList<>();
+        ArrayList<Port> excludedPorts = new ArrayList<>();
+
+        if (reservation.getIncludedDomains() != null)
+            for (String domain : reservation.getIncludedDomains())
+                includedDomains.add(new Domain(domain));
+
+        if (reservation.getExcludedDomains() != null)
+            for (String domain : reservation.getExcludedDomains())
+                excludedDomains.add(new Domain(domain));
+
+        if (reservation.getIncludedStps() != null)
+            for (String port : reservation.getIncludedStps())
+                includedPorts.add(new Port(port));
+
+        if (reservation.getExcludedStps() != null)
+            for (String port : reservation.getExcludedStps())
+                excludedPorts.add(new Port(port));
+
+        listDataChild.add(new Category<>("Included Domains", includedDomains));
+        listDataChild.add(new Category<>("Included Ports", includedPorts));
+        listDataChild.add(new Category<>("Excluded Domains", excludedDomains));
+        listDataChild.add(new Category<>("Excluded Ports", excludedPorts));
+
+        listView = (ExpandableListView) view.findViewById(R.id.pathConstraints);
+
+        listAdapter = new CustomExpandableListAdapter(getActivity(), listDataChild);
+
+        listView.setAdapter(listAdapter);
+        listView.setClickable(false);
+
+
     }
 
     private class PortTask extends AsyncTask<Void, Void, Void> {
@@ -152,6 +186,4 @@ public class OptionalParametersFragment extends android.support.v4.app.Fragment 
         getLayoutInflater(this.getArguments()).inflate(R.layout.error_layout, (ViewGroup) view.getParent());
         ((TextView) view.findViewById(R.id.errorText)).setText(e.getMessage());
     }
-
-
 }
